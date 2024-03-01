@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import {
-  Image,
+  ImageBackground,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -16,8 +15,10 @@ export default function HomeScreen({ navigation }) {
 
 
   return (
-    <SafeAreaView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Image style={styles.image} source={require('../assets/huguette.JPEG')} />
+
+      <SafeAreaView style={styles.container}>
+        <ImageBackground source={require('../assets/huguette.png')} resizeMode="cover" style={styles.image}>
+
       <Text style={styles.title}>Huguette</Text>
       <Text style={styles.title}>Get Safe</Text>
 
@@ -26,10 +27,10 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => handleLogIn()} style={styles.button} activeOpacity={0.8}>
-        <Text style={styles.textButton}>S'inscrire</Text>
+        <Text style={styles.textButton}>Se connecter</Text>
       </TouchableOpacity>
 
-
+      </ImageBackground>
     </SafeAreaView>
   )
 }
@@ -40,15 +41,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
+
   image: {
     width: '100%',
-    height: '50%',
+    height: '100%',
   },
+  
   title: {
     width: '80%',
     fontSize: 38,
     fontWeight: '600',
+    textAlign: 'center',
+    color: 'white'
   },
   input: {
     width: '80%',
