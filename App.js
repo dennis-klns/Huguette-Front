@@ -5,6 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen';
+import SignInScreen from './screens/SignInScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -25,7 +27,7 @@ const TabNavigator = () => {
 
         if (route.name === 'Map') {
           iconName = 'location-arrow';
-        } else if (route.name === 'Places') {
+        } else if (route.name === 'Profile') {
           iconName = 'map-pin';
         }
 
@@ -36,7 +38,7 @@ const TabNavigator = () => {
       headerShown: false,
     })}>
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Places" component={PlacesScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
@@ -47,6 +49,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

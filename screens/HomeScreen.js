@@ -7,13 +7,13 @@ import {
   View,
 } from 'react-native';
 
-const handleSignIn = () => {
-    navigation.navigate('TabNavigator')
-
-}
 
 export default function HomeScreen({ navigation }) {
-
+  
+  const handleSignIn = () => {
+      navigation.navigate('SignIn');
+  
+  }
 
   return (
 
