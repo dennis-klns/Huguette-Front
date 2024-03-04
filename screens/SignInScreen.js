@@ -6,8 +6,9 @@ import {
     TouchableOpacity,
     View,
   } from 'react-native';
+  import { LinearGradient } from "expo-linear-gradient";
   
-  const handleSignIn = () => {
+  const handleSignInUser = () => {
       navigation.navigate('SignIn');
   
   }
@@ -16,32 +17,38 @@ import {
   
   
     return (
-  
+        
+        <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
         <SafeAreaView style={styles.container}>
-          <Image source={require('../assets/huguette.png')} resizeMode="cover" style={styles.image}/>
+
         <View style={styles.textgroup}>
         <Text style={styles.title}>BIENVENUE ! </Text>
+        <Text style={styles.text}>Vous êtes : </Text>
         </View>
   
         <View style={styles.buttonsgroup}>
-            <Text style={styles.title}>Vous êtes : </Text>
-        <TouchableOpacity onPress={() => handleSignIn()} style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => handleSignInUser()} style={styles.button} activeOpacity={0.8}>
           <Text style={styles.textButton}>Utilisatrice</Text>
         </TouchableOpacity>
   
-        <TouchableOpacity onPress={() => handleLogIn()}  style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => handleSignInDriver()}  style={styles.button} activeOpacity={0.8}>
           <Text style={styles.textButton}>Conductrice</Text>
         </TouchableOpacity>
         </View>
   
       </SafeAreaView>
+      </LinearGradient>
     )
   }
   
   const styles = StyleSheet.create({
+
+    linearGradient: {
+        flex: 1,
+      },
+
     container: {
       flex: 1,
-      backgroundColor: '#ffffff',
       alignItems: 'center',
       justifyContent: 'center'
       },
@@ -52,6 +59,11 @@ import {
       position: 'absolute'
    
     },
+
+    textgroup : {
+        alignItems: 'center',
+        marginBottom: 30,
+    },
   
     title: {
       width: '80%',
@@ -60,14 +72,23 @@ import {
       textAlign: 'center',
       color: 'white',
     },
+
+
+    text: {
+      width: '80%',
+      fontSize: 25,
+      fontWeight: '400',
+      textAlign: 'center',
+      color: 'white',
+    },
+    
   
   
-  
+
   
     buttonsgroup: {
       width: '80%',
       alignItems: 'center',
-      marginBottom: 30,
       
     },
   
@@ -76,7 +97,7 @@ import {
       paddingTop: 8,
       width: '80%',
       alignItems: 'center',
-      marginTop: 10,
+      marginTop: 20,
       backgroundColor: 'white',
       opacity : 0.5,
       borderRadius: 10,
