@@ -9,12 +9,9 @@ import {
 
 export default function HomeScreen({ navigation }) {
   const handleSignIn = () => {
-    navigation.navigate("SignIn");
-  };
-
-  const handleLogIn = () => {
-    navigation.navigate("TabNavigator", { screen: "Map" });
-  };
+      navigation.navigate('SignUp');
+  
+  }
 
   return (
     <SafeAreaView style={styles.container}>

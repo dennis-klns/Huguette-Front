@@ -10,8 +10,8 @@ import {
   
   export default function SignInScreen({ navigation }) {
       
-      const handleSignInUser = () => {
-          navigation.navigate('SignInUser');
+      const handleSignUpUser = () => {
+          navigation.navigate('SignUpUser');
       
       }
   
@@ -26,11 +26,11 @@ import {
         </View>
   
         <View style={styles.buttonsgroup}>
-        <TouchableOpacity onPress={() => handleSignInUser()} style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => handleSignUpUser()} style={styles.button} activeOpacity={0.8}>
           <Text style={styles.textButton}>Passagère</Text>
         </TouchableOpacity>
   
-        <TouchableOpacity onPress={() => handleSignInDriver()}  style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => handleSignUpDriver()}  style={styles.button} activeOpacity={0.8}>
           <Text style={styles.textButton}>Conductrice</Text>
         </TouchableOpacity>
         </View>
