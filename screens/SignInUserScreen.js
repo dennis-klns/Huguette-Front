@@ -5,12 +5,19 @@ import {
     Text,
     TouchableOpacity,
     View,
+    TextInput,
   } from 'react-native';
   import { LinearGradient } from "expo-linear-gradient";
+  import {useState} from 'react'
   
   
-  export default function SignInScreen({ navigation }) {
+  export default function SignInUserScreen({ navigation }) {
       
+    const [lastname, setLastname] = useState('')
+    const [firstname, setFirstname] = useState('')
+    const [birthdate, setBirthdate] = useState('')
+    const [gender, setGender] = useState('')
+
       const handleSignInUser = () => {
           navigation.navigate('SignInUser');
       
@@ -21,20 +28,23 @@ import {
         <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
         <SafeAreaView style={styles.container}>
 
+        <Text style={styles.title}>PROFIL UTILISATRICE</Text>
+
         <View style={styles.textgroup}>
-        <Text style={styles.title}>BIENVENUE ! </Text>
-        <Text style={styles.text}>Vous êtes : </Text>
+        <Text style={styles.text}>Votre profil</Text>
+        <TextInput placeholder="Lastname" onChangeText={(value) => setLastname(value)} value={lastname} style={styles.input} />
+        <TextInput placeholder="Firstname" onChangeText={(value) => setFirstname(value)} value={firstname} style={styles.input} />
+        <TextInput placeholder="Birthdate" onChangeText={(value) => setBirthdate(value)} value={birthdate} style={styles.input} />
+        <TextInput placeholder="Gender" onChangeText={(value) => setGender(value)} value={gender} style={styles.input} />
         </View>
   
-        <View style={styles.buttonsgroup}>
-        <TouchableOpacity onPress={() => handleSignInUser()} style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Utilisatrice</Text>
-        </TouchableOpacity>
+
+
   
         <TouchableOpacity onPress={() => handleSignInDriver()}  style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Conductrice</Text>
+          <Text style={styles.textButton}>Valider</Text>
         </TouchableOpacity>
-        </View>
+ 
   
       </SafeAreaView>
       </LinearGradient>
@@ -52,12 +62,7 @@ import {
       alignItems: 'center',
       justifyContent: 'center'
       },
-
-
-    textgroup : {
-        alignItems: 'center',
-        marginBottom: 30,
-    },
+  
   
     title: {
       width: '80%',
@@ -76,13 +81,15 @@ import {
       color: 'white',
     },
     
-  
-    buttonsgroup: {
-      width: '80%',
-      alignItems: 'center',
-      
-    },
-  
+    input: {
+        width: '80%',
+        marginTop: 25,
+        borderBottomColor: '#ec6e5b',
+        borderBottomWidth: 1,
+        fontSize: 18,
+      },
+
+
     button: {
       height: 40,
       paddingTop: 8,
