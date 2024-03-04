@@ -24,8 +24,8 @@ export default function SignInUserScreen({ navigation }) {
     const [expdate, setExpdate] = useState('')
     const [crypto, setCrypto] = useState('')
 
-    const handleSignInUser = () => {
-        navigation.navigate('SignInUser');
+    const handleValidate = () => {
+        navigation.navigate('TabNavigator', {screen: 'Map'});
 
     }
 
@@ -64,7 +64,7 @@ export default function SignInUserScreen({ navigation }) {
                         </View>
 
 
-                        <TouchableOpacity onPress={() => handleSignInDriver()} style={styles.button} activeOpacity={0.8}>
+                        <TouchableOpacity onPress={() => handleValidate()} style={styles.button} activeOpacity={0.8}>
                             <Text style={styles.textButton}>Valider</Text>
                         </TouchableOpacity>
 
