@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 const handleSignIn = () => {
@@ -18,19 +19,21 @@ export default function HomeScreen({ navigation }) {
 
       <SafeAreaView style={styles.container}>
         <Image source={require('../assets/huguette.png')} resizeMode="cover" style={styles.image}/>
-
+      <View style={styles.textgroup}>
       <Text style={styles.title}>Huguette</Text>
       <Text style={styles.title}>Get Safe</Text>
+      </View>
 
+      <View style={styles.buttonsgroup}>
       <TouchableOpacity onPress={() => handleSignIn()} style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton}>S'inscrire</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleLogIn()} style={styles.button} activeOpacity={0.8}>
+      <TouchableOpacity onPress={() => handleLogIn()}  style={styles.button} activeOpacity={0.8}>
         <Text style={styles.textButton}>Se connecter</Text>
       </TouchableOpacity>
+      </View>
 
-     
     </SafeAreaView>
   )
 }
@@ -40,8 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
+    },
 
   image: {
     height: '120%',
@@ -58,23 +60,30 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 
-  input: {
+  textgroup: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+
+
+  buttonsgroup: {
     width: '80%',
-    marginTop: 25,
-    borderBottomColor: '#ec6e5b',
-    borderBottomWidth: 1,
-    fontSize: 18,
+    alignItems: 'center',
+    marginBottom: 30,
+    flex: 1,
+    justifyContent: 'flex-end'
+    
   },
 
   button: {
     height: 40,
-    alignItems: 'center',
     paddingTop: 8,
     width: '80%',
-    marginTop: 30,
+    alignItems: 'center',
+    marginTop: 10,
     backgroundColor: 'white',
-    opacity : 0.6,
-    borderRadius: 20,
+    opacity : 0.5,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -91,4 +100,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
+
 });
