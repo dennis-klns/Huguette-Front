@@ -11,23 +11,53 @@ import {
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../reducers/user';
 
 
 export default function SignUpUserScreen({ navigation }) {
 
+    const dispatch = useDispatch();
+    // const user = useSelector ((state) => state.users.value)
     const [lastname, setLastname] = useState('')
     const [firstname, setFirstname] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
     const [birthdate, setBirthdate] = useState('')
     const [gender, setGender] = useState('')
+    const [password, setPassword] = useState('')
+    
 
     const [cardNumber, setCardNumber] = useState('')
     const [expdate, setExpdate] = useState('')
     const [crypto, setCrypto] = useState('')
 
-    const handleValidate = () => {
-        navigation.navigate('TabNavigator', {screen: 'Map'});
+    // const handleValidate = () => {
+    //     navigation.navigate('TabNavigator', {screen: 'Map'});
 
-    }
+    const signUpClick = () => {
+    fetch('http://localhost:3000/users/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          dispatch(login({ phone, token: data.token }));
+          setLastname('');
+          setFirstname('');
+          setEmail('');
+          setPhone('');
+          setBirthdate('');
+          setGender('');
+          setPassword('');
+          navigation.navigate('TabNavigator', { screen: 'Map' });
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });}
 
     return (
 
@@ -42,8 +72,11 @@ export default function SignUpUserScreen({ navigation }) {
                             <Text style={styles.text}>Votre profil</Text>
                             <TextInput placeholder="Lastname" onChangeText={(value) => setLastname(value)} value={lastname} style={styles.input} />
                             <TextInput placeholder="Firstname" onChangeText={(value) => setFirstname(value)} value={firstname} style={styles.input} />
+                            <TextInput placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
+                            <TextInput placeholder="Phone" onChangeText={(value) => setPhone(value)} value={phone} style={styles.input} />
                             <TextInput placeholder="Birthdate" onChangeText={(value) => setBirthdate(value)} value={birthdate} style={styles.input} />
                             <TextInput placeholder="Gender" onChangeText={(value) => setGender(value)} value={gender} style={styles.input} />
+                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
                         </View>
 
                         <View style={styles.pay}>
@@ -64,7 +97,7 @@ export default function SignUpUserScreen({ navigation }) {
                         </View>
 
 
-                        <TouchableOpacity onPress={() => handleValidate()} style={styles.button} activeOpacity={0.8}>
+                        <TouchableOpacity onPress={() => signUpClick()} style={styles.button} activeOpacity={0.8}>
                             <Text style={styles.textButton}>Valider</Text>
                         </TouchableOpacity>
 
