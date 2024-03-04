@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from 'react'
 
 
-export default function SignInUserScreen({ navigation }) {
+export default function SearchScreen({ navigation }) {
 
     const [lastname, setLastname] = useState('')
     const [firstname, setFirstname] = useState('')
