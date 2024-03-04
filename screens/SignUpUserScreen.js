@@ -1,70 +1,68 @@
+import React, { useState } from 'react';
 import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    TextInput,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+
+  Platform,
+
+  SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function SignUpUserScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const [lastname, setLastname] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [gender, setGender] = useState('');
+  const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-    // const user = useSelector ((state) => state.users.value)
-    const [lastname, setLastname] = useState('')
-    const [firstname, setFirstname] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    const [birthdate, setBirthdate] = useState('')
-    const [gender, setGender] = useState('')
-    const [password, setPassword] = useState('')
+
     
 
     const [cardNumber, setCardNumber] = useState('')
     const [expdate, setExpdate] = useState('')
     const [crypto, setCrypto] = useState('')
 
-    // const handleValidate = () => {
-    //     navigation.navigate('TabNavigator', {screen: 'Map'});
-
     const signUpClick = () => {
-    fetch('http://localhost:3000/users/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.result) {
-          dispatch(login({ phone, token: data.token }));
-          setLastname('');
-          setFirstname('');
-          setEmail('');
-          setPhone('');
-          setBirthdate('');
-          setGender('');
-          setPassword('');
-          navigation.navigate('TabNavigator', { screen: 'Map' });
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });}
 
+        fetch('http://localhost:3000/users/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.result) {
+            dispatch(login({ phone, token: data.token }));
+            navigation.navigate('TabNavigator', { screen: 'Map' });
+          } else {
+            console.error('Signup failed:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        })
+       
+      };
+
+
+    
+    
     return (
 
         <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
-            <SafeAreaView>
-                <ScrollView contentContainerStyle={styles.scrollView}>
-                    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
+            <View style={styles.container}>
 
                         <Text style={styles.title}>PROFIL PASSAGÈRE</Text>
 
@@ -96,14 +94,12 @@ export default function SignUpUserScreen({ navigation }) {
                             </View>
                         </View>
 
-
-                        <TouchableOpacity onPress={() => signUpClick()} style={styles.button} activeOpacity={0.8}>
+                        <TouchableOpacity onPress={signUpClick} style={styles.button} activeOpacity={0.8} >
                             <Text style={styles.textButton}>Valider</Text>
                         </TouchableOpacity>
 
-
-                    </KeyboardAvoidingView>
-                </ScrollView>
+                        </View>
+                        </KeyboardAwareScrollView>
             </SafeAreaView>
         </LinearGradient>
     )
