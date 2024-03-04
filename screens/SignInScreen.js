@@ -1,5 +1,4 @@
 import {
-    Image,
     SafeAreaView,
     StyleSheet,
     Text,
@@ -28,7 +27,7 @@ import {
   
         <View style={styles.buttonsgroup}>
         <TouchableOpacity onPress={() => handleSignInUser()} style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Utilisatrice</Text>
+          <Text style={styles.textButton}>Passagère</Text>
         </TouchableOpacity>
   
         <TouchableOpacity onPress={() => handleSignInDriver()}  style={styles.button} activeOpacity={0.8}>
