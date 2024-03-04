@@ -11,7 +11,7 @@ import {
   export default function ProfileScreen({ navigation }) {
     
     const handleSignIn = () => {
-        navigation.navigate('TabNavigator', { screen: 'SignIn' });
+        navigation.navigate('Search');
     
     }
   

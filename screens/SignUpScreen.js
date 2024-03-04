@@ -8,7 +8,7 @@ import {
   import { LinearGradient } from "expo-linear-gradient";
   
   
-  export default function SignInScreen({ navigation }) {
+  export default function SignUpScreen({ navigation }) {
       
       const handleSignUpUser = () => {
           navigation.navigate('SignUpUser');
