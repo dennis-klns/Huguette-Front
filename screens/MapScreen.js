@@ -8,6 +8,8 @@ import {
   Text,
 } from "react-native";
 import MapView from "react-native-maps";
+import { LinearGradient } from "expo-linear-gradient";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +19,7 @@ import { Marker } from "react-native-maps";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [addresse, setAddresse] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -31,7 +34,10 @@ export default function MapScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <LinearGradient
+      colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+      style={styles.linearGradient}
+    >
       {currentPosition && (
         <MapView
           style={styles.map}
@@ -51,6 +57,18 @@ export default function MapScreen({ navigation }) {
           />
         </MapView>
       )}
+      <View style={styles.search}>
+        <Text style={styles.text}>Hello User,</Text>
+        <Text style={styles.text}>Ou allons nous ?</Text>
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Addresse"
+            onChangeText={(value) => setAddresse(value)}
+            value={addresse}
+          />
+          <FontAwesome name="search" size={30} color="grey"></FontAwesome>
+        </View>
+      </View>
       {/*<Modal visible={modalVisible} transparent>
 
         <View style={styles.centeredView}>
@@ -69,20 +87,14 @@ export default function MapScreen({ navigation }) {
        </View>
 
       </Modal> */}
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    height: "70%",
   },
 
   modalView: {
@@ -101,10 +113,14 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: 150,
-    borderBottomColor: "#ec6e5b",
+    width: "95%",
+    height: "20%",
+    borderBottomColor: "grey",
     borderBottomWidth: 1,
-    fontSize: 16,
+    fontSize: 20,
+    color: "#000",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   button: {
@@ -114,5 +130,18 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: "#ec6e5b",
     borderRadius: 10,
+  },
+  linearGradient: {
+    flex: 1,
+  },
+  search: {
+    width: "100%",
+    justifyContent: "space-around",
+    margin: 10,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    fontFamily: "Ladislav-Bold",
   },
 });
