@@ -11,7 +11,7 @@ import {
 export default function HomeScreen({ navigation }) {
   
   const handleSignIn = () => {
-      navigation.navigate('SignIn');
+      navigation.navigate('SignUp');
   
   }
 
