@@ -1,16 +1,18 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
-import SignInScreen from "./screens/SignInScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import SignInUserScreen from "./screens/SignInUserScreen";
 
-import { Provider } from "react-redux";
+import SearchScreen from './screens/SearchScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import SignUpUserScreen from './screens/SignUpUserScreen';
+
 import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 const store = configureStore({
@@ -52,8 +54,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="SignInUser" component={SignInUserScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="SignUpUser" component={SignUpUserScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
