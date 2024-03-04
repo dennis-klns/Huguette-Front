@@ -8,11 +8,15 @@ import {
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
-  const handleSignIn = () => {
+  const handleSignUp = () => {
       navigation.navigate('SignUp');
   
   }
 
+  const handleSignIn = () => {
+    navigation.navigate('SignIn');
+
+}
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -27,7 +31,7 @@ export default function HomeScreen({ navigation }) {
 
       <View style={styles.buttonsgroup}>
         <TouchableOpacity
-          onPress={() => handleSignIn()}
+          onPress={() => handleSignUp()}
           style={styles.button}
           activeOpacity={0.8}
         >
@@ -35,7 +39,7 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleLogIn()}
+          onPress={() => handleSignIn()}
           style={styles.button}
           activeOpacity={0.8}
         >
