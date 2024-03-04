@@ -3,13 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-
-import SearchScreen from './screens/SearchScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import SignUpUserScreen from './screens/SignUpUserScreen';
+import SearchScreen from "./screens/SearchScreen";
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import SignUpUserScreen from "./screens/SignUpUserScreen";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -55,6 +56,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="SignUpUser" component={SignUpUserScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
