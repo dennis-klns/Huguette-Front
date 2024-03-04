@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -41,6 +42,7 @@ export default function MapScreen({ navigation }) {
       {currentPosition && (
         <MapView
           style={styles.map}
+          //provider={PROVIDER_GOOGLE}
           initialRegion={{
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
@@ -61,10 +63,64 @@ export default function MapScreen({ navigation }) {
         <Text style={styles.text}>Hello User,</Text>
         <Text style={styles.text}>Ou allons nous ?</Text>
         <View style={styles.input}>
-          <TextInput
+          <GooglePlacesAutocomplete
             placeholder="Addresse"
-            onChangeText={(value) => setAddresse(value)}
-            value={addresse}
+            onPress={(data, details = null) => {
+              console.log(data);
+            }}
+            query={{
+              key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+              language: "fr",
+              components: "country:fr",
+            }}
+            styles={{
+              container: {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+              },
+              textInputContainer: {
+                flex: 1,
+                backgroundColor: "transparent",
+                height: 54,
+                marginHorizontal: 20,
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+              },
+              textInput: {
+                height: 54,
+                margin: 0,
+                borderRadius: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                paddingLeft: 20,
+                paddingRight: 20,
+                marginTop: 0,
+                marginLeft: 0,
+                marginRight: 0,
+                elevation: 5,
+                shadowColor: "#000",
+                shadowOpacity: 0.1,
+                shadowOffset: { x: 0, y: 0 },
+                shadowRadius: 15,
+                borderWidth: 1,
+                borderColor: "#DDD",
+                fontSize: 18,
+              },
+              listView: {
+                borderWidth: 1,
+                borderColor: "#DDD",
+                backgroundColor: "#FFF",
+                marginHorizontal: 20,
+                elevation: 5,
+                shadowColor: "#000",
+                shadowOpacity: 0.1,
+                shadowOffset: { x: 0, y: 0 },
+                shadowRadius: 15,
+                marginTop: 10,
+              },
+            }}
           />
           <FontAwesome name="search" size={30} color="grey"></FontAwesome>
         </View>
@@ -142,7 +198,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Ladislav-Bold",
   },
 });
 
