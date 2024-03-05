@@ -1,4 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   Modal,
@@ -11,10 +12,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
-import { useEffect, useState } from "react";
 //import { UseSelector } from "react-redux";
 
 import * as Location from "expo-location";
@@ -22,6 +22,10 @@ import { Marker } from "react-native-maps";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [markerPosition, setMarkerPosition] = useState({
+    latitude: currentPosition?.latitude || 0,
+    longitude: currentPosition?.longitude || 0,
+  });
   const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
@@ -31,6 +35,24 @@ export default function MapScreen({ navigation }) {
   const [music, setMusic] = useState(false);
 
   //const user = useSelector((state) => state.user.value);
+
+  // Récupération des données lat,long du départ et de l'arrivée
+
+  const handleDepartureSelect = (data, details) => {
+    console.log("Data départ:", data);
+    console.log("Details départ:", details.geometry?.location);
+  };
+
+  const handleArrivalSelect = (data, details) => {
+    console.log("Data arrivée:", data);
+    console.log("Details arrivée:", details.geometry?.location);
+  };
+
+  const handleRegionChange = (region) => {
+    setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
+    console.log(region);
+    console.log(markerPosition);
+  };
 
   const toggleSwitch = () =>
     setIsAccompanied((previousState) => !previousState);
@@ -74,19 +96,19 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           //provider={PROVIDER_GOOGLE}
+
           initialRegion={{
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
             latitudeDelta: 0.001,
             longitudeDelta: 0.001,
           }}
+          onRegionChange={handleRegionChange}
         >
           <Marker
-            coordinate={{
-              latitude: currentPosition.latitude,
-              longitude: currentPosition.longitude,
-            }}
-            title="Your Location"
+            coordinate={markerPosition}
+            title="Vous êtes ici"
+            image={require("../assets/marker.png")}
           />
         </MapView>
       )}
@@ -112,30 +134,111 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              <TextInput
+              <GooglePlacesAutocomplete
                 placeholder="Départ"
                 onChangeText={(value) => setDeparture(value)}
+                fetchDetails={true}
                 value={departure}
-                style={styles.input}
+                onPress={handleDepartureSelect}
+                query={{
+                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                  language: "fr",
+                  components: "country:fr",
+                }}
+                styles={{
+                  container: {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 120,
+                  },
+                  textInputContainer: {
+                    height: 54,
+                    marginHorizontal: 20,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                  },
+                  textInput: {
+                    backgroundColor: "transparent",
+                    borderBottomWidth: 1,
+                    borderColor: "black",
+                    marginBottom: 20,
+                    fontSize: 16,
+                    padding: 10,
+                  },
+                  listView: {
+                    position: "absolute",
+                    top: 50,
+                    borderWidth: 0.5,
+                    borderColor: "black",
+                    backgroundColor: "#F1C796",
+                    marginHorizontal: 20,
+                    elevation: 5,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowOffset: { x: 0, y: 0 },
+                    shadowRadius: 15,
+                    marginTop: 10,
+                  },
+                }}
               />
-              <TextInput
+              <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
                 value={arrival}
-                style={styles.input}
+                onPress={handleArrivalSelect}
+                fetchDetails={true}
+                query={{
+                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                  language: "fr",
+                  components: "country:fr",
+                }}
+                styles={{
+                  container: {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 100,
+                  },
+                  textInputContainer: {
+                    height: 54,
+                    marginHorizontal: 20,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                  },
+                  textInput: {
+                    backgroundColor: "transparent",
+                    borderBottomWidth: 1,
+                    borderColor: "black",
+                    marginBottom: 20,
+                    fontSize: 16,
+                    padding: 10,
+                  },
+                  listView: {
+                    position: "absolute",
+                    top: 50,
+                    borderWidth: 0.5,
+                    borderColor: "black",
+                    backgroundColor: "#F1C796",
+                    marginHorizontal: 20,
+                    elevation: 5,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowOffset: { x: 0, y: 0 },
+                    shadowRadius: 15,
+                    marginTop: 10,
+                  },
+                }}
               />
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.text}>Je suis accompagnée</Text>
                 <Switch
-                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
+                  trackColor={{ false: "#F1C796", true: "#F88559" }}
                   thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={toggleSwitch}
                   value={isAccompanied}
                 />
               </View>
-
               <View style={styles.mood}>
                 <Text style={styles.text}>MOOD</Text>
                 <View style={styles.icon}>
@@ -265,7 +368,7 @@ const styles = StyleSheet.create({
 
   profile: {
     width: "80%",
-    height: "30%",
+    minHeight: "30%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 10,
@@ -301,13 +404,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     width: "80%",
-    marginTop: 30,
+    margin: 30,
   },
 
   icon: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "20%",
+    width: "25%",
   },
 
   addresses: {
