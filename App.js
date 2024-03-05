@@ -1,20 +1,20 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import HomeScreen from './screens/HomeScreen';
-import MapScreen from './screens/MapScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import SignUpUserScreen from './screens/SignUpUserScreen';
-import SearchScreen from './screens/SearchScreen';
-import SignInScreen from './screens/SignInScreen'
+import HomeScreen from "./screens/HomeScreen";
+import MapScreen from "./screens/MapScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import SearchScreen from "./screens/SearchScreen";
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import SignUpUserScreen from "./screens/SignUpUserScreen";
 
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user';
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import user from "./reducers/user";
 
 const store = configureStore({
   reducer: { user },
@@ -25,22 +25,24 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={({ route }) => ({
-      tabBarIcon: ({ color, size }) => {
-        let iconName = '';
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName = "";
 
-        if (route.name === 'Map') {
-          iconName = 'location-arrow';
-        } else if (route.name === 'Profile') {
-          iconName = 'map-pin';
-        }
+          if (route.name === "Map") {
+            iconName = "home";
+          } else if (route.name === "Profile") {
+            iconName = "user";
+          }
 
-        return <FontAwesome name={iconName} size={size} color={color} />;
-      },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
-      headerShown: false,
-    })}>
+          return <FontAwesome name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#EBB2B5",
+        tabBarInactiveTintColor: "grey",
+        headerShown: false,
+      })}
+    >
       <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

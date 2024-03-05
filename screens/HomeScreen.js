@@ -9,14 +9,12 @@ import {
 
 export default function HomeScreen({ navigation }) {
   const handleSignUp = () => {
-      navigation.navigate('SignUp');
-  
-  }
+    navigation.navigate("SignUp");
+  };
 
   const handleSignIn = () => {
-    navigation.navigate('SignIn');
-
-}
+    navigation.navigate("SignIn");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Image
