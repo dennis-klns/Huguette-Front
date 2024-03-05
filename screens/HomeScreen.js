@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     navigation.navigate("SignUp");
   };
 

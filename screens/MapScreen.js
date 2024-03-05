@@ -1,26 +1,57 @@
+import { LinearGradient } from "expo-linear-gradient";
 import {
-  StyleSheet,
   Dimensions,
-  View,
   Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
   TextInput,
   TouchableOpacity,
-  Text,
+  View,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { LinearGradient } from "expo-linear-gradient";
+import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+//import { UseSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [addresse, setAddresse] = useState("");
+  const [addresses, setAddresses] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState("");
+  const [isAccompanied, setIsAccompanied] = useState(false);
+  const [mood, setMood] = useState(false);
+  const [music, setMusic] = useState(false);
+
+  //const user = useSelector((state) => state.user.value);
+
+  const toggleSwitch = () =>
+    setIsAccompanied((previousState) => !previousState);
+
+  const changeMood = () => {
+    setMood((previousState) => !previousState);
+  };
+
+  const changeMusic = () => {
+    setMusic((previousState) => !previousState);
+  };
+
+  let iconStyleMusic = {};
+  let iconStyleMood = {};
+  if (music) {
+    iconStyleMusic = { color: "#F88559" };
+  }
+
+  if (mood) {
+    iconStyleMood = { color: "#F88559" };
+  }
 
   useEffect(() => {
     (async () => {
@@ -62,87 +93,82 @@ export default function MapScreen({ navigation }) {
       <View style={styles.search}>
         <Text style={styles.text}>Hello User,</Text>
         <Text style={styles.text}>Ou allons nous ?</Text>
-        <View style={styles.input}>
-          <GooglePlacesAutocomplete
-            placeholder="Addresse"
-            onPress={(data, details = null) => {
-              console.log(data);
-            }}
-            query={{
-              key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-              language: "fr",
-              components: "country:fr",
-            }}
-            styles={{
-              container: {
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-              },
-              textInputContainer: {
-                flex: 1,
-                backgroundColor: "transparent",
-                height: 54,
-                marginHorizontal: 20,
-                borderTopWidth: 0,
-                borderBottomWidth: 0,
-              },
-              textInput: {
-                height: 54,
-                margin: 0,
-                borderRadius: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                paddingLeft: 20,
-                paddingRight: 20,
-                marginTop: 0,
-                marginLeft: 0,
-                marginRight: 0,
-                elevation: 5,
-                shadowColor: "#000",
-                shadowOpacity: 0.1,
-                shadowOffset: { x: 0, y: 0 },
-                shadowRadius: 15,
-                borderWidth: 1,
-                borderColor: "#DDD",
-                fontSize: 18,
-              },
-              listView: {
-                borderWidth: 1,
-                borderColor: "#DDD",
-                backgroundColor: "#FFF",
-                marginHorizontal: 20,
-                elevation: 5,
-                shadowColor: "#000",
-                shadowOpacity: 0.1,
-                shadowOffset: { x: 0, y: 0 },
-                shadowRadius: 15,
-                marginTop: 10,
-              },
-            }}
-          />
-          <FontAwesome name="search" size={30} color="grey"></FontAwesome>
-        </View>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <View style={styles.addresse}>
+            <TextInput placeholder="Addresse" />
+            <FontAwesome name="search" size={30} color="grey"></FontAwesome>
+          </View>
+        </TouchableOpacity>
       </View>
-      {/*<Modal visible={modalVisible} transparent>
+      <Modal visible={modalVisible} transparent={true} animationType="slide">
+        <LinearGradient
+          colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+          style={styles.linearGradient}
+        >
+          <SafeAreaView style={styles.container}>
+            <View style={styles.modalHeader}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <FontAwesome name="times" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.profile}>
+              <TextInput
+                placeholder="Départ"
+                onChangeText={(value) => setDeparture(value)}
+                value={departure}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Arrivée"
+                onChangeText={(value) => setArrival(value)}
+                value={arrival}
+                style={styles.input}
+              />
 
-        <View style={styles.centeredView}>
-         <View style={styles.modalView}>
-        <TextInput placeholder="New place" onChangeText={(value) => setNewPlace(value)} value={newPlace} style={styles.input} />
+              <View style={styles.isaccompanied}>
+                <Text style={styles.text}>Je suis accompagnée</Text>
+                <Switch
+                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
+                  thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isAccompanied}
+                />
+              </View>
 
-        <TouchableOpacity onPress={() => handleAddPlace()} style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Add</Text>
-        </TouchableOpacity>
+              <View style={styles.mood}>
+                <Text style={styles.text}>MOOD</Text>
+                <View style={styles.icon}>
+                  <FontAwesome
+                    name="music"
+                    onPress={() => changeMusic()}
+                    size={25}
+                    style={iconStyleMusic}
+                  />
+                  <FontAwesome
+                    name="moon-o"
+                    onPress={() => changeMood()}
+                    size={25}
+                    style={iconStyleMood}
+                  />
+                </View>
+              </View>
+            </View>
 
-        <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Close</Text>
-        </TouchableOpacity>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+              {addresses}
+            </ScrollView>
 
-        </View>
-       </View>
-
-      </Modal> */}
+            <TouchableOpacity
+              onPress={() => handleValidate()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Valider</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </LinearGradient>
+      </Modal>
     </LinearGradient>
   );
 }
@@ -153,30 +179,53 @@ const styles = StyleSheet.create({
     height: "70%",
   },
 
-  modalView: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 30,
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+  },
+  modalHeader: {
+    margin: 20,
+  },
+  modalHeaderText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 20,
+    fontSize: 16,
+    padding: 10,
+  },
+  searchButton: {
+    backgroundColor: "#1e90ff",
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  searchButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 
-  input: {
+  addresse: {
     width: "95%",
-    height: "20%",
+    height: "35%",
     borderBottomColor: "grey",
     borderBottomWidth: 1,
-    fontSize: 20,
-    color: "#000",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 
   button: {
@@ -198,6 +247,109 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  /*text: {
+    width: '80%',
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#473E66',
+    margin: 10,
+},*/
+
+  profile: {
+    width: "80%",
+    height: "30%",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  input: {
+    width: "90%",
+    marginTop: 25,
+    borderBottomColor: "#4F4F4F",
+    borderBottomWidth: 1,
+    fontSize: 16,
+    color: "#4F4F4F",
+  },
+
+  isaccompanied: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "80%",
+    marginTop: 30,
+  },
+
+  mood: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "80%",
+    marginTop: 30,
+  },
+
+  icon: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "20%",
+  },
+
+  addresses: {
+    marginTop: 20,
+    color: "#000",
+    borderBottomColor: "#4F4F4F",
+    borderBottomWidth: 1,
+  },
+
+  scrollView: {
+    width: Dimensions.get("window").width,
+    padding: 30,
+  },
+
+  name: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+
+  button: {
+    height: 40,
+    paddingTop: 8,
+    width: "80%",
+    alignItems: "center",
+    marginTop: 20,
+    backgroundColor: "#F88559",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  textButton: {
+    color: "#fff",
+    height: 30,
+    fontWeight: "600",
+    fontSize: 16,
   },
 });
 
