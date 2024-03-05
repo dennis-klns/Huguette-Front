@@ -6,45 +6,78 @@ import {
   View,
   TextInput,
   SafeAreaView,
+  Button,
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal'; 
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function SignUpUserScreen({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+
   const [password, setPassword] = useState('');
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [isPasswordResetModalVisible, setIsPasswordResetModalVisible] = useState(false);
+  const [passwordResetMessage, setPasswordResetMessage] = useState("");
+
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
 
 
-    const signInClick = () => {
-
-        fetch('http://192.168.10.157:3000/users/signin', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ phone: phone, email: email, password: password }),
-		}).then(response => response.json())
-			.then(data => {
-				if (data.result) {
-					dispatch(login({ phone: phone, email: email, token: data.token }));
-					setEmail('');
-                    setPhone('');
-					setPassword('');
-                    navigation.navigate('TabNavigator', { screen: 'Map' });
-
-				}
-			})
-        .catch(error => {
+   const signInClick = () => {
+    fetch('http://192.168.10.157:3000/users/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, email: email, password: password }),
+    }).then(response => response.json())
+      .then(data => {
+          if (data.result) {
+              dispatch(login({ phone: phone, email: email, token: data.token }));
+              setEmail('');
+              setPhone('');
+              setPassword('');
+              navigation.navigate('TabNavigator', { screen: 'Map' });
+          } else {
+              setErrorMessage("Identifiant ou mot de passe erroné, veuillez recommencer svp");
+              setIsErrorModalVisible(true); 
+          }
+      })
+      .catch(error => {
           console.error('Error:', error);
-        })
-       
-      };
+      })
+};
 
+  const handlePressIn = () => {
+    setPasswordVisibility(false);
+  };
 
+  const handlePressOut = () => {
+    setPasswordVisibility(true);
+  };
     
+  const handlePasswordResetRequest = () => {
+    setIsPasswordResetModalVisible(true);
+    setPasswordResetMessage("Voulez-vous changer votre mot de passe ?");
+  };
+
+  const handlePasswordResetConfirmation = (confirm) => {
+    if (confirm) {
+      // Envoyez la demande de réinitialisation du mot de passe ici
+      setPasswordResetMessage("Un mail vous a été envoyé afin de changer votre mot de passe !");
+      // Vous pouvez fermer le modal ici ou après un certain délai
+      // setIsPasswordResetModalVisible(false);
+    } else {
+      setIsPasswordResetModalVisible(false);
+    }
+  };
+
+
     
     return (
 
@@ -61,16 +94,44 @@ export default function SignUpUserScreen({ navigation }) {
                             <Text style={styles.text2}> ou </Text>
                             <TextInput placeholder="Phone" onChangeText={(value) => setPhone(value)} value={phone} style={styles.input} />
                             <View style={styles.trait} ></View>
-                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true} />
-                        </View>
-                        <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8} >
-                            <Text style={styles.textButton}>Valider</Text>
-                        </TouchableOpacity>
+                             <View style={styles.passwordContainer}>
+                               <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} secureTextEntry={passwordVisibility} style={styles.input} autoCapitalize="none"/>
+                                 <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut}>
+                                   <FontAwesome name={passwordVisibility ? 'eye-slash' : 'eye'} size={20} color="#4F4F4F" />
+                                 </TouchableOpacity>
+                             </View>
+                            
+                             <TouchableOpacity onPress={handlePasswordResetRequest}>
+                                <Text style={styles.forgotPasswordText}>Mot de passe oublié</Text>
+                             </TouchableOpacity>
 
+                             <Modal isVisible={isPasswordResetModalVisible} onBackdropPress={() => setIsPasswordResetModalVisible(false)}>
+                               <View style={styles.modalContent}>
+                                  <Text style={styles.resetPasswordMessage}>{passwordResetMessage}</Text>
+                                  {passwordResetMessage === "Voulez-vous changer votre mot de passe ?" && (
+                                 <View style={styles.answerModal}>
+                                    <Button title="Oui" onPress={() => handlePasswordResetConfirmation(true)} />
+                                   <Button title="Non" onPress={() => handlePasswordResetConfirmation(false)} />
+                                 </View>
+                                  )}
+                               </View>
+                             </Modal>
                         </View>
-                        </KeyboardAwareScrollView>
-            </SafeAreaView>
-        </LinearGradient>
+                        
+                            <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8} >
+                               <Text style={styles.textButton}>Valider</Text>
+                            </TouchableOpacity>
+                            <Modal isVisible={isErrorModalVisible} onBackdropPress={() => setIsErrorModalVisible(false)}>
+                                <View style={styles.modalContent}>
+                                   <Text>{errorMessage}</Text>
+                                   <Button title="Fermer" onPress={() => setIsErrorModalVisible(false)} />
+                                </View>
+                            </Modal>
+
+            </View>
+          </KeyboardAwareScrollView>
+        </SafeAreaView>
+    </LinearGradient>
     )
 }
 
@@ -193,5 +254,48 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 16,
     },
+
+    modalContent: {
+        backgroundColor: "white",
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: "center",
+        borderRadius: 4,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+    },
+
+    textModal: {
+        marginTop: 10,
+        fontSize: 15,
+    },
+
+    answerModal:{
+        justifyContent: 'space-between',
+        width: '40%',
+        paddingTop: 20,
+        flexDirection: 'row',
+    },
+
+    resetPasswordMessage: {
+        paddingTop: 8,
+        textAlign: 'center', 
+        fontSize: 15, 
+        color: '#4F4F4F', 
+      },
+
+    passwordContainer: {
+        marginTop: 7,
+        paddingLeft: 64,
+        width: '110%',
+        alignItems: 'center',
+        marginBottom: 80,
+        flexDirection: 'row',
+    },
+
+    forgotPasswordText: {
+        color: '#4F4F4F',
+        marginTop: 15,
+        textDecorationLine: 'underline',
+      },
 
 });

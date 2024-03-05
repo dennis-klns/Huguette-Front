@@ -5,15 +5,18 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-
   Platform,
-
   SafeAreaView,
+  Button,
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {Picker} from '@react-native-picker/picker';
+import Modal from 'react-native-modal'; 
+
 
 export default function SignUpUserScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -28,8 +31,14 @@ export default function SignUpUserScreen({ navigation }) {
   const [phone, setPhone] = useState('');
   const [isPhoneValid, setIsPhoneValid] = useState(true);
 
-  const [birthdate, setBirthdate] = useState('');
+//   const [birthdate, setBirthdate] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
   const [gender, setGender] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+
   const [password, setPassword] = useState('');
 
   const [cardNumber, setCardNumber] = useState('')
@@ -38,10 +47,12 @@ export default function SignUpUserScreen({ navigation }) {
 
     const signUpClick = () => {
 
+      const formattedBirthdate = date.toISOString().split('T')[0];
+
         fetch('http://192.168.10.157:3000/users/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
+          body: JSON.stringify({ lastname, firstname, email, phone, birthdate: formattedBirthdate, gender, password }),
         })
         .then(response => response.json())
         .then(data => {
@@ -64,17 +75,36 @@ export default function SignUpUserScreen({ navigation }) {
         setEmailValid(value === '' || emailRegex.test(value));
     };
 
-    const validateName = (value, setName, setIsValid) => {
+      const validateName = (value, setName, setIsValid) => {
         const nameRegex = /^[A-Za-z]+$/; 
         setName(value);
         setIsValid(nameRegex.test(value) || value === '');
+    };
+
+      const validatePhone = (value) => {
+        const phoneRegex = /^\d{10}$/;
+        setPhone(value);
+        setIsPhoneValid(value === '' || phoneRegex.test(value));
+    };
+
+      const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+    };
+    
+      const showDatepicker = () => {
+        setShow(true);
+    };
+
+    const openPickerModal = () => {
+        setIsPickerVisible(true);
       };
 
-const validatePhone = (value) => {
-  const phoneRegex = /^\d{10}$/;
-  setPhone(value);
-  setIsPhoneValid(value === '' || phoneRegex.test(value));
-};
+    const onPickerSelect = (itemValue) => {
+        setGender(itemValue);
+        setIsPickerVisible(false);
+      };
 
     
     
@@ -90,17 +120,38 @@ const validatePhone = (value) => {
                         <View style={styles.profile}>
                             <Text style={styles.text}>Votre profil</Text>
                             <TextInput placeholder="Lastname" onChangeText={(value) => validateName(value, setLastname, setIsLastnameValid)} value={lastname}
-                                       style={[styles.input, !isLastnameValid && styles.invalidInput, !isLastnameValid && { borderBottomColor: 'red' } ]} autoCapitalize="none"/>
+                                       style={[styles.input, !isLastnameValid && styles.invalidInput, !isLastnameValid && { borderBottomColor: 'red' } ]} />
                             <TextInput placeholder="Firstname" onChangeText={(value) => validateName(value, setFirstname, setIsFirstnameValid)} value={firstname} style={[styles.input,
-                                       !isFirstnameValid && styles.invalidInput, !isFirstnameValid && { borderBottomColor: 'red' } ]} autoCapitalize="none"/>
+                                       !isFirstnameValid && styles.invalidInput, !isFirstnameValid && { borderBottomColor: 'red' } ]} />
          
                             <TextInput placeholder="Email" onChangeText={validateEmail} value={email} style={styles.input} autoCapitalize="none" keyboardType="email-address"/>
                                        {!emailValid && <Text style={styles.errorText}>Entrer un email valide</Text>}
                                        <TextInput placeholder="Phone" onChangeText={validatePhone} value={phone} style={[ styles.input, phone && !isPhoneValid ? styles.invalidInput : null,]} keyboardType="phone-pad"/> 
                                        {phone && !isPhoneValid && <Text style={styles.errorText}>Le numéro doit contenir 10 chiffres</Text>}
-                                      
-                            <TextInput placeholder="Birthdate" onChangeText={(value) => setBirthdate(value)} value={birthdate} style={styles.input} />
-                            <TextInput placeholder="Gender" onChangeText={(value) => setGender(value)} value={gender} style={styles.input} />
+                
+                                                
+                        <View style={styles.datePickerContainer}>
+                          <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
+                              <Text style={styles.datePickerButtonText}>Choisir une date de naissance</Text>
+                          </TouchableOpacity>
+                         {show && (
+                         <DateTimePicker style={styles.calendrier} testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChange} maximumDate={new Date()} /> )}
+                        </View>
+
+
+                       <TouchableOpacity style={styles.genderInput} onPress={() => setModalVisible(true)}>
+                       <Text style={[styles.genderText, { color: gender ? '#4F4F4F' : 'rgba(80, 80, 80, 0.35)' }]}>{gender || "Sélectionner le genre"}</Text>
+                      </TouchableOpacity>
+                         <Modal isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
+                            <View style={styles.modalContent}>
+                               <Picker selectedValue={gender} style={{width: '100%', height: 200}} onValueChange={(itemValue, itemIndex) => {setGender(itemValue); setModalVisible(false);}}>
+                                  <Picker.Item label="Sélectionner le genre" value="Sélectionner le genre" />
+                                  <Picker.Item label="Homme" value="Homme" />
+                                  <Picker.Item label="Femme" value="Femme" />
+                               </Picker>
+                           </View>
+                        </Modal>
+
                             <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true}/>
                         </View>
 
@@ -246,6 +297,55 @@ const styles = StyleSheet.create({
       errorText: {
         color: 'red',
         fontSize: 14,
+      },
+
+      datePickerContainer: {
+        marginTop: 5,
+        borderBottomColor: '#4F4F4F',
+        borderBottomWidth: 1,
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center', 
+      },
+      
+      datePickerButton: {
+        width: '100%',
+        height: 38,
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start',
+      },
+      
+      datePickerButtonText: {
+        fontSize: 16,
+        color: 'rgba(80, 80, 80, 0.35)',
+      },
+
+      calendrier: {
+       paddingBottom: 10,
+      },
+
+      modalContent: {
+        backgroundColor: "white",
+        padding: 22,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 4,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+     
+      },
+      
+      genderInput: {
+        height: 40,
+        width: '80%',
+        borderBottomWidth: 1,
+        borderBottomColor: '#4F4F4F',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start',
+        marginTop: 5,
+      },
+
+      genderText: {
+        fontSize: 16,
       },
 
 });
