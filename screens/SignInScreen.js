@@ -22,7 +22,7 @@ export default function SignUpUserScreen({ navigation }) {
 
     const signInClick = () => {
 
-        fetch('http://localhost:3000/users/signin', {
+        fetch('http://192.168.10.157:3000/users/signin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ phone: phone, email: email, password: password }),
@@ -57,11 +57,11 @@ export default function SignUpUserScreen({ navigation }) {
 
                         <View style={styles.profile}>
                             <Text style={styles.text}>Votre profil</Text>
-                            <TextInput placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
+                            <TextInput placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} autoCapitalize="none" keyboardType="email-address"/>
                             <Text style={styles.text2}> ou </Text>
                             <TextInput placeholder="Phone" onChangeText={(value) => setPhone(value)} value={phone} style={styles.input} />
                             <View style={styles.trait} ></View>
-                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
+                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true} />
                         </View>
                         <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8} >
                             <Text style={styles.textButton}>Valider</Text>

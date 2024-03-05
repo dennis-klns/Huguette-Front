@@ -19,22 +19,26 @@ export default function SignUpUserScreen({ navigation }) {
   const dispatch = useDispatch();
   const [lastname, setLastname] = useState('');
   const [firstname, setFirstname] = useState('');
+  const [isLastnameValid, setIsLastnameValid] = useState(true);
+  const [isFirstnameValid, setIsFirstnameValid] = useState(true);
+
   const [email, setEmail] = useState('');
+  const [emailValid, setEmailValid] = useState(true);
+
   const [phone, setPhone] = useState('');
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
+
   const [birthdate, setBirthdate] = useState('');
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
 
-
-    
-
-    const [cardNumber, setCardNumber] = useState('')
-    const [expdate, setExpdate] = useState('')
-    const [crypto, setCrypto] = useState('')
+  const [cardNumber, setCardNumber] = useState('')
+  const [expdate, setExpdate] = useState('')
+  const [crypto, setCrypto] = useState('')
 
     const signUpClick = () => {
 
-        fetch('http://localhost:3000/users/signup', {
+        fetch('http://192.168.10.157:3000/users/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
@@ -54,6 +58,23 @@ export default function SignUpUserScreen({ navigation }) {
        
       };
 
+      const validateEmail = (value) => {
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        setEmail(value);
+        setEmailValid(value === '' || emailRegex.test(value));
+    };
+
+    const validateName = (value, setName, setIsValid) => {
+        const nameRegex = /^[A-Za-z]+$/; 
+        setName(value);
+        setIsValid(nameRegex.test(value) || value === '');
+      };
+
+const validatePhone = (value) => {
+  const phoneRegex = /^\d{10}$/;
+  setPhone(value);
+  setIsPhoneValid(value === '' || phoneRegex.test(value));
+};
 
     
     
@@ -68,13 +89,19 @@ export default function SignUpUserScreen({ navigation }) {
 
                         <View style={styles.profile}>
                             <Text style={styles.text}>Votre profil</Text>
-                            <TextInput placeholder="Lastname" onChangeText={(value) => setLastname(value)} value={lastname} style={styles.input} />
-                            <TextInput placeholder="Firstname" onChangeText={(value) => setFirstname(value)} value={firstname} style={styles.input} />
-                            <TextInput placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} />
-                            <TextInput placeholder="Phone" onChangeText={(value) => setPhone(value)} value={phone} style={styles.input} />
+                            <TextInput placeholder="Lastname" onChangeText={(value) => validateName(value, setLastname, setIsLastnameValid)} value={lastname}
+                                       style={[styles.input, !isLastnameValid && styles.invalidInput, !isLastnameValid && { borderBottomColor: 'red' } ]} autoCapitalize="none"/>
+                            <TextInput placeholder="Firstname" onChangeText={(value) => validateName(value, setFirstname, setIsFirstnameValid)} value={firstname} style={[styles.input,
+                                       !isFirstnameValid && styles.invalidInput, !isFirstnameValid && { borderBottomColor: 'red' } ]} autoCapitalize="none"/>
+         
+                            <TextInput placeholder="Email" onChangeText={validateEmail} value={email} style={styles.input} autoCapitalize="none" keyboardType="email-address"/>
+                                       {!emailValid && <Text style={styles.errorText}>Entrer un email valide</Text>}
+                                       <TextInput placeholder="Phone" onChangeText={validatePhone} value={phone} style={[ styles.input, phone && !isPhoneValid ? styles.invalidInput : null,]} keyboardType="phone-pad"/> 
+                                       {phone && !isPhoneValid && <Text style={styles.errorText}>Le numéro doit contenir 10 chiffres</Text>}
+                                      
                             <TextInput placeholder="Birthdate" onChangeText={(value) => setBirthdate(value)} value={birthdate} style={styles.input} />
                             <TextInput placeholder="Gender" onChangeText={(value) => setGender(value)} value={gender} style={styles.input} />
-                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} />
+                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true}/>
                         </View>
 
                         <View style={styles.pay}>
@@ -156,13 +183,14 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        width: '80%',
-        marginTop: 25,
-        borderBottomColor: '#4F4F4F',
-        borderBottomWidth: 1,
-        fontSize: 16,
-        color: '#4F4F4F',
-    },
+            width: '80%',
+            marginTop: 25,
+            borderBottomColor: '#4F4F4F', 
+            borderBottomWidth: 1,
+            fontSize: 16,
+            color: '#4F4F4F',
+       
+      },
 
     halfinput : {
         width: '100%',
@@ -207,5 +235,17 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 16,
     },
+
+    invalidInput: {
+        borderColor: 'red',
+        borderBottomColor: 'red', 
+        borderWidth: 1,
+        borderBottomWidth: 1,
+      },
+
+      errorText: {
+        color: 'red',
+        fontSize: 14,
+      },
 
 });
