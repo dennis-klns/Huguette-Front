@@ -40,12 +40,40 @@ export default function SignUpUserScreen({ navigation }) {
   const [isPickerVisible, setIsPickerVisible] = useState(false);
 
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [cardNumber, setCardNumber] = useState('')
   const [expdate, setExpdate] = useState('')
   const [crypto, setCrypto] = useState('')
 
+  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
+  const [infoModalMessage, setInfoModalMessage] = useState('');
+
+
+  const validatePasswordsMatch = () => {
+    return password === confirmPassword; };
+
+
+
     const signUpClick = () => {
+
+        if (!lastname || !firstname || !email || !phone || !date || !gender || !password || !confirmPassword) {
+            setInfoModalMessage('Veuillez remplir tous les champs requis pour continuer.');
+            setIsInfoModalVisible(true);
+            return; 
+          }
+        
+        //   if (password.length < 5) {
+        //     setInfoModalMessage('Le mot de passe doit contenir au moins 5 caractères.');
+        //     setIsInfoModalVisible(true);
+        //     return;
+        //   }
+        
+          if (!validatePasswordsMatch()) {
+            setInfoModalMessage('Les mots de passe saisis ne correspondent pas.');
+            setIsInfoModalVisible(true);
+            return;
+          }
 
       const formattedBirthdate = date.toISOString().split('T')[0];
 
@@ -152,7 +180,8 @@ export default function SignUpUserScreen({ navigation }) {
                            </View>
                         </Modal>
 
-                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true}/>
+                            <TextInput placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} style={styles.input} autoCapitalize="none" secureTextEntry={true} textContentType="oneTimeCode"/>
+                            <TextInput placeholder="Confirmer le mot de passe" onChangeText={setConfirmPassword} value={confirmPassword} style={styles.input} autoCapitalize="none" secureTextEntry={true}/>
                         </View>
 
             <View style={styles.pay}>
@@ -193,6 +222,14 @@ export default function SignUpUserScreen({ navigation }) {
             >
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
+
+            <Modal isVisible={isInfoModalVisible} onBackdropPress={() => setIsInfoModalVisible(false)}>
+               <View style={styles.modalContent}>
+                  <Text style={styles.texteModal} >{infoModalMessage}</Text>
+                  <Button title="Fermer" onPress={() => setIsInfoModalVisible(false)} />
+               </View>
+            </Modal>
+
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
@@ -358,4 +395,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
 
+      texteModal:{
+        marginTop: 10,
+        fontSize: 15,
+      },
+
+   
 });
