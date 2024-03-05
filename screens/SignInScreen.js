@@ -44,7 +44,7 @@ export default function SignUpUserScreen({ navigation }) {
               setPassword('');
               navigation.navigate('TabNavigator', { screen: 'Map' });
           } else {
-              setErrorMessage("Identifiant ou mot de passe erroné, veuillez recommencer svp");
+              setErrorMessage("Identifiants manquants ou incorrects");
               setIsErrorModalVisible(true); 
           }
       })
@@ -68,10 +68,7 @@ export default function SignUpUserScreen({ navigation }) {
 
   const handlePasswordResetConfirmation = (confirm) => {
     if (confirm) {
-      // Envoyez la demande de réinitialisation du mot de passe ici
       setPasswordResetMessage("Un mail vous a été envoyé afin de changer votre mot de passe !");
-      // Vous pouvez fermer le modal ici ou après un certain délai
-      // setIsPasswordResetModalVisible(false);
     } else {
       setIsPasswordResetModalVisible(false);
     }
@@ -123,7 +120,7 @@ export default function SignUpUserScreen({ navigation }) {
                             </TouchableOpacity>
                             <Modal isVisible={isErrorModalVisible} onBackdropPress={() => setIsErrorModalVisible(false)}>
                                 <View style={styles.modalContent}>
-                                   <Text>{errorMessage}</Text>
+                                   <Text style={styles.textModalValider}>{errorMessage}</Text>
                                    <Button title="Fermer" onPress={() => setIsErrorModalVisible(false)} />
                                 </View>
                             </Modal>
@@ -260,6 +257,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 15,
     },
+
+    textModalValider: {
+        marginTop: 10,
+        paddingBottom: 10,
+        fontSize: 15,
+    },
+
 
     answerModal:{
         justifyContent: 'space-between',
