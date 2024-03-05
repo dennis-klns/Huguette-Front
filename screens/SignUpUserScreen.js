@@ -21,7 +21,7 @@ export default function SignUpUserScreen({ navigation }) {
   const [firstname, setFirstname] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [birthdate, setBirthdate] = useState(0);
+  const [birthdate, setBirthdate] = useState('');
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
 
@@ -34,7 +34,7 @@ export default function SignUpUserScreen({ navigation }) {
 
     const signUpClick = () => {
 
-        fetch('http://localhost:3000/users/signup', {
+        fetch('http://192.168.10.176:3000/users/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ lastname, firstname, email, phone, birthdate, gender, password }),
