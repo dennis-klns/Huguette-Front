@@ -31,7 +31,7 @@ export default function SignUpUserScreen({ navigation }) {
 
 
    const signInClick = () => {
-    fetch('http://192.168.10.157:3000/users/signin', {
+    fetch('http://192.168.10.156:3000/users/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: phone, email: email, password: password }),

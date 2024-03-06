@@ -11,6 +11,7 @@ import SearchScreen from "./screens/SearchScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
+import SignUpPhotoScreen from "./screens/SignUpPhotoScreen"
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -58,6 +59,7 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="SignUpUser" component={SignUpUserScreen} />
+          <Stack.Screen name="SignUpPhoto" component={SignUpPhotoScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
