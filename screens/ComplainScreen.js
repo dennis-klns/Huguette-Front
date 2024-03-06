@@ -10,14 +10,13 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-//import { UseSelector } from "react-redux";
 
 
 
-export default function SosScreen({ navigation }) {
+export default function ComplainScreen({ navigation }) {
 
     const handleValidate = () => {
-        navigation.navigate("Arrival")
+        navigation.navigate("Map")
     }
 
 
