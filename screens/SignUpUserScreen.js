@@ -83,7 +83,7 @@ export default function SignUpUserScreen({ navigation }) {
 
     const formattedBirthdate = date.toISOString().split("T")[0];
 
-    fetch("http://192.168.10.176:3000/users/signup", {
+    fetch("http://192.168.10.189:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

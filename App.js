@@ -2,8 +2,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import ConfirmDriverScreen from "./screens/ConfirmDriverScreen";
+import ConfirmScreen from "./screens/ConfirmScreen";
 import HomeScreen from "./screens/HomeScreen";
 import MapPositionScreen from "./screens/MapPositionScreen";
 import MapScreen from "./screens/MapScreen";
@@ -13,6 +16,9 @@ import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
+import SosScreen from "./screens/SosScreen";
+import WaitingScreen from "./screens/WaitingScreen";
+
 import RouteScreen from "./screens/RouteScreen";
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -41,9 +47,10 @@ const TabNavigator = () => {
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#EBB2B5",
-        tabBarInactiveTintColor: "grey",
+        tabBarActiveTintColor: "#F88559",
+        tabBarInactiveTintColor: "black",
         headerShown: false,
+        tabBarStyle: { backgroundColor: "#E0CAC2" },
       })}
     >
       <Tab.Screen name="Map" component={MapScreen} />
@@ -56,18 +63,32 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="SignUpUser" component={SignUpUserScreen} />
           <Stack.Screen name="SignUpPhoto" component={SignUpPhotoScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="MapPosition" component={MapPositionScreen} />
+          <Stack.Screen name="Confirm" component={ConfirmScreen} />
+          <Stack.Screen name="ConfirmDriver" component={ConfirmDriverScreen} />
+          <Stack.Screen name="Waiting" component={WaitingScreen} />
+          <Stack.Screen name="sos" component={SosScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Route" component={RouteScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  tabnav: {
+    backgroundColor: "transparent",
+  },
+});

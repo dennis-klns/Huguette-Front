@@ -342,9 +342,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     margin: 10,
   },
+
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 16,
   },
 
   container: {
