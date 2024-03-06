@@ -14,10 +14,10 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 
-export default function WaitingScreen({ navigation }) {
+export default function SosScreen({ navigation }) {
 
     const handleValidate = () => {
-        navigation.navigate("sos")
+        navigation.navigate("Map")
     }
 
 
@@ -30,33 +30,14 @@ export default function WaitingScreen({ navigation }) {
 
             <View style={styles.container}>
 
-                <Image
-                    source={require("../assets/map.png")}
-                    style={styles.image}
-                />
-
-                <View style={styles.card}>
-                    <Text style={styles.title}>Récapitulatif</Text>
-                    <Text style={styles.text}>56 boulevard Pereire - 45 rue Raymond Losserand</Text>
-                    <Text style={styles.text}>Prix - 13€</Text>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.title}>Marguerite</Text>
-                    <Text style={styles.text}>Mood: #fun #music</Text>
-                </View>
-                <View style={styles.card}>
-                    <Text style={styles.title}>Votre code</Text>
-                    <Text style={styles.text}>7543</Text>
-                </View>
-
-                <View style={styles.card}>
-                    <Text style={styles.text}>Echanger avec Marguerite...</Text>
-                    
-                </View>
+                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Contact en cours</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Annuler la course</Text>
+                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Contact d'urgence </Text>
                 </TouchableOpacity>
+
             </View>
 
         </LinearGradient>

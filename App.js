@@ -16,6 +16,7 @@ import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
+import SosScreen from "./screens/sosScreen"
 import WaitingScreen from './screens/WaitingScreen'
 
 
@@ -75,6 +76,7 @@ export default function App() {
         <Stack.Screen name="Confirm" component={ConfirmScreen} />
         <Stack.Screen name="ConfirmDriver" component={ConfirmDriverScreen} />
         <Stack.Screen name="Waiting" component={WaitingScreen} />
+        <Stack.Screen name="sos" component={SosScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
