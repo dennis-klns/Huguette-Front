@@ -10,14 +10,13 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-//import { UseSelector } from "react-redux";
 
 
 
-export default function SosScreen({ navigation }) {
+export default function ArrivalScreen({ navigation }) {
 
     const handleValidate = () => {
-        navigation.navigate("Arrival")
+        navigation.navigate("Map")
     }
 
 
@@ -30,17 +29,18 @@ export default function SosScreen({ navigation }) {
         >
 
             <View style={styles.container}>
+                <Text style={styles.title}>Vous êtes arrivée ! </Text>
 
-                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-                    <Text style={styles.textEmergency }>Contact en cours</Text>
+                <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+                    <Text style={styles.text}>Notez la course</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-                    <Text style={styles.textEmergency}>Contact d'urgence </Text>
+                <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+                    <Text style={styles.text}>Commenter la course (facultatif) </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Signaler </Text>
+                    <Text style={styles.textButton} onPress={() => handleValidate()}>Signaler </Text>
                 </TouchableOpacity>
 
             </View>
@@ -62,7 +62,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    emergency: {
+    title: {
+        fontSize: 40,
+        fontWeight: '600',
+    },
+
+    input: {
         height: 45,
         justifyContent: 'center',
         paddingTop: 8,
@@ -81,8 +86,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
 
-    textEmergency: {
-        fontWeight: '800',
+    text: {
+        fontWeight: '200',
         fontSize: 16,
     },
 

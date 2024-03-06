@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import ArrivalScreen from "./screens/ArrivalScreen";
+import ComplainScreen from './screens/ComplainScreen';
 import ConfirmDriverScreen from "./screens/ConfirmDriverScreen";
 import ConfirmScreen from "./screens/ConfirmScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -79,6 +81,8 @@ export default function App() {
           <Stack.Screen name="ConfirmDriver" component={ConfirmDriverScreen} />
           <Stack.Screen name="Waiting" component={WaitingScreen} />
           <Stack.Screen name="sos" component={SosScreen} />
+          <Stack.Screen name="Arrival" component={ArrivalScreen} />
+          <Stack.Screen name="Complain" component={ComplainScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Route" component={RouteScreen} />
         </Stack.Navigator>

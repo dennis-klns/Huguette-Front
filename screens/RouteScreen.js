@@ -20,6 +20,10 @@ export default function RouteScreen({ navigation }) {
 
   //const user = useSelector((state) => state.user.value);
 
+  const handleSOS = () => {
+    navigation.navigate('sos')
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -104,7 +108,7 @@ export default function RouteScreen({ navigation }) {
         <Text style={styles.text}>20 h 14</Text>
         <Text style={styles.text}>Partager ma course en temps réel ...</Text>
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>SOS</Text>
+          <Text style={styles.textButton} onPress={() => handleSOS()}>SOS</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
