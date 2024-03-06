@@ -2,14 +2,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
   Dimensions,
-  Modal,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import MapView from "react-native-maps";
+
 //import { UseSelector } from "react-redux";
 
 import * as Location from "expo-location";
@@ -74,16 +73,12 @@ export default function MapPositionScreen({ navigation }) {
           />
         </MapView>
       )}
-      <View style={styles.search}>
+      <View style={styles.container}>
         <Text style={styles.text}>Ou êtes vous exactement ?</Text>
         <Text style={styles.text}>Temps de trajet: </Text>
         <Text style={styles.text}>Prix : </Text>
-        <TouchableOpacity
-          onPress={signInClick}
-          style={styles.button}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.textButton}>Valider</Text>
+        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+          <Text style={styles.textButton}>Je confirme ma position</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -107,20 +102,14 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
   },
-  search: {
+  container: {
     width: "100%",
-    justifyContent: "space-around",
-    margin: 10,
+    alignItems: "center",
+    padding: 50,
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
-  },
-
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   button: {

@@ -22,10 +22,6 @@ import { Marker } from "react-native-maps";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [markerPosition, setMarkerPosition] = useState({
-    latitude: currentPosition?.latitude || 0,
-    longitude: currentPosition?.longitude || 0,
-  });
   const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
@@ -48,12 +44,6 @@ export default function MapScreen({ navigation }) {
     console.log("Details arrivée:", details.geometry?.location);
   };
 
-  const handleRegionChange = (region) => {
-    setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
-    console.log(region);
-    console.log(markerPosition);
-  };
-
   const toggleSwitch = () =>
     setIsAccompanied((previousState) => !previousState);
 
@@ -74,6 +64,11 @@ export default function MapScreen({ navigation }) {
   if (mood) {
     iconStyleMood = { color: "#F88559" };
   }
+
+  const handleValidate = () => {
+    setModalVisible(false);
+    navigation.navigate("MapPosition");
+  };
 
   useEffect(() => {
     (async () => {
@@ -103,10 +98,9 @@ export default function MapScreen({ navigation }) {
             latitudeDelta: 0.001,
             longitudeDelta: 0.001,
           }}
-          onRegionChange={handleRegionChange}
         >
           <Marker
-            coordinate={markerPosition}
+            coordinate={currentPosition}
             title="Vous êtes ici"
             image={require("../assets/marker.png")}
           />
