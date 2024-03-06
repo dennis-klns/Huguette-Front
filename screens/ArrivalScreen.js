@@ -19,6 +19,10 @@ export default function ArrivalScreen({ navigation }) {
         navigation.navigate("Map")
     }
 
+    const handleComplain = () => {
+        navigation.navigate("Complain")
+    }
+
 
 
 
@@ -39,9 +43,14 @@ export default function ArrivalScreen({ navigation }) {
                     <Text style={styles.text}>Commenter la course (facultatif) </Text>
                 </TouchableOpacity>
 
+                <View style={styles.buttonsgroup}>
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={() => handleValidate()}>Signaler </Text>
+                    <Text style={styles.textButton} onPress={() => handleValidate()}>Valider </Text>
+                    </TouchableOpacity>
+                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+                    <Text style={styles.textButton} onPress={() => handleComplain()}>Signaler </Text>
                 </TouchableOpacity>
+                </View>
 
             </View>
 
@@ -65,6 +74,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 40,
         fontWeight: '600',
+        marginBottom: '20%',
     },
 
     input: {
@@ -87,8 +97,14 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontWeight: '200',
+        fontWeight: '300',
         fontSize: 16,
+    },
+
+    buttonsgroup : {
+        width: '70%',
+        alignItems: 'center',
+        marginTop: '30%',
     },
 
     button: {
@@ -107,7 +123,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        marginTop: '30%',
 
     },
 
