@@ -15,6 +15,7 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 //import { UseSelector } from "react-redux";
 
 import * as Location from "expo-location";
@@ -29,8 +30,8 @@ export default function MapScreen({ navigation }) {
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
-
-  //const user = useSelector((state) => state.user.value);
+  const [userName, setUserName] = useState("");
+  const username = useSelector((state) => state.user.value.username);
 
   // Récupération des données lat,long du départ et de l'arrivée
 
@@ -107,7 +108,7 @@ export default function MapScreen({ navigation }) {
         </MapView>
       )}
       <View style={styles.search}>
-        <Text style={styles.text}>Hello User,</Text>
+        <Text style={styles.text}>Hello {userName},</Text>
         <Text style={styles.text}>Ou allons nous ?</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.addresse}>

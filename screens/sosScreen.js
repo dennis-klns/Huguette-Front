@@ -30,12 +30,16 @@ export default function SosScreen({ navigation }) {
 
             <View style={styles.container}>
 
-                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Contact en cours</Text>
+                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
+                    <Text style={styles.textEmergency} onPress={()=>handleValidate()}>Contact en cours</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
+                    <Text style={styles.textEmergency} onPress={()=>handleValidate()}>Contact d'urgence </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Contact d'urgence </Text>
+                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Signaler </Text>
                 </TouchableOpacity>
 
             </View>
@@ -54,35 +58,32 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
     },
 
-    image : {
-        height: '40%',
-        width: '100%',
-    },
-
-    card: {
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        width: '90%',
-        borderRadius: 10,
+    emergency: {
+        height: 45,
+        justifyContent: 'center',
+        paddingTop: 8,
+        width: "80%",
+        alignItems: "center",
         marginTop: 20,
-        padding: 10,
-    
-
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
 
-    title: {
-        marginTop: 10,
-        fontSize: 18,
+    textEmergency: {
+        fontWeight: '800',
+        fontSize: 16,
     },
-
-
-
-    text: {
-        fontWeight: '700',
-        marginTop: 10,
-    },
-
 
     button: {
         height: 40,
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        marginTop: '30%',
 
     },
 

@@ -17,11 +17,10 @@ import { Marker } from "react-native-maps";
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [markerPosition, setMarkerPosition] = useState({
-    latitude: currentPosition?.latitude || 0,
-    longitude: currentPosition?.longitude || 0,
+    latitude: currentPosition?.latitude,
+    longitude: currentPosition?.longitude,
   });
   const [addresses, setAddresses] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [isAccompanied, setIsAccompanied] = useState(false);
@@ -32,13 +31,12 @@ export default function MapPositionScreen({ navigation }) {
 
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
-    console.log(region);
-    console.log(markerPosition);
+    console.log("region:", region);
+    console.log("markerPosition:", markerPosition);
   };
-
   const handleValidate = () => {
-    navigation.navigate("Confirm")
-  }
+    navigation.navigate("Route");
+  };
 
   useEffect(() => {
     (async () => {
@@ -47,6 +45,7 @@ export default function MapPositionScreen({ navigation }) {
       if (status === "granted") {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           setCurrentPosition(location.coords);
+          setMarkerPosition(location.coords);
         });
       }
     })();
@@ -81,7 +80,11 @@ export default function MapPositionScreen({ navigation }) {
         <Text style={styles.text}>Ou êtes vous exactement ?</Text>
         <Text style={styles.text}>Temps de trajet: </Text>
         <Text style={styles.text}>Prix : </Text>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleValidate()}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => handleValidate()}
+        >
           <Text style={styles.textButton}>Je confirme ma position</Text>
         </TouchableOpacity>
       </View>
