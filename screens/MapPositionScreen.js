@@ -35,7 +35,7 @@ export default function MapPositionScreen({ navigation }) {
     console.log("markerPosition:", markerPosition);
   };
   const handleValidate = () => {
-    navigation.navigate("Route");
+    navigation.navigate("Confirm");
   };
 
   useEffect(() => {
