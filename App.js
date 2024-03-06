@@ -13,6 +13,7 @@ import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
+import RouteScreen from "./screens/RouteScreen";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -64,6 +65,7 @@ export default function App() {
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="MapPosition" component={MapPositionScreen} />
+          <Stack.Screen name="Route" component={RouteScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
