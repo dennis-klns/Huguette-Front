@@ -1,6 +1,6 @@
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 //import { UseSelector } from "react-redux";
 
 export default function RouteScreen({ navigation }) {
   const [directions, setDirections] = useState(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
 
   //const user = useSelector((state) => state.user.value);
@@ -37,6 +38,26 @@ export default function RouteScreen({ navigation }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (
+      directions &&
+      directions.routes &&
+      directions.routes.length > 0 &&
+      directions.routes[0].legs &&
+      directions.routes[0].legs.length > 0
+    ) {
+      const startLocation = directions.routes[0].legs[0].start_location;
+      const endLocation = directions.routes[0].legs[0].end_location;
+      const initialRegion = {
+        latitude: (startLocation.lat + endLocation.lat) / 2,
+        longitude: (startLocation.lng + endLocation.lng) / 2,
+        latitudeDelta: Math.abs(startLocation.lat - endLocation.lat) * 2,
+        longitudeDelta: Math.abs(startLocation.lng - endLocation.lng) * 2,
+      };
+      mapRef.current.animateToRegion(initialRegion);
+    }
+  }, [directions]);
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -44,6 +65,7 @@ export default function RouteScreen({ navigation }) {
     >
       {directions && (
         <MapView
+          ref={mapRef}
           style={styles.map}
           initialRegion={{
             latitude: directions.routes[0].legs[0].start_location.lat,
@@ -52,18 +74,13 @@ export default function RouteScreen({ navigation }) {
             longitudeDelta: 0.0421,
           }}
         >
-          {/*
-            <Polyline
-              coordinates={directions.routes[0].overview_polyline.points.map(
-                (data) => ({
-                  latitude: parseFloat(data.lat),
-                  longitude: parseFloat(data.lng),
-                })
-              )}
-              strokeWidth={4}
-              strokeColor="blue"
-            />
-              */}
+          <Polyline
+            coordinates={decodePolyline(
+              directions.routes[0].overview_polyline.points
+            )}
+            strokeWidth={6}
+            strokeColor="#EBB2B5"
+          />
           <Marker
             coordinate={{
               latitude: directions.routes[0].legs[0].start_location.lat,
@@ -139,3 +156,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+function decodePolyline(encoded) {
+  // Fonction pour décoder la polyline encodée de Google Directions
+  var points = [];
+  var index = 0,
+    len = encoded.length;
+  var lat = 0,
+    lng = 0;
+  while (index < len) {
+    var b,
+      shift = 0,
+      result = 0;
+    do {
+      b = encoded.charAt(index++).charCodeAt(0) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    var dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+    lat += dlat;
+    shift = 0;
+    result = 0;
+    do {
+      b = encoded.charAt(index++).charCodeAt(0) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    var dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+    lng += dlng;
+    points.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
+  }
+  return points;
+}
