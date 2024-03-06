@@ -36,6 +36,10 @@ export default function MapPositionScreen({ navigation }) {
     console.log(markerPosition);
   };
 
+  const handleValidate = () => {
+    navigation.navigate("Confirm")
+  }
+
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -77,7 +81,7 @@ export default function MapPositionScreen({ navigation }) {
         <Text style={styles.text}>Ou êtes vous exactement ?</Text>
         <Text style={styles.text}>Temps de trajet: </Text>
         <Text style={styles.text}>Prix : </Text>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleValidate()}>
           <Text style={styles.textButton}>Je confirme ma position</Text>
         </TouchableOpacity>
       </View>
