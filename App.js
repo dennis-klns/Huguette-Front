@@ -16,7 +16,7 @@ import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
-import SosScreen from "./screens/sosScreen"
+import SosScreen from './screens/SosScreen'
 import WaitingScreen from './screens/WaitingScreen'
 
 
