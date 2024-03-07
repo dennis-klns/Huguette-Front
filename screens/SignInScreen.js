@@ -30,7 +30,7 @@ export default function SignUpUserScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const signInClick = () => {
-    fetch("http://192.168.10.189:3000/users/signin", {
+    fetch("https://huguette-backend.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone: phone, email: email, password: password }),
