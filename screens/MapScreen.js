@@ -34,6 +34,7 @@ export default function MapScreen({ navigation }) {
 
 
   const user = useSelector((state) => state.user.value);
+
   const dispatch = useDispatch();
 
   // Récupération des données lat,long du départ et de l'arrivée
@@ -86,7 +87,7 @@ export default function MapScreen({ navigation }) {
         longitudeA: arrival.longitude,
         latitudeA: arrival.latitude,
         completeAddressA: arrival.completeAddress,
-        passenger : user.token,
+        tokenPassenger : user.token,
 
       }),
     })

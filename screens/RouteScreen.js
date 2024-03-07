@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-//import { UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function RouteScreen({ navigation }) {
   const [directions, setDirections] = useState(null);
@@ -18,7 +18,7 @@ export default function RouteScreen({ navigation }) {
   const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
 
-  //const user = useSelector((state) => state.user.value);
+  const trips = useSelector((state) => state.trips.value);
 
   const handleSOS = () => {
     navigation.navigate('sos')
@@ -28,7 +28,7 @@ export default function RouteScreen({ navigation }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=6 rue des Fontenettes, Bessencourt&key=${GOOGLE_API_KEY}`
+          `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=${trips.arrival}&key=${GOOGLE_API_KEY}`
         );
         console.log("API Response:", response.data);
         console.log(directions);
