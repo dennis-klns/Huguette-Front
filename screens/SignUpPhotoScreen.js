@@ -111,8 +111,8 @@ const pickImage = async () => {
   let formData = new FormData();
   formData.append('photoFromLibrairie', {
     uri: pickerResult?.assets[0]?.uri,
-    name: 'photo.jpg', // Le nom du fichier pourrait être dynamique ou basé sur une timestamp
-    type: 'image/jpeg', // Assurez-vous que le type correspond au type réel de l'image
+    name: 'photo.jpg', 
+    type: 'image/jpeg', 
   });
 
   fetch('http://192.168.10.154:3000/uploadLibrairie', {
@@ -121,7 +121,7 @@ const pickImage = async () => {
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Erreur réseau'); // ou une gestion plus spécifique basée sur response.status
+      throw new Error('Erreur réseau'); 
     }
     return response.json();
   })
