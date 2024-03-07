@@ -90,6 +90,8 @@ export default function MapPositionScreen({ navigation }) {
     })();
   }, []);
 
+console.lod(user);
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
