@@ -31,15 +31,23 @@ export default function ComplainScreen({ navigation }) {
             <View style={styles.container}>
 
                 <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-                    <Text style={styles.textEmergency }>Contact en cours</Text>
+                    <Text style={styles.textEmergency }>Comportement inapproprié</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-                    <Text style={styles.textEmergency}>Contact d'urgence </Text>
+                    <Text style={styles.textEmergency}>Sentiment d'insécurité </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
+                    <Text style={styles.textEmergency}>Véhicule sale</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
+                    <Text style={styles.textEmergency}>Autre</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Signaler </Text>
+                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Valider </Text>
                 </TouchableOpacity>
 
             </View>
@@ -62,13 +70,13 @@ const styles = StyleSheet.create({
     },
 
     emergency: {
-        height: 45,
+        height: 60,
         justifyContent: 'center',
         paddingTop: 8,
         width: "80%",
         alignItems: "center",
         marginTop: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
         borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
     },
 
     textEmergency: {
-        fontWeight: '800',
+        fontWeight: '700',
         fontSize: 16,
     },
 
