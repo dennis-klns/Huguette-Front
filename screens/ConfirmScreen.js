@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 
+
 export default function ConfirmScreen({ navigation }) {
     const [currentPosition, setCurrentPosition] = useState(null);
     const [markerPosition, setMarkerPosition] = useState({
@@ -21,7 +22,6 @@ export default function ConfirmScreen({ navigation }) {
         longitude: currentPosition?.longitude || 0,
     });
  
-
     const trips = useSelector((state) => state.trips.value);
 
     const handleValidate = () => {

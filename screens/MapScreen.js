@@ -42,6 +42,7 @@ export default function MapScreen({ navigation }) {
 
 
   const user = useSelector((state) => state.user.value);
+
   const dispatch = useDispatch();
 >>>>>>> fbbbd3cb2a6ce9dca63d940ea31890325e4c8d5f
 
@@ -95,7 +96,7 @@ export default function MapScreen({ navigation }) {
         longitudeA: arrival.longitude,
         latitudeA: arrival.latitude,
         completeAddressA: arrival.completeAddress,
-        passenger : user.token,
+        tokenPassenger : user.token,
 
       }),
     })
