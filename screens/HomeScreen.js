@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {

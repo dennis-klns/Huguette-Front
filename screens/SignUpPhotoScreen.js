@@ -70,7 +70,10 @@ type: 'image/jpeg',
 
 formData.append('photoFromFront', file);
 
-fetch('http://192.168.10.154:3000/upload', {
+//fetch('https://huguette-backend.vercel.app/upload'
+//http://192.168.10.154:3000/upload
+
+fetch('https://huguette-backend.vercel.app/upload', {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())
@@ -111,17 +114,22 @@ const pickImage = async () => {
   let formData = new FormData();
   formData.append('photoFromLibrairie', {
     uri: pickerResult?.assets[0]?.uri,
-    name: 'photo.jpg', // Le nom du fichier pourrait être dynamique ou basé sur une timestamp
-    type: 'image/jpeg', // Assurez-vous que le type correspond au type réel de l'image
+    name: 'photo.jpg', 
+    type: 'image/jpeg', 
   });
 
-  fetch('http://192.168.10.154:3000/uploadLibrairie', {
+
+  //https://huguette-backend.vercel.app/uploadLibrairie'
+  //http://192.168.10.154:3000/uploadLibrairie
+
+
+  fetch('https://huguette-backend.vercel.app/uploadLibrairie', {
     method: 'POST',
     body: formData,
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Erreur réseau'); // ou une gestion plus spécifique basée sur response.status
+      throw new Error('Erreur réseau'); 
     }
     return response.json();
   })
