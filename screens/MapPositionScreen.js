@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDistance, addCost, addDuration } from "../reducers/trip";
+import { addDeparture, addDistance, addCost, addDuration } from "../reducers/trip";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -62,12 +62,14 @@ export default function MapPositionScreen({ navigation }) {
       body: JSON.stringify({
         // cost: trip.cost,
         tripId: trip.tripId,
+        completeAddress : address,
+
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addTripId(data.trip._id));
+          dispatch(addDeparture(address));
           navigation.navigate("Confirm");
           console.log("OK");
         } else {
