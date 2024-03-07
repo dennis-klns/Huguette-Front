@@ -26,9 +26,10 @@ import RouteScreen from "./screens/RouteScreen";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import user from "./reducers/user";
+import trips from './reducers/trips';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, trips },
 });
 
 const Stack = createNativeStackNavigator();
