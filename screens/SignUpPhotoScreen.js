@@ -7,6 +7,7 @@ import {
   TextInput,
   Platform,
   SafeAreaView,
+  Image,
   Button,
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,6 +26,7 @@ import * as ImagePicker from 'expo-image-picker';
 export default function SignUpPhotoScreen({ navigation }) {
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [photoUri, setPhotoUri] = useState(null);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -58,6 +60,7 @@ const takePicture = async () => {
   if (cameraRef.current) {
     const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
     const uri = photo?.uri;
+    setPhotoUri(uri);
 
 
 const formData = new FormData();
@@ -107,7 +110,7 @@ const pickImage = async () => {
   console.log(pickerResult); 
 
   if (pickerResult?.assets[0]?.canceled === true) {
-    return;
+    setPhotoUri(pickerResult.assets[0].uri);
   }
   console.log("test", pickerResult?.assets[0]?.uri); 
 
@@ -140,71 +143,107 @@ const pickImage = async () => {
     console.error('Error uploading image:', error);
   });
 
+
+
+};
+
+const handleTakePhoto = async () => {
+  if (cameraRef.current) {
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+    const uri = photo?.uri;
+    setPhotoUri(uri);
+    toggleModal(); // Fermer le modal après avoir pris la photo
+  }
+};
+
+const handleValidation = () => {
+  if (photoUri) {
+    const formData = new FormData();
+    formData.append('photoFromFront', {
+      uri: photoUri,
+      name: 'photo.jpg',
+      type: 'image/jpeg',
+    });
+
+    fetch('https://huguette-backend.vercel.app/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Réponse du backend :', data);
+        toggleModal();
+      })
+      .catch(error => console.error('Erreur lors de la validation de la photo :', error));
+  } else {
+    console.error('Aucune photo à valider');
+  }
 };
 
     return (
 
-        <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
-            <View style={styles.container}>
-
-              <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>PROFIL PASSAGÈRE</Text>
-
-                        <View style={styles.profile}>
-                           <Text style={styles.text}>Ajouter votre photo de profil</Text>
+      <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
+          <View style={styles.container}>
+            <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>PROFIL PASSAGÈRE</Text>
+            <View style={styles.profile}>
+              <Text style={styles.text}>Ajouter votre photo de profil</Text>
+            </View>
+            <View style={styles.photoContainer}>
+              <View style={styles.photoContent}>
+                <View style={styles.textWrapper}>
+                {photoUri ? (
+    <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
+  ) : (
+                  <TouchableOpacity onPress={toggleModal}>
+                    <Text style={styles.text1}>Prendre une photo</Text>
+                  </TouchableOpacity> )}
+                  <Modal isVisible={isModalVisible} style={styles.modal}>
+                    <View style={styles.modalContent}>
+                      {photoUri ? (
+                        <View>
+                          <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
+                          <TouchableOpacity onPress={handleValidation}>
+                            <Text>Valider</Text>
+                          </TouchableOpacity>
                         </View>
-                     
-              <View style={styles.photoContainer}>
-                 <View style={styles.photoContent}>
-                    <View style={styles.textWrapper}>
-
-                      <TouchableOpacity onPress={toggleModal}>
-                         <Text style={styles.text1}>Prendre une photo</Text>
-                      </TouchableOpacity>
-
-                        <Modal isVisible={isModalVisible} style={styles.modal}>
-                           <View style={styles.modalContent}>
-                             {hasPermission ? (
-                               <Camera style={styles.camera} type={type} ref={cameraRef} flashMode={flashMode}>
-                                 <View style={styles.cameraContent}>
-                                  <TouchableOpacity onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)} style={styles.cameraButton}>
-                                    <FontAwesome name="rotate-right" size={25} color="#ffffff" />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity onPress={takePicture} style={styles.cameraButton}>
-                                    <FontAwesome name="camera" size={25} color="#ffffff" />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity onPress={toggleModal} style={styles.cameraButton}>
-                                    <FontAwesome name="times" size={25} color="#ffffff" />
-                                  </TouchableOpacity>
-                                 </View>
-                               </Camera>
-                             ) : (
-                             <Text>No access to camera</Text>
-                               )}
+                      ) : hasPermission ? (
+                        <Camera style={styles.camera} type={type} ref={cameraRef} flashMode={flashMode}>
+                          <View style={styles.cameraContent}>
+                            <TouchableOpacity onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)} style={styles.cameraButton}>
+                              <FontAwesome name="rotate-right" size={25} color="#ffffff" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleTakePhoto} style={styles.cameraButton}>
+                              <FontAwesome name="camera" size={25} color="#ffffff" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleModal} style={styles.cameraButton}>
+                              <FontAwesome name="times" size={25} color="#ffffff" />
+                            </TouchableOpacity>
                           </View>
-                        </Modal>
-
+                        </Camera>
+                      ) : (
+                        <Text>No access to camera</Text>
+                      )}
                     </View>
-                    
-                    <View style={styles.textWrapper}>
-                      <TouchableOpacity onPress={pickImage}>
-                        <Text style={styles.text1}>Choisir une photo dans votre librairie</Text>
-                      </TouchableOpacity>
-                    </View>
-                 </View>
-              </View>
-
-                <View style={styles.buttonContainer}>
-                     <TouchableOpacity onPress={() => handleMapScreen()}  style={styles.button2} activeOpacity={0.8}>
-                        <Text style={styles.textButton}>Passer</Text>
-                     </TouchableOpacity>
-
-                     <TouchableOpacity onPress={() => handleMapScreen()}  style={styles.button} activeOpacity={0.8}>
-                        <Text style={styles.textButton}>Valider</Text>
-                     </TouchableOpacity>
+                  </Modal>
                 </View>
-              </View>               
+                <View style={styles.textWrapper}>
+                  <TouchableOpacity onPress={pickImage}>
+                    <Text style={styles.text1}>Choisir une photo dans votre librairie</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button2} activeOpacity={0.8}>
+                <Text style={styles.textButton}>Passer</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button} activeOpacity={0.8}>
+                <Text style={styles.textButton}>Valider</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
