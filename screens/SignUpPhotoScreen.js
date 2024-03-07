@@ -25,6 +25,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 export default function SignUpPhotoScreen({ navigation }) {
 
+  const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState(null);
 
@@ -96,7 +97,7 @@ fetch('https://huguette-backend.vercel.app/upload', {
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  if (permissionResult.granted === false) {
+   if (permissionResult.granted === false) {
     alert("Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !");
     return;
   }
@@ -106,6 +107,7 @@ const pickImage = async () => {
     allowsEditing: true, 
     quality: 1, 
   });
+
 
   console.log(pickerResult); 
 
@@ -143,16 +145,16 @@ const pickImage = async () => {
     console.error('Error uploading image:', error);
   });
 
-
+  setIsPhotoUploaded(true);
 
 };
+
 
 const handleTakePhoto = async () => {
   if (cameraRef.current) {
     const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
     const uri = photo?.uri;
     setPhotoUri(uri);
-    toggleModal(); // Fermer le modal après avoir pris la photo
   }
 };
 
@@ -193,12 +195,9 @@ const handleValidation = () => {
             <View style={styles.photoContainer}>
               <View style={styles.photoContent}>
                 <View style={styles.textWrapper}>
-                {photoUri ? (
-    <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
-  ) : (
                   <TouchableOpacity onPress={toggleModal}>
                     <Text style={styles.text1}>Prendre une photo</Text>
-                  </TouchableOpacity> )}
+                  </TouchableOpacity>
                   <Modal isVisible={isModalVisible} style={styles.modal}>
                     <View style={styles.modalContent}>
                       {photoUri ? (
@@ -233,6 +232,14 @@ const handleValidation = () => {
                     <Text style={styles.text1}>Choisir une photo dans votre librairie</Text>
                   </TouchableOpacity>
                 </View>
+                {photoUri && (
+                  
+    <Image source={{ uri: photoUri }} style={styles.imagePreview} />
+    
+  )}
+  {isPhotoUploaded && (
+    <Text style={styles.uploadSuccessMessage}>Photo téléchargée !</Text>
+  )}
               </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -288,7 +295,7 @@ const styles = StyleSheet.create({
 
   photoContainer: {
     width: '80%',
-    height: '80%', 
+    height: '50%', 
     maxHeight: '65%', 
     alignItems: 'center',
     justifyContent: 'center',
@@ -298,7 +305,7 @@ const styles = StyleSheet.create({
   photoContent: {
     flex: 1,
     height: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   
@@ -426,6 +433,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
       },
+
+      imagePreview: {
+        width: 200, // Ou une largeur en pourcentage si vous préférez
+        height: 200, // Idem pour la hauteur
+        marginTop: 20, // Ajustez l'espacement selon vos besoins
+      },
+
+      uploadSuccessMessage: {
+        color: 'green',
+        marginTop: 10,
+        fontSize: 16,
+      },
       
     });
     
+
