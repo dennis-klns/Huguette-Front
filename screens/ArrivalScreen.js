@@ -24,7 +24,17 @@ export default function ArrivalScreen({ navigation }) {
     }
 
 
+    const stars = [];
 
+  
+    for (let i = 0; i < 10; i++) {
+        if( i < props.voteAverage -1)
+        {stars.push(<FontAwesome name="star" size={30} color="gold" key={i} className={styles.fullStar}/>);
+        } else {
+        {stars.push(<FontAwesome key={i} name="star" size={30} color="gold"/>);
+        }
+    };
+    }
 
     return (
         <LinearGradient

@@ -84,7 +84,11 @@ export default function SignUpUserScreen({ navigation }) {
 
     const formattedBirthdate = date.toISOString().split("T")[0];
 
+<<<<<<< HEAD
+    fetch("http://192.168.10.182:3000/users/signup", {
+=======
     fetch("https://huguette-backend.vercel.app/users/signup", {
+>>>>>>> cd564b8365d75c8e146715a70dc04781dbd70da5
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -100,8 +104,13 @@ export default function SignUpUserScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
+<<<<<<< HEAD
+          dispatch(login({ phone, token: data.token }));
+          navigation.navigate("TabNavigator", { screen: "Map" });
+=======
           dispatch(login({ phone, token: data.token })); //surement rajouter le email
           navigation.navigate("SignUpPhoto");
+>>>>>>> cd564b8365d75c8e146715a70dc04781dbd70da5
         } else {
           console.error("Signup failed:", data.error);
         }
@@ -110,6 +119,31 @@ export default function SignUpUserScreen({ navigation }) {
         console.error("Error:", error);
       });
   };
+<<<<<<< HEAD
+
+        
+
+        fetch('https://huguette-backend.vercel.app/users/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lastname, firstname, email, phone, birthdate: formattedBirthdate, gender, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.result) {
+            dispatch(login({ phone, token: data.token })); //surement rajouter le email
+            navigation.navigate('SignUpPhoto');
+          } else {
+            console.error('Signup failed:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        })
+       
+    
+=======
+>>>>>>> cd564b8365d75c8e146715a70dc04781dbd70da5
 
   const validateEmail = (value) => {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;

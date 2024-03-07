@@ -8,8 +8,6 @@ import {
     View,
 } from "react-native";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 //import { UseSelector } from "react-redux";
 
 

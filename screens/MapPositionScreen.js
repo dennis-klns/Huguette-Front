@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 
-//import { UseSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+import { addArrival, addDistance, addCost, addDuration } from "../reducers/trips";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -21,10 +22,13 @@ export default function MapPositionScreen({ navigation }) {
     longitude: currentPosition?.longitude,
   });
 
+  const dispatch = useDispatch();
+
+
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
   const [address, setAddress] = useState("");
 
-  //const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.value);
 
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
@@ -49,9 +53,29 @@ export default function MapPositionScreen({ navigation }) {
     }
   };
 
-  const handleValidate = () => {
-    navigation.navigate("Confirm");
-  };
+  // const handleValidate = () => {
+  //   fetch("https://huguette-backend.vercel.app/trips/costPosition", {
+  //     method: "PUT",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       cost: ,
+  //       tripId: ,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.result) {
+  //         dispatch(addTripId(data.trip._id));
+  //         navigation.navigate("Confirm");
+  //         console.log("OK");
+  //       } else {
+  //         console.error("Failed:", data.error);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
   useEffect(() => {
     (async () => {

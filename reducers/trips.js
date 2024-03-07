@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
+    tripId:null,
     departure: null,
     arrival: null,
     duration: null,
@@ -29,9 +30,12 @@ export const tripsSlice = createSlice({
     addCost: (state, action) => {
       state.value.cost = action.payload;
     },
+    addTripId: (state, action) => {
+      state.value.cost = action.payload;
+    },
   },
 });
 
-export const { addDeparture, addArrival, addDuration, addDistance, addCost } =
+export const { addDeparture, addArrival, addDuration, addDistance, addCost, addTripId } =
   tripsSlice.actions;
 export default tripsSlice.reducer;

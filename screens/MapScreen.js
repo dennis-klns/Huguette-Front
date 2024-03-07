@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+import { addArrival, addTripId } from "../reducers/trips";
 
 import { addArrival, addDeparture } from "../reducers/trips";
 
@@ -100,6 +101,7 @@ export default function MapScreen({ navigation }) {
       .then((data) => {
         if (data.result) {
           console.log("OK");
+          dispatch(addTripId(data.trip._id));
         } else {
           console.error("Failed:", data.error);
         }
