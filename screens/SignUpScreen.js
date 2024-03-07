@@ -4,6 +4,7 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Button,
   } from 'react-native';
   import { LinearGradient } from "expo-linear-gradient";
   

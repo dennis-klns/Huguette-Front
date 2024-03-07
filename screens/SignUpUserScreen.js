@@ -85,6 +85,7 @@ export default function SignUpUserScreen({ navigation }) {
     const formattedBirthdate = date.toISOString().split("T")[0];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     fetch("http://192.168.10.182:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -113,6 +114,9 @@ export default function SignUpUserScreen({ navigation }) {
   };
 =======
         fetch('http://192.168.10.156:3000/users/signup', {
+=======
+        fetch('https://huguette-backend.vercel.app/users/signup', {
+>>>>>>> 9ff6ecc1ae7618241257b25c3d9ec04f1ea5044b
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ lastname, firstname, email, phone, birthdate: formattedBirthdate, gender, password }),
