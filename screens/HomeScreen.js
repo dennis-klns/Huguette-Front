@@ -5,11 +5,13 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   const handleSignUp = () => {
-    navigation.navigate("SignUp");
+    navigation.navigate("SignUpPhoto");
+    // navigation.navigate("SignUp");
   };
 
   const handleSignIn = () => {

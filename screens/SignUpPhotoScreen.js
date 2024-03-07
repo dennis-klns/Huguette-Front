@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,21 +10,137 @@ import {
   Button,
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import Modal from 'react-native-modal'; 
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useIsFocused } from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker';
 
 
 export default function SignUpPhotoScreen({ navigation }) {
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   
-    
+  const formData = new FormData();
+  
   const handleMapScreen = () => {
-    navigation.navigate('Map');
+    navigation.navigate('TabNavigator', { screen: 'Map'});
 
 }
+
+const dispatch = useDispatch();
+const isFocused = useIsFocused();
+
+const [hasPermission, setHasPermission] = useState(false);
+const [type, setType] = useState(CameraType.front);
+const [flashMode, setFlashMode] = useState(FlashMode.off);
+
+let cameraRef  = useRef(null);
+
+useEffect(() => {
+  (async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    setHasPermission(status === 'granted');
+  })();
+}, []);
+
+
+const takePicture = async () => {
+  if (cameraRef.current) {
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+    const uri = photo?.uri;
+
+
+const formData = new FormData();
+
+const file = {
+uri: uri,
+name: 'photo.jpg',
+type: 'image/jpeg',
+};
+
+formData.append('photoFromFront', file);
+
+//fetch('https://huguette-backend.vercel.app/upload'
+//http://192.168.10.154:3000/upload
+
+fetch('https://huguette-backend.vercel.app/upload', {
+  method: 'POST',
+  body: formData,
+}).then((response) => response.json())
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((error) => {
+    console.error('Error uploading photo:', error);
+  });
+  }
+
+  if (!hasPermission || !isFocused) {
+    return <View />;
+  }
+};
+
+const pickImage = async () => {
+  const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+  if (permissionResult.granted === false) {
+    alert("Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !");
+    return;
+  }
+  
+  const pickerResult = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true, 
+    quality: 1, 
+  });
+
+  console.log(pickerResult); 
+
+  if (pickerResult?.assets[0]?.canceled === true) {
+    return;
+  }
+  console.log("test", pickerResult?.assets[0]?.uri); 
+
+  let formData = new FormData();
+  formData.append('photoFromLibrairie', {
+    uri: pickerResult?.assets[0]?.uri,
+    name: 'photo.jpg', 
+    type: 'image/jpeg', 
+  });
+
+
+  //https://huguette-backend.vercel.app/uploadLibrairie'
+  //http://192.168.10.154:3000/uploadLibrairie
+
+
+  fetch('https://huguette-backend.vercel.app/uploadLibrairie', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur réseau'); 
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('librairie2:', data);
+  })
+  .catch((error) => {
+    console.error('Error uploading image:', error);
+  });
+
+};
 
     return (
 
@@ -33,21 +149,68 @@ export default function SignUpPhotoScreen({ navigation }) {
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
             <View style={styles.container}>
 
-                        <Text style={styles.title}>PROFIL PASSAGÈRE</Text>
+              <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>PROFIL PASSAGÈRE</Text>
 
-                           <View style={styles.profile}>
-                              <Text style={styles.text}>Votre profil</Text>
-                           </View>
+                        <View style={styles.profile}>
+                           <Text style={styles.text}>Ajouter votre photo de profil</Text>
+                        </View>
+                     
+              <View style={styles.photoContainer}>
+                 <View style={styles.photoContent}>
+                    <View style={styles.textWrapper}>
 
-              <TouchableOpacity onPress={() => handleMapScreen()}  style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Conductrice</Text>
-        </TouchableOpacity>
-            </View>               
+                      <TouchableOpacity onPress={toggleModal}>
+                         <Text style={styles.text1}>Prendre une photo</Text>
+                      </TouchableOpacity>
+
+                        <Modal isVisible={isModalVisible} style={styles.modal}>
+                           <View style={styles.modalContent}>
+                             {hasPermission ? (
+                               <Camera style={styles.camera} type={type} ref={cameraRef} flashMode={flashMode}>
+                                 <View style={styles.cameraContent}>
+                                  <TouchableOpacity onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)} style={styles.cameraButton}>
+                                    <FontAwesome name="rotate-right" size={25} color="#ffffff" />
+                                  </TouchableOpacity>
+                                  <TouchableOpacity onPress={takePicture} style={styles.cameraButton}>
+                                    <FontAwesome name="camera" size={25} color="#ffffff" />
+                                  </TouchableOpacity>
+                                  <TouchableOpacity onPress={toggleModal} style={styles.cameraButton}>
+                                    <FontAwesome name="times" size={25} color="#ffffff" />
+                                  </TouchableOpacity>
+                                 </View>
+                               </Camera>
+                             ) : (
+                             <Text>No access to camera</Text>
+                               )}
+                          </View>
+                        </Modal>
+
+                    </View>
+                    
+                    <View style={styles.textWrapper}>
+                      <TouchableOpacity onPress={pickImage}>
+                        <Text style={styles.text1}>Choisir une photo dans votre librairie</Text>
+                      </TouchableOpacity>
+                    </View>
+                 </View>
+              </View>
+
+                <View style={styles.buttonContainer}>
+                     <TouchableOpacity onPress={() => handleMapScreen()}  style={styles.button2} activeOpacity={0.8}>
+                        <Text style={styles.textButton}>Passer</Text>
+                     </TouchableOpacity>
+
+                     <TouchableOpacity onPress={() => handleMapScreen()}  style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textButton}>Valider</Text>
+                     </TouchableOpacity>
+                </View>
+              </View>               
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
 }
+
 
 const styles = StyleSheet.create({
   linearGradient: {
@@ -57,34 +220,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
   },
 
   title: {
-    width: "80%",
+    width: "80%", 
     fontSize: 24,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
     margin: 40,
+
   },
 
   profile: {
     width: "100%",
     alignItems: "center",
     marginBottom: 80,
-  },
-
-  pay: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
-  },
-
-  paywith: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
+  
   },
 
   text: {
@@ -95,31 +247,36 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
-    input: {
-            width: '80%',
-            marginTop: 25,
-            borderBottomColor: '#4F4F4F', 
-            borderBottomWidth: 1,
-            fontSize: 16,
-            color: '#4F4F4F',
-       
-      },
-
-  halfinput: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
+  photoContainer: {
+    width: '80%',
+    height: '80%', 
+    maxHeight: '65%', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+  },
+  
+  photoContent: {
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
+  textWrapper: {
+    marginVertical: 25,
   },
 
-  smallinput: {
-    width: "30%",
-    marginTop: 25,
-    borderBottomColor: "#4F4F4F",
-    borderBottomWidth: 1,
-    fontSize: 16,
-    color: "#4F4F4F",
+  text1:{
+    fontSize: 19,
   },
+
+  buttonContainer:{
+    marginTop: '15%',
+    width: '80%',
+    alignItems: 'center',
+  },
+
 
   button: {
     height: 40,
@@ -138,6 +295,25 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
+  button2: {
+    height: 40,
+    paddingTop: 8,
+    width: "40%",
+    alignItems: "center",
+    marginTop: 20,
+    backgroundColor: "#EAAC8B",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
 
     textButton: {
         color: '#fff',
@@ -158,40 +334,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
       },
 
-      datePickerContainer: {
-        marginTop: 5,
-        borderBottomColor: '#4F4F4F',
-        borderBottomWidth: 1,
-        width: '80%',
-        alignItems: 'center',
-        justifyContent: 'center', 
-      },
-      
-      datePickerButton: {
-        width: '100%',
-        height: 38,
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',
-      },
-      
-      datePickerButtonText: {
-        fontSize: 16,
-        color: 'rgba(80, 80, 80, 0.35)',
-      },
-
-      calendrier: {
-       paddingBottom: 10,
-      },
-
-      modalContent: {
-        backgroundColor: "white",
-        padding: 22,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-     
-      },
       
       genderInput: {
         height: 40,
@@ -202,15 +344,49 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginTop: 5,
       },
-
+      
       genderText: {
         fontSize: 16,
       },
-
+      
       texteModal:{
         marginTop: 10,
         fontSize: 15,
       },
+      
+      modal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+      },
 
-   
-});
+
+      modalContent: {
+        height: '70%',
+        backgroundColor: "white",
+        padding: 22,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 4,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+     
+      },
+
+      camera: {
+        width: '100%',
+        height: '70%',
+      },
+      cameraContent: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 20,
+      },
+      cameraButton: {
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+      },
+      
+    });
+    
