@@ -20,20 +20,35 @@ export default function MapPositionScreen({ navigation }) {
     latitude: currentPosition?.latitude,
     longitude: currentPosition?.longitude,
   });
-  const [addresses, setAddresses] = useState("");
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [isAccompanied, setIsAccompanied] = useState(false);
-  const [mood, setMood] = useState(false);
-  const [music, setMusic] = useState(false);
+
+  const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
+  const [address, setAddress] = useState("");
 
   //const user = useSelector((state) => state.user.value);
 
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
-    console.log("region:", region);
-    console.log("markerPosition:", markerPosition);
   };
+
+  const fetchAddressFromCoordinates = async () => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${markerPosition.latitude},${markerPosition.longitude}&key=${GOOGLE_API_KEY}`
+      );
+      const data = await response.json();
+      console.log("data", data);
+      if (data.status === "OK" && data.results.length > 0) {
+        console.log(data.results[0].formatted_address);
+        setAddress(data.results[0].formatted_address);
+      } else {
+        setAddress("Adresse non disponible");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'adresse:", error);
+      setAddress("Erreur lors de la récupération de l'adresse");
+    }
+  };
+
   const handleValidate = () => {
     navigation.navigate("Confirm");
   };
@@ -68,6 +83,7 @@ export default function MapPositionScreen({ navigation }) {
             longitudeDelta: 0.001,
           }}
           onRegionChange={handleRegionChange}
+          onTouchEnd={fetchAddressFromCoordinates}
         >
           <Marker
             coordinate={markerPosition}

@@ -21,8 +21,8 @@ export default function RouteScreen({ navigation }) {
   const trips = useSelector((state) => state.trips.value);
 
   const handleSOS = () => {
-    navigation.navigate('sos')
-  }
+    navigation.navigate("sos");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,10 +30,9 @@ export default function RouteScreen({ navigation }) {
         const response = await axios.get(
           `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=${trips.arrival}&key=${GOOGLE_API_KEY}`
         );
-        console.log("API Response:", response.data);
-        console.log(directions);
         setDirections(response.data);
-        console.log(response.data);
+        console.log("API Response:", response.data);
+        console.log("API Distance:", response.data);
       } catch (error) {
         console.error("Error fetching directions:", error);
       }
@@ -52,6 +51,8 @@ export default function RouteScreen({ navigation }) {
     ) {
       const startLocation = directions.routes[0].legs[0].start_location;
       const endLocation = directions.routes[0].legs[0].end_location;
+      console.log(directions.routes[0].legs[0].distance.text);
+      console.log(directions.routes[0].legs[0].duration.text);
       const initialRegion = {
         latitude: (startLocation.lat + endLocation.lat) / 2,
         longitude: (startLocation.lng + endLocation.lng) / 2,
@@ -108,7 +109,9 @@ export default function RouteScreen({ navigation }) {
         <Text style={styles.text}>20 h 14</Text>
         <Text style={styles.text}>Partager ma course en temps réel ...</Text>
         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton} onPress={() => handleSOS()}>SOS</Text>
+          <Text style={styles.textButton} onPress={() => handleSOS()}>
+            SOS
+          </Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

@@ -15,12 +15,12 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 
-import { addDeparture, addArrival } from '../reducers/trips'
+import { addArrival, addDeparture } from "../reducers/trips";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -32,7 +32,6 @@ export default function MapScreen({ navigation }) {
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
 
-
   const user = useSelector((state) => state.user.value);
 
   const dispatch = useDispatch();
@@ -43,16 +42,23 @@ export default function MapScreen({ navigation }) {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
     dispatch(addDeparture(data.description));
-    setDeparture({ latitude: details.geometry?.location.lat, longitude: details.geometry?.location.lng, completeAddress: data.description })
-  }
-
+    setDeparture({
+      latitude: details.geometry?.location.lat,
+      longitude: details.geometry?.location.lng,
+      completeAddress: data.description,
+    });
+  };
 
   const handleArrivalSelect = (data, details) => {
     console.log("Data arrivée:", data);
     console.log("Details arrivée:", details.geometry?.location);
     dispatch(addArrival(data.description));
-    setArrival({ latitude: details.geometry?.location.lat, longitude: details.geometry?.location.lng, completeAddress: data.description })
-  }
+    setArrival({
+      latitude: details.geometry?.location.lat,
+      longitude: details.geometry?.location.lng,
+      completeAddress: data.description,
+    });
+  };
 
   const toggleSwitch = () =>
     setIsAccompanied((previousState) => !previousState);
@@ -87,16 +93,15 @@ export default function MapScreen({ navigation }) {
         longitudeA: arrival.longitude,
         latitudeA: arrival.latitude,
         completeAddressA: arrival.completeAddress,
-        tokenPassenger : user.token,
-
+        tokenPassenger: user.token,
       }),
     })
       .then((response) => response.json())
-      .then(data => {
+      .then((data) => {
         if (data.result) {
-          console.log('OK');
+          console.log("OK");
         } else {
-          console.error('Failed:', data.error);
+          console.error("Failed:", data.error);
         }
       })
       .catch((error) => {
@@ -117,9 +122,6 @@ export default function MapScreen({ navigation }) {
       }
     })();
   }, []);
-
-
-
 
   return (
     <LinearGradient
@@ -389,7 +391,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 10,
   },
 
