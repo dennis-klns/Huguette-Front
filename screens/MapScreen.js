@@ -199,8 +199,6 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
-                    width: "100%",
-                    height: 40,
                   },
                   listView: {
                     position: "absolute",
@@ -248,8 +246,6 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
-                    width: "100%",
-                    height: 40,
                   },
                   listView: {
                     position: "absolute",
@@ -343,8 +339,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   input: {
