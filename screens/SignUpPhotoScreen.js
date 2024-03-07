@@ -70,6 +70,9 @@ type: 'image/jpeg',
 
 formData.append('photoFromFront', file);
 
+//fetch('https://huguette-backend.vercel.app/upload'
+//http://192.168.10.154:3000/upload
+
 fetch('https://huguette-backend.vercel.app/upload', {
   method: 'POST',
   body: formData,
@@ -114,6 +117,11 @@ const pickImage = async () => {
     name: 'photo.jpg', 
     type: 'image/jpeg', 
   });
+
+
+  //https://huguette-backend.vercel.app/uploadLibrairie'
+  //http://192.168.10.154:3000/uploadLibrairie
+
 
   fetch('https://huguette-backend.vercel.app/uploadLibrairie', {
     method: 'POST',
