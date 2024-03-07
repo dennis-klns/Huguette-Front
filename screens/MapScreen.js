@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDeparture, addTripId } from "../reducers/trips";
+import { addArrival, addDeparture, addTripId } from "../reducers/trip";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -100,7 +100,7 @@ export default function MapScreen({ navigation }) {
         if (data.result) {
           console.log("OK");
           dispatch(addTripId(data.trip._id));
-          
+
           console.log("trips:", trip);
         } else {
           console.error("Failed:", data.error);

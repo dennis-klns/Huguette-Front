@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addDeparture, addDistance, addCost, addDuration } from "../reducers/trip";
+import { addDeparture } from "../reducers/trip";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -25,7 +25,6 @@ export default function MapPositionScreen({ navigation }) {
   const trip = useSelector((state) => state.trip.value);
 
   const dispatch = useDispatch();
-
 
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
   const [address, setAddress] = useState("");
@@ -62,14 +61,16 @@ export default function MapPositionScreen({ navigation }) {
       body: JSON.stringify({
         // cost: trip.cost,
         tripId: trip.tripId,
-        completeAddress : address,
-
+        completeAddress: address,
+        latitudeD: markerPosition.latitude,
+        longitudeD: markerPosition.longitude,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
           dispatch(addDeparture(address));
+          console.log("address:", address);
           navigation.navigate("Confirm");
           console.log("OK");
         } else {
@@ -94,7 +95,7 @@ export default function MapPositionScreen({ navigation }) {
     })();
   }, []);
 
-console.lod(user);
+  console.log(user);
 
   return (
     <LinearGradient
