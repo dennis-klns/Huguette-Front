@@ -85,8 +85,8 @@ export default function SignUpUserScreen({ navigation }) {
         .then(response => response.json())
         .then(data => {
           if (data.result) {
-            dispatch(login({ phone, token: data.token }));
-            navigation.navigate('TabNavigator', {screen: "Map"});
+            dispatch(login({ phone, token: data.token })); //surement rajouter le email
+            navigation.navigate('SignUpPhoto');
           } else {
             console.error('Signup failed:', data.error);
           }
