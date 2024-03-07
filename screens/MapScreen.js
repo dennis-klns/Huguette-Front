@@ -15,35 +15,43 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector } from "react-redux";
-//import { UseSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+
+import { addDeparture, addArrival } from '../reducers/trips'
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [departure, setDeparture] = useState("");
+  const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState("");
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
-  const [userName, setUserName] = useState("");
-  const username = useSelector((state) => state.user.value.username);
+
+
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
 
   // Récupération des données lat,long du départ et de l'arrivée
 
   const handleDepartureSelect = (data, details) => {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
-  };
+    dispatch(addDeparture(data.description));
+    setDeparture({latitude :details.geometry?.location.lat, longitude :details.geometry?.location.lng})
+  }
+
 
   const handleArrivalSelect = (data, details) => {
     console.log("Data arrivée:", data);
     console.log("Details arrivée:", details.geometry?.location);
-  };
+    dispatch(addArrival(data.description));
+    setArrival({latitude :details.geometry?.location.lat, longitude :details.geometry?.location.lng})
+  }
 
   const toggleSwitch = () =>
     setIsAccompanied((previousState) => !previousState);
@@ -68,6 +76,28 @@ export default function MapScreen({ navigation }) {
 
   const handleValidate = () => {
     setModalVisible(false);
+    fetch("http://192.168.10.157:3000/trips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        latitudeD: details.geometry?.location.lat,
+        longitudeD: details.geometry?.location.lng,
+        completeAddressD: data.description,
+
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addDeparture(data.description));
+        } else {
+          console.error("Failed:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
     navigation.navigate("MapPosition");
   };
 
@@ -81,7 +111,15 @@ export default function MapScreen({ navigation }) {
         });
       }
     })();
-  }, []);
+
+    //fetch('http://localhost:3000/users')
+
+
+  },
+    []);
+
+
+
 
   return (
     <LinearGradient
@@ -108,7 +146,7 @@ export default function MapScreen({ navigation }) {
         </MapView>
       )}
       <View style={styles.search}>
-        <Text style={styles.text}>Hello {userName},</Text>
+        <Text style={styles.text}>Hello {user.firstname},</Text>
         <Text style={styles.text}>Ou allons nous ?</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.addresse}>
@@ -283,20 +321,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   modalHeader: {
     margin: 20,
   },
+
   modalHeaderText: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
   },
+
   modalContent: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
     width: "80%",
   },
+
   input: {
     borderBottomWidth: 1,
     borderColor: "#ccc",
@@ -304,12 +346,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
   },
+
   searchButton: {
     backgroundColor: "#1e90ff",
     padding: 12,
     borderRadius: 5,
     alignItems: "center",
   },
+
   searchButtonText: {
     color: "#fff",
     fontSize: 16,
@@ -339,12 +383,14 @@ const styles = StyleSheet.create({
   },
   search: {
     width: "100%",
-    justifyContent: "space-around",
+    justifyContent: "center",
     margin: 10,
   },
 
   text: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
   },
 
   container: {
