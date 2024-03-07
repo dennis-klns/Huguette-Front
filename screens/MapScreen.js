@@ -42,7 +42,7 @@ export default function MapScreen({ navigation }) {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
     dispatch(addDeparture(data.description));
-    setDeparture({latitude :details.geometry?.location.lat, longitude :details.geometry?.location.lng})
+    setDeparture({ latitude: details.geometry?.location.lat, longitude: details.geometry?.location.lng, completeAddress: data.description })
   }
 
 
@@ -50,7 +50,7 @@ export default function MapScreen({ navigation }) {
     console.log("Data arrivée:", data);
     console.log("Details arrivée:", details.geometry?.location);
     dispatch(addArrival(data.description));
-    setArrival({latitude :details.geometry?.location.lat, longitude :details.geometry?.location.lng})
+    setArrival({ latitude: details.geometry?.location.lat, longitude: details.geometry?.location.lng, completeAddress: data.description })
   }
 
   const toggleSwitch = () =>
@@ -76,22 +76,26 @@ export default function MapScreen({ navigation }) {
 
   const handleValidate = () => {
     setModalVisible(false);
-    fetch("http://192.168.10.157:3000/trips", {
+    fetch("https://huguette-backend.vercel.app/trips", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        latitudeD: details.geometry?.location.lat,
-        longitudeD: details.geometry?.location.lng,
-        completeAddressD: data.description,
+        longitudeD: departure.longitude,
+        latitudeD: departure.latitude,
+        completeAddressD: departure.completeAddress,
+        longitudeA: arrival.longitude,
+        latitudeA: arrival.latitude,
+        completeAddressA: arrival.completeAddress,
+        passenger : user.token,
 
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(data => {
         if (data.result) {
-          dispatch(addDeparture(data.description));
+          console.log('OK');
         } else {
-          console.error("Failed:", data.error);
+          console.error('Failed:', data.error);
         }
       })
       .catch((error) => {
@@ -111,12 +115,7 @@ export default function MapScreen({ navigation }) {
         });
       }
     })();
-
-    //fetch('http://localhost:3000/users')
-
-
-  },
-    []);
+  }, []);
 
 
 
