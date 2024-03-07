@@ -111,7 +111,7 @@ export default function SignUpUserScreen({ navigation }) {
       });
   };
 
-        fetch('http://192.168.10.156:3000/users/signup', {
+        
 
         fetch('https://huguette-backend.vercel.app/users/signup', {
           method: 'POST',
@@ -131,7 +131,7 @@ export default function SignUpUserScreen({ navigation }) {
           console.error('Error:', error);
         })
        
-      };
+    
 
   const validateEmail = (value) => {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
