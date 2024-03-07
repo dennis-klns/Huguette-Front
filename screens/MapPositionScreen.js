@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDistance, addCost, addDuration } from "../reducers/trips";
+import { addArrival, addDistance, addCost, addDuration } from "../reducers/trip";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);

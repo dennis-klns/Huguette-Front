@@ -19,8 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addTripId, addDeparture } from "../reducers/trips";
-
+import { addArrival, addTripId, addDeparture } from "../reducers/trip";
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [addresses, setAddresses] = useState("");
