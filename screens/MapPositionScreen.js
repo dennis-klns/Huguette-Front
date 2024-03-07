@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDistance, addCost, addDuration } from "../reducers/trips";
+import { addArrival, addDistance, addCost, addDuration } from "../reducers/trip";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -21,6 +21,8 @@ export default function MapPositionScreen({ navigation }) {
     latitude: currentPosition?.latitude,
     longitude: currentPosition?.longitude,
   });
+
+  const trip = useSelector((state) => state.trip.value);
 
   const dispatch = useDispatch();
 
@@ -53,29 +55,29 @@ export default function MapPositionScreen({ navigation }) {
     }
   };
 
-  // const handleValidate = () => {
-  //   fetch("https://huguette-backend.vercel.app/trips/costPosition", {
-  //     method: "PUT",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       cost: ,
-  //       tripId: ,
-  //     }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data.result) {
-  //         dispatch(addTripId(data.trip._id));
-  //         navigation.navigate("Confirm");
-  //         console.log("OK");
-  //       } else {
-  //         console.error("Failed:", data.error);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
+  const handleValidate = () => {
+    fetch("https://huguette-backend.vercel.app/trips/costPosition", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // cost: trip.cost,
+        tripId: trip.tripId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addTripId(data.trip._id));
+          navigation.navigate("Confirm");
+          console.log("OK");
+        } else {
+          console.error("Failed:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   useEffect(() => {
     (async () => {

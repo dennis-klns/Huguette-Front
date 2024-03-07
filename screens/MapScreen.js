@@ -32,7 +32,7 @@ export default function MapScreen({ navigation }) {
   const [music, setMusic] = useState(false);
 
   const user = useSelector((state) => state.user.value);
-  const trips = useSelector((state) => state.trips.value);
+  const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
 
   // Récupération des données lat,long du départ et de l'arrivée
@@ -100,7 +100,8 @@ export default function MapScreen({ navigation }) {
         if (data.result) {
           console.log("OK");
           dispatch(addTripId(data.trip._id));
-          console.log("trips:", trips);
+          
+          console.log("trips:", trip);
         } else {
           console.error("Failed:", data.error);
         }
