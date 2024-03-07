@@ -31,7 +31,8 @@ export default function MapScreen({ navigation }) {
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
   const [userName, setUserName] = useState("");
-  const username = useSelector((state) => state.user.value.username);
+
+  const firstname = useSelector((state) => state.user.value.firstname);
 
   // Récupération des données lat,long du départ et de l'arrivée
 

@@ -5,6 +5,7 @@ const initialState = {
     token: null,
     email: null,
     addresses: [],
+    firstname: null,
   },
 };
 
