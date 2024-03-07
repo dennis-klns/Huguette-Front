@@ -38,7 +38,7 @@ export default function SignUpUserScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ phone: phone, email: email, token: data.token }));
+          dispatch(login({ firstname: data.firstname, token: data.token }));
           setEmail("");
           setPhone("");
           setPassword("");

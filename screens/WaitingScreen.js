@@ -9,12 +9,13 @@ import {
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
-//import { UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 
 
 export default function WaitingScreen({ navigation }) {
+
+    const trips = useSelector((state) => state.trips.value)
 
     const handleValidate = () => {
         navigation.navigate("Route")
@@ -37,7 +38,7 @@ export default function WaitingScreen({ navigation }) {
 
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif</Text>
-                    <Text style={styles.text}>56 boulevard Pereire - 45 rue Raymond Losserand</Text>
+                    <Text style={styles.text}>{trips.departure} - {trips.arrival}</Text>
                     <Text style={styles.text}>Prix - 13€</Text>
                 </View>
                 <View style={styles.card}>
@@ -51,11 +52,11 @@ export default function WaitingScreen({ navigation }) {
 
                 <View style={styles.card}>
                     <Text style={styles.text}>Echanger avec Marguerite...</Text>
-                    
+
                 </View>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Annuler la course</Text>
+                    <Text style={styles.textButton} onPress={() => handleValidate()}>Annuler la course</Text>
                 </TouchableOpacity>
             </View>
 
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    image : {
+    image: {
         height: '40%',
         width: '100%',
     },
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 20,
         padding: 10,
-    
+
 
     },
 

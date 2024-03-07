@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 
-//import { UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+
 
 export default function ConfirmScreen({ navigation }) {
     const [currentPosition, setCurrentPosition] = useState(null);
@@ -21,8 +22,7 @@ export default function ConfirmScreen({ navigation }) {
         longitude: currentPosition?.longitude || 0,
     });
  
-
-    //const user = useSelector((state) => state.user.value);
+    const trips = useSelector((state) => state.trips.value);
 
     const handleValidate = () => {
         navigation.navigate("ConfirmDriver")
@@ -72,9 +72,9 @@ export default function ConfirmScreen({ navigation }) {
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif de la course</Text>
                     <Text style={styles.text}>Départ : </Text>
-                    <Text style={styles.info}>Départ : </Text>
+                    <Text style={styles.info}>{trips.departure} </Text>
                     <Text style={styles.text}>Arrivée : </Text>
-                    <Text style={styles.info}>Arrivée : </Text>
+                    <Text style={styles.info}>{trips.arrival} </Text>
                     <Text style={styles.text}>Prix : </Text>
                     <Text style={styles.info}>Prix : </Text>
 

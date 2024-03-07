@@ -13,6 +13,7 @@ import HomeScreen from "./screens/HomeScreen";
 import MapPositionScreen from "./screens/MapPositionScreen";
 import MapScreen from "./screens/MapScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import RouteScreen from "./screens/RouteScreen"
 import SearchScreen from "./screens/SearchScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
@@ -21,14 +22,13 @@ import SignUpUserScreen from "./screens/SignUpUserScreen";
 import SosScreen from "./screens/SosScreen";
 import WaitingScreen from "./screens/WaitingScreen";
 
-import RouteScreen from "./screens/RouteScreen";
-
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import user from "./reducers/user";
+import trips from './reducers/trips';
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, trips },
 });
 
 const Stack = createNativeStackNavigator();
@@ -80,11 +80,11 @@ export default function App() {
           <Stack.Screen name="Confirm" component={ConfirmScreen} />
           <Stack.Screen name="ConfirmDriver" component={ConfirmDriverScreen} />
           <Stack.Screen name="Waiting" component={WaitingScreen} />
+          <Stack.Screen name="Route" component={RouteScreen} />
           <Stack.Screen name="sos" component={SosScreen} />
           <Stack.Screen name="Arrival" component={ArrivalScreen} />
           <Stack.Screen name="Complain" component={ComplainScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Route" component={RouteScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
