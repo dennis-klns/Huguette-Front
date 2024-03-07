@@ -3,13 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: {
     token: null,
-<<<<<<< HEAD
-    email: null,
-    addresses: [], //transformer en objet avec, possiblement, nom des adresses personnalisé
-=======
     addresses: [],
     firstname: null,
->>>>>>> fbbbd3cb2a6ce9dca63d940ea31890325e4c8d5f
   },
 };
 
