@@ -39,8 +39,8 @@ export default function SosScreen({ navigation }) {
                     <Text style={styles.textEmergency}>Contact d'urgence </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Signaler </Text>
+                <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>handleValidate()}>
+                    <Text style={styles.textButton} >Signaler </Text>
                 </TouchableOpacity>
 
             </View>
