@@ -16,7 +16,6 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
-//import { UseSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
@@ -31,7 +30,7 @@ export default function MapScreen({ navigation }) {
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
   const [userName, setUserName] = useState("");
-  const username = useSelector((state) => state.user.value.username);
+  const user = useSelector((state) => state.user.value);
 
   // Récupération des données lat,long du départ et de l'arrivée
 

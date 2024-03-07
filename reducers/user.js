@@ -4,7 +4,7 @@ const initialState = {
   value: {
     token: null,
     email: null,
-    addresses: [],
+    addresses: [], //transformer en objet avec, possiblement, nom des adresses personnalisé
   },
 };
 
