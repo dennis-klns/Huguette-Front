@@ -21,13 +21,14 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
-import { UseSelector } from "react-redux";
 
 export default function SignUpPhotoScreen({ navigation }) {
 
   const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState(null);
+
+  const user = useSelector((state) => state.user.value)
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -57,43 +58,43 @@ useEffect(() => {
 }, []);
 
 
-const takePicture = async () => {
-  if (cameraRef.current) {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
-    const uri = photo?.uri;
-    setPhotoUri(uri);
+// const takePicture = async () => {
+//   if (cameraRef.current) {
+//     const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+//     const uri = photo?.uri;
+//     setPhotoUri(uri);
 
 
-const formData = new FormData();
+// const formData = new FormData();
 
-const file = {
-uri: uri,
-name: 'photo.jpg',
-type: 'image/jpeg',
-};
+// const file = {
+// uri: uri,
+// name: 'photo.jpg',
+// type: 'image/jpeg',
+// };
 
-formData.append('photoFromFront', file);
-const user = useSelector((state) => state.value)
+// formData.append('photoFromFront', file);
+// const user = useSelector((state) => state.value)
 
-//fetch('https://huguette-backend.vercel.app/upload'
-//http://192.168.10.154:3000/upload
+// //fetch('https://huguette-backend.vercel.app/upload'
+// //http://192.168.10.154:3000/upload
 
-fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-  method: 'POST',
-  body: formData,
-}).then((response) => response.json())
-  .then((data) => {
-    console.log(data)
-  })
-  .catch((error) => {
-    console.error('Error uploading photo:', error);
-  });
-  }
+// fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+//   method: 'POST',
+//   body: formData,
+// }).then((response) => response.json())
+//   .then((data) => {
+//     console.log(data)
+//   })
+//   .catch((error) => {
+//     console.error('Error uploading photo:', error);
+//   });
+//   }
 
-  if (!hasPermission || !isFocused) {
-    return <View />;
-  }
-};
+//   if (!hasPermission || !isFocused) {
+//     return <View />;
+//   }
+// };
 
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -160,6 +161,7 @@ const handleTakePhoto = async () => {
 };
 
 const handleValidation = () => {
+  console.log(user.token);
   if (photoUri) {
     const formData = new FormData();
     formData.append('photoFromFront', {
@@ -168,7 +170,7 @@ const handleValidation = () => {
       type: 'image/jpeg',
     });
 
-    fetch('https://huguette-backend.vercel.app/upload', {
+    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
       method: 'POST',
       body: formData,
     })
@@ -205,7 +207,7 @@ const handleValidation = () => {
                         <View>
                           <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
                           <TouchableOpacity onPress={handleValidation}>
-                            <Text>Valider</Text>
+                            <Text>Validerr</Text>
                           </TouchableOpacity>
                         </View>
                       ) : hasPermission ? (
