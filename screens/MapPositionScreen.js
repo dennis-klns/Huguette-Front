@@ -42,7 +42,9 @@ export default function MapPositionScreen({ navigation }) {
       console.log("data", data);
       if (data.status === "OK" && data.results.length > 0) {
         const departureAddress = data.results[0].formatted_address;
-        console.log(departureAddress);
+        console.log("departureAdress:", departureAddress);
+        console.log("user:", user);
+        console.log("trip:", trip);
         setAddress(departureAddress);
         //dispatch(addDeparture(departureAddress));
       } else {
@@ -68,12 +70,11 @@ export default function MapPositionScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("handleValidateData:", data);
         if (data.result) {
-          dispatch(addDeparture(address));
-          console.log("address:", address);
+          dispatch(addDeparture(data.departure.completeAddress));
+          console.log("completeAddress: ", data.departure.completeAddress);
           navigation.navigate("Confirm");
-          console.log("OK");
         } else {
           console.error("Failed:", data.error);
         }
@@ -85,7 +86,7 @@ export default function MapPositionScreen({ navigation }) {
 
   const handleTest = () => {
     navigation.navigate("Confirm");
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -99,9 +100,6 @@ export default function MapPositionScreen({ navigation }) {
       }
     })();
   }, []);
-
-  console.log("user:", user);
-  console.log("trip:", trip);
 
   return (
     <LinearGradient
