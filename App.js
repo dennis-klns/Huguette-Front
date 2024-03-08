@@ -6,14 +6,14 @@ import { StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import ArrivalScreen from "./screens/ArrivalScreen";
-import ComplainScreen from './screens/ComplainScreen';
+import ComplainScreen from "./screens/ComplainScreen";
 import ConfirmDriverScreen from "./screens/ConfirmDriverScreen";
 import ConfirmScreen from "./screens/ConfirmScreen";
 import HomeScreen from "./screens/HomeScreen";
 import MapPositionScreen from "./screens/MapPositionScreen";
 import MapScreen from "./screens/MapScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import RouteScreen from "./screens/RouteScreen"
+import RouteScreen from "./screens/RouteScreen";
 import SearchScreen from "./screens/SearchScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpPhotoScreen from "./screens/SignUpPhotoScreen";
@@ -24,11 +24,11 @@ import WaitingScreen from "./screens/WaitingScreen";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import trip from "./reducers/trip";
 import user from "./reducers/user";
-import trips from './reducers/trips';
 
 const store = configureStore({
-  reducer: { user, trips },
+  reducer: { user, trip },
 });
 
 const Stack = createNativeStackNavigator();
