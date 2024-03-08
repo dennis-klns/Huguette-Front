@@ -33,6 +33,15 @@ export const tripSlice = createSlice({
     addTripId: (state, action) => {
       state.value.tripId = action.payload;
     },
+    logoutTrip: (state, action) => {
+      state.value.tripId = null;
+      state.value.departure = null;
+      state.value.arrival = null;
+      state.value.duration = null;
+      state.value.distance = null;
+      state.value.cost = null
+    },
+   
   },
 });
 
@@ -43,5 +52,6 @@ export const {
   addDistance,
   addCost,
   addTripId,
+  logoutTrip,
 } = tripSlice.actions;
 export default tripSlice.reducer;
