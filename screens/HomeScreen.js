@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Button,
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
@@ -68,6 +67,7 @@ const styles = StyleSheet.create({
   title: {
     width: "80%",
     fontSize: 38,
+    fontFamily: "OpenSans-Regular",
     fontWeight: "600",
     textAlign: "center",
     color: "white",
@@ -110,5 +110,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 });

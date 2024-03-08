@@ -370,6 +370,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#473E66",
     margin: 40,
+    fontFamily: "OpenSans-Regular",
   },
 
   profile: {
@@ -396,6 +397,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
   input: {

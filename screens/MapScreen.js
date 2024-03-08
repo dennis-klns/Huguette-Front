@@ -35,17 +35,17 @@ export default function MapScreen({ navigation }) {
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
 
- // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
- const addressesList = [
-  {
-      name: 'Maison',
-      address: '16 rue des Boulets, PARIS'
-  },
-  {
-      name: 'La Capsule',
-      address: '56 boulevard Pereire, PARIS'
-  }
-]
+  // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
+  const addressesList = [
+    {
+      name: "Maison",
+      address: "16 rue des Boulets, PARIS",
+    },
+    {
+      name: "La Capsule",
+      address: "56 boulevard Pereire, PARIS",
+    },
+  ];
 
   // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
@@ -136,20 +136,15 @@ export default function MapScreen({ navigation }) {
     })();
   }, []);
 
-
   // Affichage des adresses favorites
   const addresses = addressesList.map((data, i) => {
     return (
-        <View key={i} style={styles.addresses}>
-        
-                <Text style={styles.name}>{data.name}</Text>
-                <Text>{data.address}</Text>
-           
-        </View>
-    )
-
-
-});
+      <View key={i} style={styles.addresses}>
+        <Text style={styles.name}>{data.name}</Text>
+        <Text>{data.address}</Text>
+      </View>
+    );
+  });
 
   return (
     <LinearGradient
@@ -227,6 +222,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -274,6 +270,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -340,7 +337,6 @@ export default function MapScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   // Caractéristiques pour la page principale
   linearGradient: {
     flex: 1,
@@ -375,6 +371,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
   // DEBUT DES ELEMENTS DE LA MODAL
@@ -386,7 +383,7 @@ const styles = StyleSheet.create({
 
   profile: {
     width: "80%",
-    minHeight: "30%",
+    height: "35%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 10,
@@ -437,6 +434,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "700",
+    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -462,5 +460,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 });
