@@ -22,7 +22,7 @@ export default function ConfirmScreen({ navigation }) {
         longitude: currentPosition?.longitude || 0,
     });
  
-    const trips = useSelector((state) => state.trips.value);
+    const trip = useSelector((state) => state.trip.value);
 
     const handleValidate = () => {
         navigation.navigate("ConfirmDriver")
@@ -72,9 +72,9 @@ export default function ConfirmScreen({ navigation }) {
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif de la course</Text>
                     <Text style={styles.text}>Départ : </Text>
-                    <Text style={styles.info}>{trips.departure} </Text>
+                    <Text style={styles.info}>{trip.departure} </Text>
                     <Text style={styles.text}>Arrivée : </Text>
-                    <Text style={styles.info}>{trips.arrival} </Text>
+                    <Text style={styles.info}>{trip.arrival} </Text>
                     <Text style={styles.text}>Prix : </Text>
                     <Text style={styles.info}>Prix : </Text>
 

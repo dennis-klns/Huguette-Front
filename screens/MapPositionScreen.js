@@ -82,6 +82,10 @@ export default function MapPositionScreen({ navigation }) {
       });
   };
 
+  const handleTest = () => {
+    navigation.navigate("Confirm");
+  }
+
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -133,6 +137,15 @@ export default function MapPositionScreen({ navigation }) {
           onPress={() => handleValidate()}
         >
           <Text style={styles.textButton}>Je confirme ma position</Text>
+        </TouchableOpacity>
+
+        {/* Bouton temporaire pour passer à la page d'après */}
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => handleTest()}
+        >
+          <Text style={styles.textButton}>Suivant</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
