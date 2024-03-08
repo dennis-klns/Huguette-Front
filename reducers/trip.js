@@ -5,9 +5,9 @@ const initialState = {
     tripId: null,
     departure: null,
     arrival: null,
-    duration: null,
-    distance: null,
-    cost: null,
+    duration: 15,
+    distance: 47,
+    cost: 23,
   },
 };
 
@@ -33,7 +33,7 @@ export const tripSlice = createSlice({
     addTripId: (state, action) => {
       state.value.tripId = action.payload;
     },
-    logoutTrip: (state, action) => {
+    logoutTrip: (state) => {
       state.value.tripId = null;
       state.value.departure = null;
       state.value.arrival = null;
@@ -41,6 +41,7 @@ export const tripSlice = createSlice({
       state.value.distance = null;
       state.value.cost = null
     },
+  
    
   },
 });
@@ -53,5 +54,6 @@ export const {
   addCost,
   addTripId,
   logoutTrip,
+
 } = tripSlice.actions;
 export default tripSlice.reducer;

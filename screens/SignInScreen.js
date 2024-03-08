@@ -42,7 +42,8 @@ export default function SignUpUserScreen({ navigation }) {
           setEmail("");
           setPhone("");
           setPassword("");
-          navigation.navigate("TabNavigator", { screen: "Map" });
+          navigation.navigate("SignUpPhoto");  
+          // navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
           setErrorMessage("Identifiants manquants ou incorrects");
           setIsErrorModalVisible(true);

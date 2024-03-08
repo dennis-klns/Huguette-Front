@@ -26,6 +26,7 @@ export default function ConfirmScreen({ navigation }) {
 
     const handleValidate = () => {
         navigation.navigate("ConfirmDriver")
+    
     };
 
 
