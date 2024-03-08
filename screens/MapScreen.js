@@ -23,7 +23,7 @@ import { addArrival, addDeparture, addTripId } from "../reducers/trip";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [addresses, setAddresses] = useState("");
+  //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState("");
@@ -35,8 +35,19 @@ export default function MapScreen({ navigation }) {
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
 
-  // Récupération des données lat,long du départ et de l'arrivée
+  // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
+  const addressesList = [
+    {
+      name: "Maison",
+      address: "16 rue des Boulets, PARIS",
+    },
+    {
+      name: "La Capsule",
+      address: "56 boulevard Pereire, PARIS",
+    },
+  ];
 
+  // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
@@ -125,6 +136,16 @@ export default function MapScreen({ navigation }) {
     })();
   }, []);
 
+  // Affichage des adresses favorites
+  const addresses = addressesList.map((data, i) => {
+    return (
+      <View key={i} style={styles.addresses}>
+        <Text style={styles.name}>{data.name}</Text>
+        <Text>{data.address}</Text>
+      </View>
+    );
+  });
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -201,6 +222,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -248,6 +270,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -314,54 +337,18 @@ export default function MapScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  // Caractéristiques pour la page principale
+  linearGradient: {
+    flex: 1,
+  },
+
   map: {
     width: Dimensions.get("window").width,
     height: "70%",
   },
 
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   modalHeader: {
     margin: 20,
-  },
-
-  modalHeaderText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
-  },
-
-  modalContent: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 20,
-    width: "80%",
-  },
-
-  input: {
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
-    marginBottom: 20,
-    fontSize: 16,
-    padding: 10,
-  },
-
-  searchButton: {
-    backgroundColor: "#1e90ff",
-    padding: 12,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-
-  searchButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 
   addresse: {
@@ -374,17 +361,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  button: {
-    width: 150,
-    alignItems: "center",
-    marginTop: 20,
-    paddingTop: 8,
-    backgroundColor: "#ec6e5b",
-    borderRadius: 10,
-  },
-  linearGradient: {
-    flex: 1,
-  },
   search: {
     width: "100%",
     justifyContent: "center",
@@ -395,8 +371,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
+  // DEBUT DES ELEMENTS DE LA MODAL
   container: {
     flex: 1,
     alignItems: "center",
@@ -405,7 +383,7 @@ const styles = StyleSheet.create({
 
   profile: {
     width: "80%",
-    minHeight: "30%",
+    height: "38%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 10,
@@ -417,15 +395,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-
-  input: {
-    width: "90%",
-    marginTop: 25,
-    borderBottomColor: "#4F4F4F",
-    borderBottomWidth: 1,
-    fontSize: 16,
-    color: "#4F4F4F",
   },
 
   isaccompanied: {
@@ -465,6 +434,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "700",
+    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -490,5 +460,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 });
