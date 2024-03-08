@@ -21,15 +21,13 @@ export default function MapPositionScreen({ navigation }) {
     latitude: currentPosition?.latitude,
     longitude: currentPosition?.longitude,
   });
-
-  const trip = useSelector((state) => state.trip.value);
-
-  const dispatch = useDispatch();
-
-  const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
   const [address, setAddress] = useState("");
 
+  const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
+
   const user = useSelector((state) => state.user.value);
+  const trip = useSelector((state) => state.trip.value);
+  const dispatch = useDispatch();
 
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
@@ -43,8 +41,10 @@ export default function MapPositionScreen({ navigation }) {
       const data = await response.json();
       console.log("data", data);
       if (data.status === "OK" && data.results.length > 0) {
-        console.log(data.results[0].formatted_address);
-        setAddress(data.results[0].formatted_address);
+        const departureAddress = data.results[0].formatted_address;
+        console.log(departureAddress);
+        setAddress(departureAddress);
+        //dispatch(addDeparture(departureAddress));
       } else {
         setAddress("Adresse non disponible");
       }
@@ -61,13 +61,14 @@ export default function MapPositionScreen({ navigation }) {
       body: JSON.stringify({
         // cost: trip.cost,
         tripId: trip.tripId,
-        completeAddress: address,
+        completeAddressD: address,
         latitudeD: markerPosition.latitude,
         longitudeD: markerPosition.longitude,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result) {
           dispatch(addDeparture(address));
           console.log("address:", address);
@@ -99,7 +100,8 @@ export default function MapPositionScreen({ navigation }) {
     })();
   }, []);
 
-  console.log(user);
+  console.log("user:", user);
+  console.log("trip:", trip);
 
   return (
     <LinearGradient

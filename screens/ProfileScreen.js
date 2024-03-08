@@ -36,6 +36,10 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
 
+  const handleuserDriver = () => {
+    navigation.navigate("UserDriver");
+  };
+
   const handleLogOut = () => {
     dispatch(logoutTrip());
     dispatch(logout());
@@ -51,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
     >
         <SafeAreaView style={styles.container}>
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity  style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="bolt" size={25} color="#ffffff" />
@@ -66,7 +70,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
 
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity onPress={() => handleuserDriver()} style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="user" size={25} color="#ffffff" />
