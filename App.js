@@ -21,7 +21,10 @@ import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
 import SosScreen from "./screens/SosScreen";
 import WaitingScreen from "./screens/WaitingScreen";
-import ProfilInformations from "./screens/ProfilInformationsScreen";
+import ProfilInformations from "./screens/ProfilInformationsEditScreen";
+import FavoritAdresses from "./screens/FavoritAdressesEditScreen";
+import PaiementEdit from "./screens/PayementEditScreen";
+import ContactEdit from "./screens/ContactEditScreen";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -85,7 +88,10 @@ export default function App() {
           <Stack.Screen name="sos" component={SosScreen} />
           <Stack.Screen name="Arrival" component={ArrivalScreen} />
           <Stack.Screen name="Complain" component={ComplainScreen} />
-          <Stack.Screen name="ProfilInformations" component={ProfilInformations} />
+          <Stack.Screen name="ProfilInformationsEdit" component={ProfilInformations} />
+          <Stack.Screen name="FavoritAdressesEdit" component={FavoritAdresses} />
+          <Stack.Screen name="PaiementEdit" component={PaiementEdit} />
+          <Stack.Screen name="ContactEdit" component={ContactEdit} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
