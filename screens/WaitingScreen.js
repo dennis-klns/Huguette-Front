@@ -1,5 +1,4 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
 import {
     Image,
     StyleSheet,
@@ -9,16 +8,39 @@ import {
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutTrip } from "../reducers/trip";
 
 
 
 export default function WaitingScreen({ navigation }) {
 
-    const trip = useSelector((state) => state.trip.value)
+    
+    const trip = useSelector((state) => state.trip.value);
+    const dispatch = useDispatch();
 
-    const handleValidate = () => {
-        navigation.navigate("Route")
+    const handleCancel = () => {
+        fetch("https://huguette-backend.vercel.app/trips/cancelationPassenger", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tripId: trip.tripId, cancelledPassenger: true, }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data.trip)
+                if (data.result) {
+                    console.log("OK");
+                    dispatch(logoutTrip());
+                } else {
+                    console.log(trip)
+                    console.error("Failed:", data.error);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+
+        /* navigation.navigate("Map") */
     }
 
 
@@ -39,7 +61,7 @@ export default function WaitingScreen({ navigation }) {
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif</Text>
                     <Text style={styles.text}>{trip.departure} - {trip.arrival}</Text>
-                    <Text style={styles.text}>Prix - 13€</Text>
+                    <Text style={styles.text}>Prix - {trip.cost}</Text>
                 </View>
                 <View style={styles.card}>
                     <Text style={styles.title}>Marguerite</Text>
@@ -56,7 +78,7 @@ export default function WaitingScreen({ navigation }) {
                 </View>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={() => handleValidate()}>Annuler la course</Text>
+                    <Text style={styles.textButton} onPress={() => handleCancel()}>Annuler la course</Text>
                 </TouchableOpacity>
             </View>
 
