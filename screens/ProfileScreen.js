@@ -9,10 +9,15 @@ import {
 } from "react-native";
 import Modal from 'react-native-modal'; 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import React, { useState,useEffect, useRef } from "react";
-import { UseDispatch, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import {useDispatch,useSelector } from "react-redux";
+import {logoutTrip} from '../reducers/trip';
+import {logout} from '../reducers/user';
 
 export default function ProfileScreen({ navigation }) {
+
+  const trip = useSelector((state) => state.trip.value);
+  const user = useSelector((state) => state.user.value);
 
   const dispatch = useDispatch();
 
@@ -32,8 +37,10 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleLogOut = () => {
+    dispatch(logoutTrip());
     dispatch(logout());
     navigation.navigate("Home");
+    console.log(trip, user)
   };
 
   return (
