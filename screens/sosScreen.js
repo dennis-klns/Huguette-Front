@@ -1,6 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function SosScreen({ navigation }) {
   const handleValidate = () => {

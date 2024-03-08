@@ -36,8 +36,20 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
 
-  const handleuserDriver = () => {
-    navigation.navigate("UserDriver");
+  const handleProfilInfo = () => {
+    navigation.navigate("ProfilInformationsEdit");
+  };
+
+  const handleFavorit = () => {
+    navigation.navigate("FavoritAdressesEdit");
+  };
+  
+  const handlePaiement = () => {
+    navigation.navigate("PaiementEdit");
+  };
+
+  const handleContact = () => {
+    navigation.navigate("ContactEdit");
   };
 
   const handleLogOut = () => {
@@ -70,7 +82,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => handleuserDriver()} style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity onPress={() => handleProfilInfo()} style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="user" size={25} color="#ffffff" />
@@ -85,7 +97,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
 
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity onPress={() => handleFavorit()} style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="car" size={25} color="#ffffff" />
@@ -100,7 +112,7 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
 
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity onPress={() => handlePaiement()} style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="money" size={25} color="#ffffff" />
@@ -114,7 +126,7 @@ export default function ProfileScreen({ navigation }) {
            </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+        <TouchableOpacity onPress={() => handleContact()} style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="phone" size={25} color="#ffffff" />
