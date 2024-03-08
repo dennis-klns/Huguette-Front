@@ -8,8 +8,6 @@ import {
     View,
 } from "react-native";
 
-//import { UseSelector } from "react-redux";
-
 
 
 export default function SosScreen({ navigation }) {
