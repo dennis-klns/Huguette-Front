@@ -55,7 +55,7 @@ export default function MapPositionScreen({ navigation }) {
   };
 
   const handleValidate = () => {
-    fetch("https://huguette-backend.vercel.app/trips/costPosition", {
+    fetch("https://huguette-backend.vercel.app/trips/costposition", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
