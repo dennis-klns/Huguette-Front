@@ -201,6 +201,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -248,6 +249,7 @@ export default function MapScreen({ navigation }) {
                     marginBottom: 20,
                     fontSize: 16,
                     padding: 10,
+                    fontFamily: "OpenSans-Regular",
                   },
                   listView: {
                     position: "absolute",
@@ -334,6 +336,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
+    fontFamily: "OpenSans-Regular",
   },
 
   modalContent: {
@@ -349,6 +352,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     padding: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
   searchButton: {
@@ -362,6 +366,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "OpenSans-Regular",
   },
 
   addresse: {
@@ -395,6 +400,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
   container: {
@@ -426,6 +432,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
+    fontFamily: "OpenSans-Regular",
   },
 
   isaccompanied: {
@@ -465,6 +472,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "700",
+    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -490,5 +498,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 });
