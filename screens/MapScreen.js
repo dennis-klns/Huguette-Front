@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
 
   profile: {
     width: "80%",
-    height: "35%",
+    height: "38%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 10,
