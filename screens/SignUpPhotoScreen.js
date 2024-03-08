@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Camera, CameraType, FlashMode } from 'expo-camera';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -21,7 +21,7 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
-
+import { UseSelector } from "react-redux";
 
 export default function SignUpPhotoScreen({ navigation }) {
 
@@ -73,11 +73,12 @@ type: 'image/jpeg',
 };
 
 formData.append('photoFromFront', file);
+const user = useSelector((state) => state.value)
 
 //fetch('https://huguette-backend.vercel.app/upload'
 //http://192.168.10.154:3000/upload
 
-fetch('https://huguette-backend.vercel.app/upload', {
+fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())
