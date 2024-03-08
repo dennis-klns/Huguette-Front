@@ -21,6 +21,7 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
+import {addPicture} from '../reducers/user'
 
 export default function SignUpPhotoScreen({ navigation }) {
 
@@ -177,6 +178,7 @@ const handleValidation = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Réponse du backend :', data);
+        dispatch(addPicture(data.url));
         toggleModal();
       })
       .catch(error => console.error('Erreur lors de la validation de la photo :', error));

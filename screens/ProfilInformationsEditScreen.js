@@ -17,7 +17,12 @@ import {logout} from '../reducers/user';
 
 
 
+
 export default function ProfilInformations({ navigation }) {
+
+  const user = useSelector((state) => state.user.value);
+
+  console.log("user Pic", user.picture);
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -31,6 +36,7 @@ export default function ProfilInformations({ navigation }) {
         style={styles.linearGradient}
     >
         <SafeAreaView style={styles.container}>
+       
 
 
    
@@ -44,19 +50,19 @@ export default function ProfilInformations({ navigation }) {
 
             <View style={styles.profile}>
               <View>
-                <Text style={styles.text}>Modifier votre profil</Text>
+                <Text style={styles.text}>Modifier votre profill</Text>
               </View>
               <View>
-              <Text style={styles.text}>photo ici</Text>
-
-              </View>
-              <View>
-                  <TextInput placeholder="Lastname"/>
-                  <TextInput placeholder="Firstname"/>
+              <Image source={{ uri: user.picture }} style={{ width: 200, height: 200, borderRadius: 100, }} />
+                 </View>
+              
+              <View style={styles.textContainer}>
+                 <TextInput style={styles.text} placeholder={user.firstname}/>
+                 <TextInput style={styles.text} placeholder={user.lastname}/>
               </View>
             </View>
+          </View>
 
-        </View>
 
 
        
@@ -108,9 +114,13 @@ profile: {
   
 },
 
+textContainer:{
+  borderWidth: 5,
+},
+
 text: {
   width: "80%",
-  fontSize: 16,
+  fontSize: 20,
   fontWeight: "800",
   color: "#473E66",
   margin: 10,

@@ -5,6 +5,8 @@ const initialState = {
     token: null,
     addresses: [],
     firstname: null,
+    lastname: null,
+    picture: null,
   },
 };
 
@@ -15,16 +17,21 @@ export const userSlice = createSlice({
     login: (state, action) => {
       state.value.token = action.payload.token;
       state.value.firstname = action.payload.firstname;
+      state.value.lastname = action.payload.lastname;
     },
     logout: (state) => {
       state.value.token = null;
       state.value.firstname = null;
+      state.value.lastname = null;
     },
     addAddresses: (state, action) => {
       state.value.addresses.push(action.payload);
     },
+    addPicture: (state,action) => {
+      state.value.picture = action.payload;
+    }
   },
 });
 
-export const { login, logout, addAddresses } = userSlice.actions;
+export const { login, logout, addAddresses,addPicture } = userSlice.actions;
 export default userSlice.reducer;
