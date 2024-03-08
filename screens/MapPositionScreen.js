@@ -26,7 +26,6 @@ export default function MapPositionScreen({ navigation }) {
 
   const dispatch = useDispatch();
 
-
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
   const [address, setAddress] = useState("");
 
