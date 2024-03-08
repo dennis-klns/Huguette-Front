@@ -16,7 +16,11 @@ import {logout} from '../reducers/user';
 
 
 
-export default function ProfilInformations({ navigation }) {
+export default function FavoritAdresses({ navigation }) {
+
+  const handleBack = () => {
+    navigation.navigate("TabNavigator", { screen: "Profile" });
+  };
 
   
   return (
@@ -30,7 +34,7 @@ export default function ProfilInformations({ navigation }) {
 
    
        <View style={styles.closeIcon} >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleBack()}>
              <FontAwesome name="times" size={30} color="#333" />
           </TouchableOpacity>
        </View>
