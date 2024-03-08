@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -202,5 +203,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 });

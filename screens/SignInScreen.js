@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#473E66",
     margin: 40,
+    fontFamily: "OpenSans-Regular",
   },
 
   profile: {
@@ -231,6 +232,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
+    fontFamily: "OpenSans-Regular",
   },
 
   text2: {
@@ -239,6 +241,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     paddingTop: 30,
+    fontFamily: "OpenSans-Regular",
   },
 
   trait: {
@@ -256,6 +259,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
+    fontFamily: "OpenSans-Regular",
   },
 
   halfinput: {
@@ -272,6 +276,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
+    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -297,6 +302,7 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
 
   modalContent: {
@@ -311,12 +317,14 @@ const styles = StyleSheet.create({
   textModal: {
     marginTop: 10,
     fontSize: 15,
+    fontFamily: "OpenSans-Regular",
   },
 
   textModalValider: {
     marginTop: 10,
     paddingBottom: 10,
     fontSize: 15,
+    fontFamily: "OpenSans-Regular",
   },
 
   answerModal: {
@@ -331,6 +339,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     color: "#4F4F4F",
+    fontFamily: "OpenSans-Regular",
   },
 
   passwordContainer: {
@@ -346,5 +355,6 @@ const styles = StyleSheet.create({
     color: "#4F4F4F",
     marginTop: 15,
     textDecorationLine: "underline",
+    fontFamily: "OpenSans-Regular",
   },
 });
