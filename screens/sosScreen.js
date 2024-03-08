@@ -20,7 +20,6 @@ export default function SosScreen({ navigation }) {
 
 
 
-
     return (
         <LinearGradient
             colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}

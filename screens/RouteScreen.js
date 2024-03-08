@@ -18,7 +18,7 @@ export default function RouteScreen({ navigation }) {
   const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
 
-  const trips = useSelector((state) => state.trips.value);
+  const trip = useSelector((state) => state.trip.value);
 
   const handleSOS = () => {
     navigation.navigate("sos");
@@ -28,7 +28,7 @@ export default function RouteScreen({ navigation }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=${trips.arrival}&key=${GOOGLE_API_KEY}`
+          `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=${trip.arrival}&key=${GOOGLE_API_KEY}`
         );
         setDirections(response.data);
         console.log("API Response:", response.data);

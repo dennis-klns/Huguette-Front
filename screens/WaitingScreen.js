@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 export default function WaitingScreen({ navigation }) {
 
-    const trips = useSelector((state) => state.trips.value)
+    const trip = useSelector((state) => state.trip.value)
 
     const handleValidate = () => {
         navigation.navigate("Route")
@@ -38,7 +38,7 @@ export default function WaitingScreen({ navigation }) {
 
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif</Text>
-                    <Text style={styles.text}>{trips.departure} - {trips.arrival}</Text>
+                    <Text style={styles.text}>{trip.departure} - {trip.arrival}</Text>
                     <Text style={styles.text}>Prix - 13€</Text>
                 </View>
                 <View style={styles.card}>
