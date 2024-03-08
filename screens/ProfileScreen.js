@@ -7,17 +7,32 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
+import Modal from 'react-native-modal'; 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import React, { useState,useEffect, useRef } from "react";
+import { UseDispatch, useDispatch } from "react-redux";
 
 export default function ProfileScreen({ navigation }) {
+
+  const dispatch = useDispatch();
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const handledDontDisconnect = () => {
+    toggleModal();
+    }
 
   
   const handleSignIn = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
 
-  const handleLogIn = () => {
+  const handleLogOut = () => {
+    dispatch(logout());
     navigation.navigate("Home");
   };
 
@@ -29,98 +44,107 @@ export default function ProfileScreen({ navigation }) {
     >
         <SafeAreaView style={styles.container}>
 
-        <TouchableOpacity
-  style={styles.bar}
-  
-  activeOpacity={0.3}
->
-  <View style={styles.bar1}>
-    <View style={styles.bar11}>
-      <FontAwesome name="bolt" size={25} color="#ffffff" />
-    </View>
-    <View style={styles.bar12}>
-      <Text style={styles.textEmergency}>Conductrice/ Cliente</Text>
-    </View>
-  </View>
-  <View style={styles.bar2}>
-    <FontAwesome name="arrow-right" size={30} color="#ffffff" />
-  </View>
-</TouchableOpacity>
-
-          <TouchableOpacity style={styles.bar}>
-              <View style={styles.bar1}>
-                <View style={styles.bar11}>
-                   <FontAwesome name="user" size={25} color="#ffffff"  />
-                </View>
-                <View style={styles.bar12}>
-                      <TouchableOpacity style={styles.centerLine} activeOpacity={0.8}>
-                          <Text style={styles.textEmergency }>Informations personnelles</Text>
-                      </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.bar2}>
-                   <FontAwesome name="arrow-right" size={30} color="#ffffff"  />
-              </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bar}>
-              <View style={styles.bar1}>
-                <View style={styles.bar11}>
-                   <FontAwesome name="car" size={25} color="#ffffff"  />
-                </View>
-                <View style={styles.bar12}>
-                      <TouchableOpacity style={styles.centerLine} activeOpacity={0.8}>
-                          <Text style={styles.textEmergency }>Adresses préférées</Text>
-                      </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.bar2}>
-                   <FontAwesome name="arrow-right" size={30} color="#ffffff"  />
-              </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bar}>
-              <View style={styles.bar1}>
-                <View style={styles.bar11}>
-                   <FontAwesome name="money" size={25} color="#ffffff"  />
-                </View>
-                <View style={styles.bar12}>
-                      <TouchableOpacity style={styles.centerLine} activeOpacity={0.8}>
-                          <Text style={styles.textEmergency }>Paiement</Text>
-                      </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.bar2}>
-                   <FontAwesome name="arrow-right" size={30} color="#ffffff"  />
-              </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bar}>
-              <View style={styles.bar1}>
-                <View style={styles.bar11}>
-                   <FontAwesome name="phone" size={25} color="#ffffff"  />
-                </View>
-                <View style={styles.bar12}>
-                      <TouchableOpacity style={styles.centerLine} activeOpacity={0.8}>
-                          <Text style={styles.textEmergency }>Contacts d'urgence</Text>
-                      </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.bar2}>
-                   <FontAwesome name="arrow-right" size={30} color="#ffffff"  />
-              </View>
-          </TouchableOpacity>
-
-        
-
-          <View style={styles.buttonContainer}>
-          <TouchableOpacity
-          onPress={() => handleLogIn()}
-          style={styles.button} activeOpacity={0.8} >
-          <Text style={styles.textButton}>Se déconnecter</Text>
+        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+           <View style={styles.bar1}>
+               <View style={styles.bar11}>
+                  <FontAwesome name="bolt" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Conductrice/ Cliente</Text>
+               </View>
+           </View>
+           <View style={styles.bar2}>
+                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+           </View>
         </TouchableOpacity>
-        </View>
 
+
+        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+           <View style={styles.bar1}>
+               <View style={styles.bar11}>
+                  <FontAwesome name="user" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Informations personnelles</Text>
+               </View>
+           </View>
+           <View style={styles.bar2}>
+                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+           </View>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+           <View style={styles.bar1}>
+               <View style={styles.bar11}>
+                  <FontAwesome name="car" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Adresses préférées</Text>
+               </View>
+           </View>
+           <View style={styles.bar2}>
+                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+           </View>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+           <View style={styles.bar1}>
+               <View style={styles.bar11}>
+                  <FontAwesome name="money" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Paiement</Text>
+               </View>
+           </View>
+           <View style={styles.bar2}>
+                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+           </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
+           <View style={styles.bar1}>
+               <View style={styles.bar11}>
+                  <FontAwesome name="phone" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Contacts d'urgence</Text>
+               </View>
+           </View>
+           <View style={styles.bar2}>
+                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+           </View>
+        </TouchableOpacity>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8} >
+             <Text style={styles.textButton}>Se déconnecter</Text>
+          </TouchableOpacity>
+          <Modal isVisible={isModalVisible} style={styles.modal}>
+          <View style={styles.modalContent}>
+                 
+                        <View>
+                          <TouchableOpacity>
+                            <Text>Souhaitez-vous vous déconnecter ?</Text>
+                          </TouchableOpacity>
+
+                               <View>
+                                  <TouchableOpacity onPress={() => handleLogOut()}>
+                                     <Text>Oui</Text>
+                                  </TouchableOpacity>
+                               </View>
+                               <View>
+                                  <TouchableOpacity onPress={() => handledDontDisconnect()}>
+                                     <Text>non</Text>
+                                  </TouchableOpacity>
+                               </View>
+                        </View>
+                    
+         </View>
+
+          </Modal>
+        </View> 
            
 
         </SafeAreaView>
@@ -163,7 +187,7 @@ alignItems: 'center',
 },
 
 bar2:{
-  paddingRight: '5%',
+  paddingRight: '6%',
 },
 
 bar11:{
@@ -201,7 +225,7 @@ endLine:{
 },
 
 buttonContainer:{
-  marginTop: '10%',
+  marginTop: '13%',
   width: '60%',
   alignItems: 'center',
 },
@@ -234,6 +258,28 @@ button: {
       
   },
 
+
+  texteModal:{
+    marginTop: 10,
+    fontSize: 15,
+  },
+  
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+
+
+  modalContent: {
+    height: '70%',
+    backgroundColor: "white",
+    padding: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+ 
+  },
 
 
 });
