@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,6 +23,11 @@ export default function ContactEdit({ navigation }) {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   
   return (
  
@@ -39,21 +45,46 @@ export default function ContactEdit({ navigation }) {
           </TouchableOpacity>
        </View>
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
-           <View style={styles.bar1}>
-               <View style={styles.bar11}>
-                  <FontAwesome name="bolt" size={25} color="#ffffff" />
-               </View>
-               <View style={styles.bar12}>
-                 <Text style={styles.textEmergency}>Conductrice/ Cliente</Text>
-               </View>
-           </View>
-           <View style={styles.bar2}>
-                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
-           </View>
-        </TouchableOpacity>
+       <View style={styles.body}>
+              <View>
+                <Text style={styles.titleTop}>Contact d'urgence</Text>
+              </View>
+           <View style={styles.textContainer}>
+                 <View style={styles.titleContainer}>
+                     <Text style={styles.title}>Modifier votre contact d'urgence</Text>
+                </View>
+                <View>
+                    <TextInput style={styles.text2} placeholder='Marie'/>
+                    <TextInput style={styles.text2} placeholder='Dune'/>
+                    <View style={styles.messageInputContainer}>
 
-
+                 <View style={styles.titleContainer}>
+                     <Text style={styles.title}>Modifier votre message d'urgence</Text>
+                </View>
+                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4} />
+                    </View>
+                </View>
+                    <View style={styles.buttonContainer}>
+                         <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8} >
+                           <Text style={styles.textButton}>Valider</Text>
+                        </TouchableOpacity>
+                        <Modal isVisible={isModalVisible} style={styles.modal}>
+                             <View style={styles.modalContent}>
+                               <Text style={styles.modalText}>Voulez-vous valider vos modifications ?</Text>
+                                  <View style={styles.modalButtonContainer}>
+                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                                        <Text style={styles.textModal}>Oui</Text>
+                                     </TouchableOpacity>
+                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                                       <Text style={styles.textModal}>Non</Text>
+                                     </TouchableOpacity>
+                                  </View>
+                              </View>
+                          </Modal>
+                    </View> 
+           </View>
+       </View>
+       
        
            
 
@@ -77,125 +108,178 @@ container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-  
+},
+
+titleTop:{
+  fontSize: 30,
+  color: "#473E66",
+  fontFamily: "OpenSans-Regular",
+  paddingBottom: '15%',
+},
+
+text2:{
+  width: "80%",
+  fontSize: 16,
+  fontWeight: "800",
+  color: "#473E66",
+  margin: 10,
+  fontFamily: "OpenSans-Regular",
+  borderBottomColor: "#4F4F4F",
+    borderBottomWidth: 1,
+},
+
+messageInputContainer:{
+alignItems: 'center',
+paddingTop: '7%',
+
+},
+
+
+messageInput: {
  
+  height: '55%',
+  width: "90%",
+  fontSize: 16,
+  color: "#473E66",
+  margin: 10,
+  padding: 10,
+  backgroundColor: "#FFF", // Vous pouvez ajuster cette couleur comme vous le souhaitez
+  borderRadius: 10,
+  fontFamily: "OpenSans-Regular",
+  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  borderWidth: 1,
 },
 
 closeIcon: {
   width: '90%',
 },
 
-bar:{
-  width: '100%',
-  flexDirection: 'row',
+
+textContainer:{
+  width: '80%',
+  justifyContent: 'center',
+  fontFamily: "OpenSans-Regular",
+height : '80%',
+  
+},
+
+titleContainer:{
+  justifyContent: 'center',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  marginTop : '10%',
-  paddingBottom:'6%',
+  fontFamily: "OpenSans-Regular",
+  paddingBottom: '10%',
+  
  
 },
 
-bar1:{
-paddingLeft: '4%',
-width: '85%',
-flexDirection: 'row',
-alignItems: 'center',
+title:{
+fontSize: 20,
+fontFamily: "OpenSans-Regular",
 },
 
-bar2:{
-  paddingRight: '6%',
+  
+  text: {
+    width: "80%",
+    fontSize: 30,
+    fontWeight: "800",
+    color: "#473E66",
+    margin: 10,
+    fontFamily: "OpenSans-Regular",
+    
+  },
+
+body: {
+  width: "100%",
+  justifyContent: 'center',
+  alignItems: "center",
 },
 
-bar11:{
-width: '8%',
-justifyContent: 'center',
-alignItems: 'center',
-},
-
-bar12:{
-  paddingLeft: '4%',
-},
-
-startLine:{
-
-},
-
-centerLine: {
-    height: 45,
-    justifyContent: 'center',
-    alignItems: "flex-start",
-    backgroundColor: 'transparent',
-    borderRadius: 10,
-
-},
-
-
-textEmergency: {
-    fontWeight: '800',
-    fontSize: 20,
-    marginRight: '10%',
-},
-
-endLine:{
-
+textButton: {
+  color: '#fff',
+  fontWeight: '600',
+  fontSize: 16,
+  
 },
 
 buttonContainer:{
-  marginTop: '13%',
-  width: '60%',
+  width: '100%',
   alignItems: 'center',
+  justifyContent: 'center',
+
+  
 },
 
+
 button: {
-  
-  height: 40,
-  paddingTop: 8,
+  height: 50,
   width: "60%",
   alignItems: "center",
-  marginTop: 20,
-  backgroundColor: "#EAAC8B",
-  borderRadius: 10,
+  justifyContent: "center",
+  backgroundColor: "#F88559",
+  borderRadius: 25,
+  marginTop: '30%',
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
     height: 2,
   },
   shadowOpacity: 0.25,
-  shadowRadius: 4,
+  shadowRadius: 3.84,
+  elevation: 5,
+  
+},
+modalContent: {
+  backgroundColor: "white",
+  padding: 20,
+  alignItems: "center",
+  borderRadius: 10,
+  borderColor: "rgba(0, 0, 0, 0.1)",
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
   elevation: 5,
 },
 
+modalText: {
+  fontSize: 20,
+  marginBottom: 15,
+  textAlign: "center",
+},
 
-  textButton: {
-      color: '#fff',
-      height: 30,
-      fontWeight: '600',
-      fontSize: 16,
-      
+modalButtonContainer: {
+  flexDirection: "row",
+  justifyContent: "space-around",
+  width: "100%",
+},
+
+modalButton: {
+  backgroundColor: "#F88559",
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 20,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 1,
   },
+  shadowOpacity: 0.22,
+  shadowRadius: 2.22,
+  elevation: 3,
+},
 
+// Ajoutez un style pour le texte des boutons dans la modale
+modalButtonText: {
+  color: "#fff",
+  fontSize: 16,
+  fontWeight: "600",
+},
 
-  texteModal:{
-    marginTop: 10,
-    fontSize: 15,
-  },
-  
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-
-
-  modalContent: {
-    height: '70%',
-    backgroundColor: "white",
-    padding: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 4,
-    borderColor: "rgba(0, 0, 0, 0.1)",
- 
-  },
-
+textModal: {
+  color: 'white',
+},
 
 });
