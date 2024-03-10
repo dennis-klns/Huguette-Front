@@ -33,55 +33,64 @@ export default function MapPositionScreen({ navigation }) {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
   };
 
-  const fetchAddressFromCoordinates = async () => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${markerPosition.latitude},${markerPosition.longitude}&key=${GOOGLE_API_KEY}`
-      );
-      const data = await response.json();
-      console.log("data", data);
-      if (data.status === "OK" && data.results.length > 0) {
-        const departureAddress = data.results[0].formatted_address;
-        console.log("departureAdress:", departureAddress);
-        console.log("user:", user);
-        console.log("trip:", trip);
-        setAddress(departureAddress);
-        //dispatch(addDeparture(departureAddress));
-      } else {
-        setAddress("Adresse non disponible");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération de l'adresse:", error);
-      setAddress("Erreur lors de la récupération de l'adresse");
-    }
-  };
+  // const fetchAddressFromCoordinates = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${markerPosition.latitude},${markerPosition.longitude}&key=${GOOGLE_API_KEY}`
+  //     );
+  //     const data = await response.json();
+  //     console.log("data", data);
+  //     if (data.status === "OK" && data.results.length > 0) {
+  //       const departureAddress = data.results[0].formatted_address;
+  //       console.log("departureAdress:", departureAddress);
+  //       console.log("user:", user);
+  //       console.log("trip:", trip);
+  //       setAddress(departureAddress);
+  //       //dispatch(addDeparture(departureAddress));
+  //     } else {
+  //       setAddress("Adresse non disponible");
+  //     }
+  //   } catch (error) {
+  //     console.error("Erreur lors de la récupération de l'adresse:", error);
+  //     setAddress("Erreur lors de la récupération de l'adresse");
+  //   }
+  // };
 
   const handleValidate = () => {
-    fetch("https://huguette-backend.vercel.app/trips/costposition", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        // cost: trip.cost,
-        tripId: trip.tripId,
-        completeAddressD: address,
-        latitudeD: markerPosition.latitude,
-        longitudeD: markerPosition.longitude,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("handleValidateData:", data);
-        if (data.result) {
-          dispatch(addDeparture(data.departure.completeAddress));
-          console.log("completeAddress: ", data.departure.completeAddress);
-          navigation.navigate("Confirm");
-        } else {
-          console.error("Failed:", data.error);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+
+    navigation.navigate("Confirm");
+
+    // Je travaille sur cet écran.
+
+    // fetch("https://huguette-backend.vercel.app/trips/costposition", {
+    //   method: "PUT",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     // cost: trip.cost,
+    //     tripId: trip.tripId,
+    //     completeAddressD: address,
+    //     latitudeD: markerPosition.latitude,
+    //     longitudeD: markerPosition.longitude,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("handleValidateData:", data);
+    //     if (data.result) {
+    //       dispatch(addDeparture(data.departure.completeAddress));
+    //       console.log("completeAddress: ", data.departure.completeAddress);
+    //       navigation.navigate("Confirm");
+    //     } else {
+    //       console.error("Failed:", data.error);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+
+
+      
+
   };
 
   const handleTest = () => {
@@ -118,7 +127,7 @@ export default function MapPositionScreen({ navigation }) {
             longitudeDelta: 0.001,
           }}
           onRegionChange={handleRegionChange}
-          onTouchEnd={fetchAddressFromCoordinates}
+          // onTouchEnd={fetchAddressFromCoordinates}
         >
           <Marker
             coordinate={markerPosition}
@@ -129,8 +138,8 @@ export default function MapPositionScreen({ navigation }) {
       )}
       <View style={styles.container}>
         <Text style={styles.text}>Ou êtes vous exactement ?</Text>
-        <Text style={styles.text}>Temps de trajet: </Text>
-        <Text style={styles.text}>Prix : </Text>
+        <Text style={styles.text}>Temps de trajet: {trip.duration}</Text>
+        <Text style={styles.text}>Prix : {trip.cost}€</Text>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
@@ -171,8 +180,9 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
+    height:'9%',
     alignItems: "center",
-    padding: 50,
+    padding: '5%',
   },
   text: {
     fontSize: 24,

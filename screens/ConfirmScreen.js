@@ -76,9 +76,12 @@ export default function ConfirmScreen({ navigation }) {
                     <Text style={styles.info}>{trip.departure} </Text>
                     <Text style={styles.text}>Arrivée : </Text>
                     <Text style={styles.info}>{trip.arrival} </Text>
+                    <Text style={styles.text}>Distance : </Text>
+                    <Text style={styles.info}> {trip.distance}</Text>
+                    <Text style={styles.text}>Temps de trajet estimé :</Text>
+                    <Text style={styles.info}> {trip.duration}</Text>
                     <Text style={styles.text}>Prix : </Text>
-                    <Text style={styles.info}>Prix : </Text>
-
+                    <Text style={styles.info}> {trip.cost}€</Text>
                 </View>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleValidate()}>
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         position: 'absolute',
         height: '30%',
-        width: '80%',
+        width: '85%',
         alignItems: 'center',
         justifyContent: 'space-around',
         marginTop: '50%',

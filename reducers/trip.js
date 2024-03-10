@@ -5,9 +5,9 @@ const initialState = {
     tripId: null,
     departure: null,
     arrival: null,
-    duration: 15,
-    distance: 47,
-    cost: 23,
+    duration: null,
+    distance: null,
+    cost: null,
   },
 };
 

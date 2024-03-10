@@ -19,14 +19,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDeparture, addTripId } from "../reducers/trip";
+import { addArrival, addDeparture, addTripId, addDuration, addDistance, addCost } from "../reducers/trip";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState({});
-  const [arrival, setArrival] = useState("");
+  const [arrival, setArrival] = useState({});
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
@@ -51,7 +51,6 @@ export default function MapScreen({ navigation }) {
   const handleDepartureSelect = (data, details) => {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
-    dispatch(addDeparture(data.description));
     setDeparture({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
@@ -62,7 +61,6 @@ export default function MapScreen({ navigation }) {
   const handleArrivalSelect = (data, details) => {
     console.log("Data arrivée:", data);
     console.log("Details arrivée:", details.geometry?.location);
-    dispatch(addArrival(data.description));
     setArrival({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
@@ -92,37 +90,48 @@ export default function MapScreen({ navigation }) {
   }
 
   const handleValidate = () => {
-    setModalVisible(false);
-    fetch("https://huguette-backend.vercel.app/trips", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        longitudeD: departure.longitude,
-        latitudeD: departure.latitude,
-        completeAddressD: departure.completeAddress,
-        longitudeA: arrival.longitude,
-        latitudeA: arrival.latitude,
-        completeAddressA: arrival.completeAddress,
-        tokenPassenger: user.token,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("OK");
-          dispatch(addTripId(data.trip._id));
 
-          console.log("trips:", trip);
-        } else {
-          console.error("Failed:", data.error);
-        }
+    fetch("https://huguette-backend.vercel.app/trips/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          longitudeD: departure.longitude,
+          latitudeD: departure.latitude,
+          longitudeA: arrival.longitude,
+          latitudeA: arrival.latitude,
+          tokenPassenger: user.token,
+        }),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            console.log("OK");
+            dispatch(addTripId(data.trip._id));
+            dispatch(addDeparture(data.trip.departure.completeAddress));
+            dispatch(addArrival(data.trip.arrival.completeAddress));
+            dispatch(addDuration(data.trip.estimatedDuration));
+            dispatch(addDistance(data.trip.distance));
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
+            // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
 
+            console.log("tripBDD:", data.trip);
+          } else {
+            console.error("Failed:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+  
+
+    setArrival({});
+    setDeparture({});
+    setModalVisible(false);
     navigation.navigate("MapPosition");
   };
+
+  console.log("tripReducer:", trip);
+
 
   useEffect(() => {
     (async () => {
@@ -192,12 +201,16 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              <GooglePlacesAutocomplete
+              
+
+            <View style={styles.autoDeparture}>
+
+            <GooglePlacesAutocomplete
                 placeholder="Départ"
                 onChangeText={(value) => setDeparture(value)}
-                fetchDetails={true}
                 value={departure}
                 onPress={handleDepartureSelect}
+                fetchDetails={true}
                 query={{
                   key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
                   language: "fr",
@@ -240,7 +253,12 @@ export default function MapScreen({ navigation }) {
                   },
                 }}
               />
-              <GooglePlacesAutocomplete
+
+            </View>
+
+            <View style={styles.autoArrival}>
+
+            <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
                 value={arrival}
@@ -255,7 +273,6 @@ export default function MapScreen({ navigation }) {
                   container: {
                     justifyContent: "center",
                     alignItems: "center",
-                    zIndex: 100,
                   },
                   textInputContainer: {
                     height: 54,
@@ -288,6 +305,9 @@ export default function MapScreen({ navigation }) {
                   },
                 }}
               />
+
+            </View>
+              
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.text}>Je suis accompagnée</Text>
@@ -395,6 +415,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  autoDeparture:{
+    height: '20%',
+    width:'90%',
+  },
+
+  autoArrival:{
+    height: '20%',
+    width:'90%',
   },
 
   isaccompanied: {
