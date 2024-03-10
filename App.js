@@ -28,7 +28,7 @@ import SignUpUserScreen from "./screens/SignUpUserScreen";
 import SosScreen from "./screens/SosScreen";
 import WaitingScreen from "./screens/WaitingScreen";
 import SignUpDriverScreen from "./screens/SignUpDriverScreen";
-import DocumentsDriverScreen from "./screens/documentsDriverScreen";
+import DocumentsDriverScreen from "./screens/DocumentsDriverScreen";
 import WaitingFilesScreen from "./screens/WaitingFilesScreen";
 
 

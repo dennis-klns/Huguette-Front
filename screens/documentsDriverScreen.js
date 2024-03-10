@@ -25,6 +25,7 @@ export default function DocumentsDriverScreen({ navigation }) {
     navigation.navigate("WaitingFiles");
   };
 
+  console.log();
 
   return (
  
