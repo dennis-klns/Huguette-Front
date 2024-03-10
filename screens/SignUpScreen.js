@@ -15,6 +15,11 @@ import {
           navigation.navigate('SignUpUser');
       
       }
+
+      const handleSignUpDriver = () => {
+        navigation.navigate('SignUpdriver');
+    
+    }
   
     return (
         
