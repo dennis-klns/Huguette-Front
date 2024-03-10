@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,6 +23,11 @@ export default function FavoritAdresses({ navigation }) {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   
   return (
  
@@ -39,20 +45,54 @@ export default function FavoritAdresses({ navigation }) {
           </TouchableOpacity>
        </View>
 
-        <TouchableOpacity style={styles.bar} activeOpacity={0.3}>
-           <View style={styles.bar1}>
-               <View style={styles.bar11}>
-                  <FontAwesome name="bolt" size={25} color="#ffffff" />
+       <View>
+           <Text style={styles.titleTop}>Adresses favorites</Text>
+       </View>
+
+       <View style={styles.adressesContainer} >
+         <View style={styles.body} activeOpacity={0.3}>
+           <View style={styles.body2}>
+               <View style={styles.logoContainer}>
+                  <FontAwesome name="home" size={33} color="#ffffff" />
                </View>
                <View style={styles.bar12}>
-                 <Text style={styles.textEmergency}>Conductrice/ Cliente</Text>
+                 <Text style={styles.textEmergency}>Maison</Text>
                </View>
            </View>
-           <View style={styles.bar2}>
-                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
+               <TextInput style={styles.input} placeholder='adresse maison'></TextInput>
+         </View>
+         
+         <View style={styles.body} activeOpacity={0.3}>
+           <View style={styles.body2}>
+               <View style={styles.logoContainer}>
+                  <FontAwesome name="car" size={25} color="#ffffff" />
+               </View>
+               <View style={styles.bar12}>
+                 <Text style={styles.textEmergency}>Travail</Text>
+               </View>
            </View>
-        </TouchableOpacity>
+                <TextInput style={styles.input} placeholder='adresse travail'></TextInput>
+         </View>
 
+         <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8} >
+                <Text style={styles.textButton}>Valider</Text>
+            </TouchableOpacity>
+            <Modal isVisible={isModalVisible} style={styles.modal}>
+                             <View style={styles.modalContent}>
+                               <Text style={styles.modalText}>Voulez-vous valider vos modifications ?</Text>
+                                  <View style={styles.modalButtonContainer}>
+                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                                        <Text style={styles.textModal}>Oui</Text>
+                                     </TouchableOpacity>
+                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                                       <Text style={styles.textModal}>Non</Text>
+                                     </TouchableOpacity>
+                                  </View>
+                              </View>
+                          </Modal>
+         </View> 
+      </View>
 
        
            
@@ -85,35 +125,54 @@ closeIcon: {
   width: '90%',
 },
 
-bar:{
+titleTop:{
+  paddingTop: '5%',
+  fontSize: 30,
+  color: "#473E66",
+  fontFamily: "OpenSans-Regular",
+
+},
+
+adressesContainer: {
+  flex: 1, // Utilisez flex pour une adaptation plus dynamique
   width: '100%',
-  flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
+  paddingTop: '10%',
+},
+
+body:{
+  width: '100%',
+  height: '15%',
+  flexDirection: 'column',
+  alignItems: 'center',
   marginTop : '10%',
   paddingBottom:'6%',
- 
+
+
 },
 
-bar1:{
+body2:{
 paddingLeft: '4%',
-width: '85%',
+width: '100%',
+height: '50%',
 flexDirection: 'row',
 alignItems: 'center',
+marginBottom: '7%',
+
+
 },
 
-bar2:{
-  paddingRight: '6%',
-},
-
-bar11:{
+logoContainer:{
 width: '8%',
 justifyContent: 'center',
 alignItems: 'center',
+
 },
 
 bar12:{
   paddingLeft: '4%',
+  
 },
 
 startLine:{
@@ -129,6 +188,17 @@ centerLine: {
 
 },
 
+input:{
+  width: "80%",
+  fontSize: 16,
+  fontWeight: "800",
+  color: "#473E66",
+
+  fontFamily: "OpenSans-Regular",
+  borderBottomColor: "#4F4F4F",
+  borderBottomWidth: 1,
+
+},
 
 textEmergency: {
     fontWeight: '800',
@@ -140,35 +210,33 @@ endLine:{
 
 },
 
-buttonContainer:{
-  marginTop: '13%',
+buttonContainer: {
   width: '60%',
   alignItems: 'center',
+  marginBottom: 20, 
 },
 
 button: {
-  
-  height: 40,
-  paddingTop: 8,
+  height: 50,
   width: "60%",
   alignItems: "center",
-  marginTop: 20,
-  backgroundColor: "#EAAC8B",
-  borderRadius: 10,
+  justifyContent: "center",
+  backgroundColor: "#F88559",
+  borderRadius: 25,
+  marginTop: '30%',
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
     height: 2,
   },
   shadowOpacity: 0.25,
-  shadowRadius: 4,
+  shadowRadius: 3.84,
   elevation: 5,
+  
 },
-
 
   textButton: {
       color: '#fff',
-      height: 30,
       fontWeight: '600',
       fontSize: 16,
       
@@ -181,7 +249,8 @@ button: {
   },
   
   modal: {
-    justifyContent: 'flex-end',
+    justifyContent: 'center', // Ajusté pour centrer la modale
+    alignItems: 'center',
     margin: 0,
   },
 
@@ -197,5 +266,58 @@ button: {
  
   },
 
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+    borderRadius: 10,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  
+  modalText: {
+    fontSize: 20,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  
+  modalButton: {
+    backgroundColor: "#F88559",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  
+  // Ajoutez un style pour le texte des boutons dans la modale
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  
+  textModal: {
+    color: 'white',
+  },
 
 });
