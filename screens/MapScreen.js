@@ -32,6 +32,8 @@ export default function MapScreen({ navigation }) {
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
 
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
@@ -92,6 +94,11 @@ export default function MapScreen({ navigation }) {
   }
 
   const handleValidate = () => {
+
+    if (!departure.completeAddress || !arrival.completeAddress) {
+      setErrorModalVisible(true); // Affiche la modale d'erreur
+      return; // Empêche la navigation si les conditions ne sont pas remplies
+    }
 
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
@@ -233,7 +240,7 @@ export default function MapScreen({ navigation }) {
                   container: {
                     justifyContent: "center",
                     alignItems: "center",
-                    zIndex: 120,
+                    zIndex: 140,
                   },
                   textInputContainer: {
                     height: '50%',
@@ -268,9 +275,12 @@ export default function MapScreen({ navigation }) {
               />
 
               {/*  </View> */}
+              {/*  </View> */}
 
               {/*    <View style={styles.autoArrival}> */}
+              {/*    <View style={styles.autoArrival}> */}
 
+              <GooglePlacesAutocomplete
               <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
@@ -286,6 +296,7 @@ export default function MapScreen({ navigation }) {
                   container: {
                     justifyContent: "center",
                     alignItems: "center",
+                    zIndex: 120,
                   },
                   textInputContainer: {
                     height: '50%',
@@ -362,6 +373,24 @@ export default function MapScreen({ navigation }) {
             >
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
+            <Modal
+  visible={errorModalVisible}
+  transparent={true}
+  animationType="slide"
+  onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
+>
+  <View style={styles.centeredView}>
+    <View style={styles.errorModalView}>
+      <Text style={styles.modalText}>Veuillez renseigner une arrivée pour votre course</Text>
+      <TouchableOpacity
+        style={[styles.button, styles.buttonClose]}
+        onPress={() => setErrorModalVisible(false)}
+      >
+        <Text style={styles.textStyle}>Fermer</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
           </SafeAreaView>
         </LinearGradient>
       </Modal>
@@ -506,4 +535,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "OpenSans-Regular",
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
+  errorModalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 16, // Vous pouvez ajuster la taille du texte ici
+  },
+  buttonClose: {
+    backgroundColor: "#F88559", // Couleur du bouton pour fermer la modale, ajustable
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+   
+  },
+
 });

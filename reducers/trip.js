@@ -8,6 +8,8 @@ const initialState = {
     duration: null,
     distance: null,
     cost: null,
+    latitude: null,
+    longitude: null,
   },
 };
 
@@ -33,16 +35,20 @@ export const tripSlice = createSlice({
     addTripId: (state, action) => {
       state.value.tripId = action.payload;
     },
+    addLongitude: (state, action) => {
+      state.value.longitude = action.payload;
+    },
+    addLatitude: (state, action) => {
+      state.value.latitude = action.payload;
+    },
     logoutTrip: (state) => {
       state.value.tripId = null;
       state.value.departure = null;
       state.value.arrival = null;
       state.value.duration = null;
       state.value.distance = null;
-      state.value.cost = null
+      state.value.cost = null;
     },
-  
-   
   },
 });
 
@@ -51,9 +57,10 @@ export const {
   addArrival,
   addDuration,
   addDistance,
+  addLatitude,
+  addLongitude,
   addCost,
   addTripId,
   logoutTrip,
-
 } = tripSlice.actions;
 export default tripSlice.reducer;
