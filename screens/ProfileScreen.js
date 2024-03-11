@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Switch,
 } from "react-native";
 import Modal from 'react-native-modal'; 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -22,6 +23,10 @@ export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isAccompanied, setIsAccompanied] = useState(false);
+
+  const toggleSwitch = () =>
+  setIsAccompanied((previousState) => !previousState);
   
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -67,19 +72,25 @@ export default function ProfileScreen({ navigation }) {
     >
         <SafeAreaView style={styles.container}>
 
-        <TouchableOpacity  style={styles.bar} activeOpacity={0.3}>
+        <View  style={styles.bar} activeOpacity={0.3}>
            <View style={styles.bar1}>
                <View style={styles.bar11}>
                   <FontAwesome name="bolt" size={25} color="#ffffff" />
                </View>
                <View style={styles.bar12}>
-                 <Text style={styles.textEmergency}>Conductrice/ Cliente</Text>
+                 <Text style={styles.textEmergency}>Conductrice/ Passagère</Text>
                </View>
            </View>
-           <View style={styles.bar2}>
-                <FontAwesome name="arrow-right" size={30} color="#ffffff" />
-           </View>
-        </TouchableOpacity>
+           <View style={styles.isaccompanied}>
+                <Switch
+                  trackColor={{ false: "#F1C796", true: "#F88559" }}
+                  thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isAccompanied}
+                />
+              </View>
+        </View>
 
 
         <TouchableOpacity onPress={() => handleProfilInfo()} style={styles.bar} activeOpacity={0.3}>
@@ -145,7 +156,7 @@ export default function ProfileScreen({ navigation }) {
              <Text style={styles.textButton}>Se déconnecter</Text>
           </TouchableOpacity>
           <Modal isVisible={isModalVisible} style={styles.modal}>
-          <View style={styles.modalContent}>
+           <View style={styles.modalContent}>
                  
                         <View>
                           <TouchableOpacity>
@@ -162,10 +173,8 @@ export default function ProfileScreen({ navigation }) {
                                      <Text>non</Text>
                                   </TouchableOpacity>
                                </View>
-                        </View>
-                    
-         </View>
-
+                        </View>     
+           </View>
           </Modal>
         </View> 
            
@@ -223,8 +232,8 @@ bar12:{
   paddingLeft: '4%',
 },
 
-startLine:{
-
+isaccompanied: {
+  marginRight: "20%",
 },
 
 centerLine: {
@@ -248,7 +257,7 @@ endLine:{
 },
 
 buttonContainer:{
-  marginTop: '13%',
+  marginTop: '75%',
   width: '60%',
   alignItems: 'center',
 },

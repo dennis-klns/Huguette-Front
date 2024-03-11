@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 
-export default function SignUpUserScreen({ navigation }) {
+export default function SignUpDriverScreen({ navigation }) {
   const dispatch = useDispatch();
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -84,7 +84,7 @@ export default function SignUpUserScreen({ navigation }) {
 
     const formattedBirthdate = date.toISOString().split("T")[0];
 
-    fetch("https://huguette-backend.vercel.app/users/signup", {
+    fetch("https://huguette-backend.vercel.app/drivers/signupDriver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -101,7 +101,7 @@ export default function SignUpUserScreen({ navigation }) {
       .then((data) => {
         if (data.result) {
           dispatch(login({ phone, token: data.token,firstname, lastname })); //surement rajouter le email
-          navigation.navigate("SignUpPhoto");
+          navigation.navigate("DocumentsDriver");
         } else {
           console.error("Signup failed:", data.error);
         }
@@ -295,34 +295,11 @@ export default function SignUpUserScreen({ navigation }) {
             </View>
 
             <View style={styles.pay}>
-              <Text style={styles.text}>Payer avec</Text>
-              <TextInput placeholder="Apple Pay" style={styles.input} />
-              <TextInput placeholder="Paypal" style={styles.input} />
-            </View>
-
-            <View style={styles.paywith}>
-              <Text style={styles.text}>Ajouter un moyen de paiement</Text>
-              <TextInput
-                placeholder="Numéro de carte"
-                onChangeText={(value) => setCardNumber(value)}
-                value={cardNumber}
-                style={styles.input}
-              />
-
-              <View style={styles.halfinput}>
-                <TextInput
-                  placeholder="Date d'expiration"
-                  onChangeText={(value) => setExpdate(value)}
-                  value={expdate}
-                  style={styles.smallinput}
-                />
-                <TextInput
-                  placeholder="Crypto"
-                  onChangeText={(value) => setCrypto(value)}
-                  value={crypto}
-                  style={styles.smallinput}
-                />
-              </View>
+              <Text style={styles.text}>Renseigner votre adresse</Text>
+              <TextInput placeholder="libellé de la voie" style={styles.input} />
+              <TextInput placeholder="numéro de la voie" style={styles.input} />
+              <TextInput placeholder="code postale" style={styles.input} />
+              <TextInput placeholder="ville" style={styles.input} />
             </View>
 
             <TouchableOpacity
@@ -441,6 +418,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    marginBottom: '10%',
   },
 
   textButton: {

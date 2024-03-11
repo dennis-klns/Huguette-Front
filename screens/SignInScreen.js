@@ -38,12 +38,14 @@ export default function SignUpUserScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname: data.firstname, token: data.token }));
+          dispatch(login({ firstname: data.firstname, token: data.token, lastname: data.lastname }));
           setEmail("");
           setPhone("");
           setPassword("");
-          navigation.navigate("SignUpPhoto");  
+          navigation.navigate("TabNavigator", { screen: "Map" }); 
+          console.log('token : ',data.token)
           // navigation.navigate("TabNavigator", { screen: "Map" });
+          // navigation.navigate("SignUpPhoto");  
         } else {
           setErrorMessage("Identifiants manquants ou incorrects");
           setIsErrorModalVisible(true);

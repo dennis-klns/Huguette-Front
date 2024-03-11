@@ -27,11 +27,17 @@ import SignUpScreen from "./screens/SignUpScreen";
 import SignUpUserScreen from "./screens/SignUpUserScreen";
 import SosScreen from "./screens/SosScreen";
 import WaitingScreen from "./screens/WaitingScreen";
+import SignUpDriverScreen from "./screens/SignUpDriverScreen";
+import DocumentsDriverScreen from "./screens/DocumentsDriverScreen";
+import WaitingFilesScreen from "./screens/WaitingFilesScreen";
+
+
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import trip from "./reducers/trip";
 import user from "./reducers/user";
+
 
 const store = configureStore({
   reducer: { user, trip },
@@ -105,16 +111,13 @@ export default function App() {
           <Stack.Screen name="sos" component={SosScreen} />
           <Stack.Screen name="Arrival" component={ArrivalScreen} />
           <Stack.Screen name="Complain" component={ComplainScreen} />
-          <Stack.Screen
-            name="ProfilInformationsEdit"
-            component={ProfilInformations}
-          />
-          <Stack.Screen
-            name="FavoritAdressesEdit"
-            component={FavoritAdresses}
-          />
+          <Stack.Screen name="ProfilInformationsEdit" component={ProfilInformations}/>
+          <Stack.Screen name="FavoritAdressesEdit" component={FavoritAdresses}/>
           <Stack.Screen name="PaiementEdit" component={PaiementEdit} />
           <Stack.Screen name="ContactEdit" component={ContactEdit} />
+          <Stack.Screen name="SignUpdriver" component={SignUpDriverScreen} />
+          <Stack.Screen name="DocumentsDriver" component={DocumentsDriverScreen} />
+          <Stack.Screen name="WaitingFiles" component={WaitingFilesScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
