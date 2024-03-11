@@ -19,7 +19,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDeparture, addTripId, addDuration, addDistance, addCost } from "../reducers/trip";
+import {
+  addArrival,
+  addCost,
+  addDeparture,
+  addDistance,
+  addDuration,
+  addLatitude,
+  addLongitude,
+  addTripId,
+} from "../reducers/trip";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -90,48 +99,46 @@ export default function MapScreen({ navigation }) {
   }
 
   const handleValidate = () => {
-
     fetch("https://huguette-backend.vercel.app/trips/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          longitudeD: departure.longitude,
-          latitudeD: departure.latitude,
-          longitudeA: arrival.longitude,
-          latitudeA: arrival.latitude,
-          tokenPassenger: user.token,
-        }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        longitudeD: departure.longitude,
+        latitudeD: departure.latitude,
+        longitudeA: arrival.longitude,
+        latitudeA: arrival.latitude,
+        tokenPassenger: user.token,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("OK:", data);
+          dispatch(addTripId(data.trip._id));
+          dispatch(addDeparture(data.trip.departure.completeAddress));
+          dispatch(addArrival(data.trip.arrival.completeAddress));
+          dispatch(addDuration(data.trip.estimatedDuration));
+          dispatch(addDistance(data.trip.distance));
+          dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
+          dispatch(addLongitude(data.trip.departure.longitude));
+          dispatch(addLatitude(data.trip.departure.latitude));
+          setArrival({});
+          setDeparture({});
+          setModalVisible(false);
+          navigation.navigate("MapPosition");
+          // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
+          console.log("tripReducerindispatch:", trip);
+          console.log("tripBDD:", data.trip);
+        } else {
+          console.error("Failed:", data.error);
+        }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            console.log("OK");
-            dispatch(addTripId(data.trip._id));
-            dispatch(addDeparture(data.trip.departure.completeAddress));
-            dispatch(addArrival(data.trip.arrival.completeAddress));
-            dispatch(addDuration(data.trip.estimatedDuration));
-            dispatch(addDistance(data.trip.distance));
-            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
-            // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
-
-            console.log("tripBDD:", data.trip);
-          } else {
-            console.error("Failed:", data.error);
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-  
-
-    setArrival({});
-    setDeparture({});
-    setModalVisible(false);
-    navigation.navigate("MapPosition");
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   console.log("tripReducer:", trip);
-
 
   useEffect(() => {
     (async () => {
@@ -203,13 +210,66 @@ export default function MapScreen({ navigation }) {
             <View style={styles.profile}>
               
 
-            <View style={styles.autoDeparture}>
+            {/* <View style={styles.autoDeparture}> */}
 
-            <GooglePlacesAutocomplete
+              <GooglePlacesAutocomplete
                 placeholder="Départ"
                 onChangeText={(value) => setDeparture(value)}
                 value={departure}
                 onPress={handleDepartureSelect}
+                fetchDetails={true}
+                query={{
+                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                  language: "fr",
+                  components: "country:fr",
+                }}
+                styles={{
+                  container: {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 140,
+                  },
+                  textInputContainer: {
+                    height: 54,
+                    marginHorizontal: 20,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                  },
+                  textInput: {
+                    backgroundColor: "transparent",
+                    borderBottomWidth: 1,
+                    borderColor: "black",
+                    marginBottom: 20,
+                    fontSize: 16,
+                    padding: 10,
+                    fontFamily: "OpenSans-Regular",
+                  },
+                  listView: {
+                    position: "absolute",
+                    top: 50,
+                    borderWidth: 0.5,
+                    borderColor: "black",
+                    backgroundColor: "#F1C796",
+                    marginHorizontal: 20,
+                    elevation: 5,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowOffset: { x: 0, y: 0 },
+                    shadowRadius: 15,
+                    marginTop: 10,
+                  },
+                }}
+              />
+
+           {/*  </View> */}
+
+         {/*    <View style={styles.autoArrival}> */}
+
+              <GooglePlacesAutocomplete
+                placeholder="Arrivée"
+                onChangeText={(value) => setArrival(value)}
+                value={arrival}
+                onPress={handleArrivalSelect}
                 fetchDetails={true}
                 query={{
                   key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
@@ -254,59 +314,7 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-            </View>
-
-            <View style={styles.autoArrival}>
-
-            <GooglePlacesAutocomplete
-                placeholder="Arrivée"
-                onChangeText={(value) => setArrival(value)}
-                value={arrival}
-                onPress={handleArrivalSelect}
-                fetchDetails={true}
-                query={{
-                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                  language: "fr",
-                  components: "country:fr",
-                }}
-                styles={{
-                  container: {
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
-                  textInputContainer: {
-                    height: 54,
-                    marginHorizontal: 20,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                  },
-                  textInput: {
-                    backgroundColor: "transparent",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    marginBottom: 20,
-                    fontSize: 16,
-                    padding: 10,
-                    fontFamily: "OpenSans-Regular",
-                  },
-                  listView: {
-                    position: "absolute",
-                    top: 50,
-                    borderWidth: 0.5,
-                    borderColor: "black",
-                    backgroundColor: "#F1C796",
-                    marginHorizontal: 20,
-                    elevation: 5,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowOffset: { x: 0, y: 0 },
-                    shadowRadius: 15,
-                    marginTop: 10,
-                  },
-                }}
-              />
-
-            </View>
+            {/* </View> */}
               
 
               <View style={styles.isaccompanied}>
@@ -417,14 +425,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  autoDeparture:{
-    height: '20%',
-    width:'90%',
+  autoDeparture: {
+    height: "20%",
+    width: "90%",
   },
 
-  autoArrival:{
-    height: '20%',
-    width:'90%',
+  autoArrival: {
+    height: "20%",
+    width: "90%",
   },
 
   isaccompanied: {
