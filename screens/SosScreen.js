@@ -1,35 +1,68 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
 
 export default function SosScreen({ navigation }) {
   const handleValidate = () => {
     navigation.navigate("Arrival");
   };
 
+  const sendSMS = () => {
+    
+    const phoneNumber = '0624797127';
+    const message = "Bonjour, je suis actuellement dans une situation inconfortable, est-ce que vous pouvez m'appeler maintenant merci ! ";
+    const url = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (!supported) {
+          console.log('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
+        } else {
+          return Linking.openURL(url);
+        }
+      })
+      .catch((err) => console.error('Une erreur est survenue', err));
+  };
+
+  const makePhoneCall = () => {
+    const phoneNumber = '0624797127'; // Remplacer par le numéro de votre contact d'urgence
+    const url = `tel:${phoneNumber}`;
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (!supported) {
+          console.log('Impossible de lancer un appel');
+        } else {
+          return Linking.openURL(url);
+        }
+      })
+      .catch((err) => console.error('Une erreur est survenue', err));
+  };
+
+
   return (
     <LinearGradient
-      colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-      style={styles.linearGradient}
-    >
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-          <Text style={styles.textEmergency}>Contact en cours</Text>
-        </TouchableOpacity>
+    colors={['#F1C796', '#EBB2B5', '#E0CAC2']}
+    style={styles.linearGradient}
+  >
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={sendSMS}>
+        <Text style={styles.textEmergency}>Contact en cours</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-          <Text style={styles.textEmergency}>Contact d'urgence </Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={makePhoneCall}>
+        <Text style={styles.textEmergency}>Contact d'urgence</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => handleValidate()}
-        >
-          <Text style={styles.textButton}>Signaler </Text>
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
-  );
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.8}
+        onPress={() => handleValidate()}
+      >
+        <Text style={styles.textButton}>Signaler</Text>
+      </TouchableOpacity>
+    </View>
+  </LinearGradient>
+);
 }
 
 const styles = StyleSheet.create({
