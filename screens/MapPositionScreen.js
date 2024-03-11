@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -9,23 +9,30 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  addCost,
+  addDeparture,
+  addDuration,
+  addLatitude,
+  addLongitude,
+} from "../reducers/trip";
 
 import { Marker } from "react-native-maps";
 
 export default function MapPositionScreen({ navigation }) {
-  const [currentPosition, setCurrentPosition] = useState(null);
-  const [markerPosition, setMarkerPosition] = useState({
-    latitude: currentPosition?.latitude,
-    longitude: currentPosition?.longitude,
-  });
-  const [address, setAddress] = useState("");
-
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [markerPosition, setMarkerPosition] = useState({
+    latitude: trip.latitude,
+    longitude: trip.longitude,
+  });
+  const [address, setAddress] = useState("");
 
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
+    console.log("region", markerPosition);
   };
 
   // const fetchAddressFromCoordinates = async () => {
@@ -87,6 +94,46 @@ export default function MapPositionScreen({ navigation }) {
     navigation.navigate("Confirm");
   };
 
+  const changeCostPostion = () => {
+    fetch("https://huguette-backend.vercel.app/trips/costposition", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tripId: trip.tripId,
+        latitudeD: markerPosition.latitude,
+        longitudeD: markerPosition.longitude,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("handleValidateData:", data);
+        if (data.result) {
+          dispatch(addDeparture(data.trip.departure.completeAddress));
+          dispatch(addLatitude(data.trip.departure.latitude));
+          dispatch(addLongitude(data.trip.departure.longitude));
+          dispatch(addDuration(data.trip.estimatedDuration));
+          console.log("trip: ", data);
+          console.log("reducer:", trip);
+
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Number(parts[0]) * 60 + Number(parts[1]);
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(parseFloat(minutes) * 0.9));
+          } else {
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.9));
+          }
+        } else {
+          console.error("Failed:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   /*   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -99,10 +146,10 @@ export default function MapPositionScreen({ navigation }) {
       }
     })();
   }, []); */
-
+  /* 
   useEffect(() => {
     setMarkerPosition({ latitude: trip.latitude, longitude: trip.longitude });
-  }, []);
+  }, []); */
 
   return (
     <LinearGradient
@@ -120,7 +167,7 @@ export default function MapPositionScreen({ navigation }) {
             longitudeDelta: 0.001,
           }}
           onRegionChange={handleRegionChange}
-          // onTouchEnd={fetchAddressFromCoordinates}
+          onTouchEnd={changeCostPostion}
         >
           <Marker
             coordinate={markerPosition}

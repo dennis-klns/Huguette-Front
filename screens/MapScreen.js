@@ -100,7 +100,7 @@ export default function MapScreen({ navigation }) {
   }
 
   const handleValidate = () => {
-    if (!departure.completeAddress || !arrival.completeAddress) {
+    if (!arrival.completeAddress) {
       setErrorModalVisible(true); // Affiche la modale d'erreur
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
@@ -163,10 +163,11 @@ export default function MapScreen({ navigation }) {
       if (status === "granted") {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           setCurrentPosition(location.coords);
+          setDeparture(location.coords);
         });
       }
     })();
-  }, []);
+  }, [modalVisible]);
 
   // Affichage des adresses favorites
   const addresses = addressesList.map((data, i) => {
@@ -227,7 +228,7 @@ export default function MapScreen({ navigation }) {
               {/* <View style={styles.autoDeparture}> */}
 
               <GooglePlacesAutocomplete
-                placeholder="Départ"
+                placeholder="Ma position"
                 onChangeText={(value) => setDeparture(value)}
                 value={departure}
                 onPress={handleDepartureSelect}
