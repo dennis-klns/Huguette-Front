@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Image,
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -19,15 +20,54 @@ import {logout} from '../reducers/user';
 
 export default function ContactEdit({ navigation }) {
 
-  const handleBack = () => {
-    navigation.navigate("TabNavigator", { screen: "Profile" });
-  };
+  const [emergencyFirstname, setEmergencyFirstname] = useState("");
+  const [emergencyLastname, setEmergencyLastname] = useState("");
+  const [emergencyPhone, setEmergencyPhone] = useState("");
+  const [emergencyMessage, setEmergencyMessage] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const user = useSelector((state) => state.user.value);
 
   const [isModalVisible, setModalVisible] = useState(false);
   
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  
+  const handleBack = () => {
+    navigation.navigate("TabNavigator", { screen: "Profile" });
+  };
+
+  const updateEmergencyContact = () => {
+
+    const url = "https://huguette-backend.vercel.app/users/emergencyContact"; 
+
+    const body = {
+      emergencyFirstname,
+      emergencyLastname,
+      emergencyPhone,
+      emergencyMessage,
+      token: user.token,
+    };
+    console.log(body);
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then(response => response.json())
+    .then(data => {
+      setShowConfirmation(true); 
+    })
+    .catch((error) => {
+      console.error('Erreur lors de la mise à jour:', error);
+      Alert.alert("Erreur", "Une erreur s'est produite lors de la mise à jour.");
+    });
+  };
+
   
   return (
  
@@ -54,15 +94,21 @@ export default function ContactEdit({ navigation }) {
                      <Text style={styles.title}>Modifier votre contact d'urgence</Text>
                 </View>
                 <View>
-                    <TextInput style={styles.text2} placeholder='Prénom'/>
-                    <TextInput style={styles.text2} placeholder='Nom'/>
-                    <TextInput style={styles.text2} placeholder='Phone'/>
+                    <TextInput style={styles.text2} placeholder='Prénom' value={emergencyFirstname} // Lie l'état emergencyFirstname à ce TextInput
+    onChangeText={text => setEmergencyFirstname(text)} />
+                    <TextInput style={styles.text2} placeholder='Nom' value={emergencyLastname} // Lie l'état emergencyLastname à ce TextInput
+    onChangeText={text => setEmergencyLastname(text)}/>
+                    <TextInput style={styles.text2} placeholder='Phone' value={emergencyPhone} // Lie l'état emergencyPhone à ce TextInput
+    onChangeText={text => setEmergencyPhone(text)}/>
                     <View style={styles.messageInputContainer}>
 
                  <View style={styles.titleContainer}>
                      <Text style={styles.title}>Modifier votre message d'urgence</Text>
                 </View>
-                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4} />
+                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4} multiline={true}
+    numberOfLines={4}
+    value={emergencyMessage} // Lie l'état emergencyMessage à ce TextInput
+    onChangeText={text => setEmergencyMessage(text)} />
                     </View>
                 </View>
                     <View style={styles.buttonContainer}>
@@ -70,18 +116,32 @@ export default function ContactEdit({ navigation }) {
                            <Text style={styles.textButton}>Valider</Text>
                         </TouchableOpacity>
                         <Modal isVisible={isModalVisible} style={styles.modal}>
-                             <View style={styles.modalContent}>
-                               <Text style={styles.modalText}>Voulez-vous valider vos modifications ?</Text>
-                                  <View style={styles.modalButtonContainer}>
-                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
-                                        <Text style={styles.textModal}>Oui</Text>
-                                     </TouchableOpacity>
-                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
-                                       <Text style={styles.textModal}>Non</Text>
-                                     </TouchableOpacity>
-                                  </View>
-                              </View>
-                          </Modal>
+          <View style={styles.modalContent}>
+            {
+              // Condition pour afficher soit le message de confirmation soit la question de validation
+              showConfirmation ? (
+                <>
+                  <Text style={styles.modalText}>Modification enregistrée</Text>
+                  <TouchableOpacity onPress={() => {setModalVisible(false); setShowConfirmation(false);}} style={styles.modalButton}>
+                    <Text style={styles.textModal}>Fermer</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.modalText}>Voulez-vous valider vos modifications ?</Text>
+                  <View style={styles.modalButtonContainer}>
+                    <TouchableOpacity onPress={updateEmergencyContact} style={styles.modalButton}>
+                      <Text style={styles.textModal}>Oui</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                      <Text style={styles.textModal}>Non</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )
+            }
+          </View>
+        </Modal>
                     </View> 
            </View>
        </View>
@@ -161,6 +221,7 @@ textContainer:{
   justifyContent: 'center',
   fontFamily: "OpenSans-Regular",
 height : '80%',
+paddingTop: '10%',
   
 },
 
@@ -218,7 +279,6 @@ button: {
   justifyContent: "center",
   backgroundColor: "#F88559",
   borderRadius: 25,
-  marginTop: '30%',
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -284,3 +344,4 @@ textModal: {
 },
 
 });
+
