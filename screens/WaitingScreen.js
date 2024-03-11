@@ -40,7 +40,7 @@ export default function WaitingScreen({ navigation }) {
                 console.error("Error:", error);
             });
 
-        /* navigation.navigate("Map") */
+        navigation.navigate("Map")
     }
 
 

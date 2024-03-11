@@ -210,7 +210,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 120,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: '50%',
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -258,7 +258,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 100,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: '50%',
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -349,6 +349,7 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     margin: 20,
+    height: Dimensions.get("window")
   },
 
   addresse: {
