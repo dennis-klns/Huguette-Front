@@ -15,6 +15,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ArrivalScreen({ navigation }) {
 
+    const [personalNote, setPersonalNote] = useState(0);
+
     const handleValidate = () => {
         navigation.navigate("Map")
     }
@@ -23,18 +25,14 @@ export default function ArrivalScreen({ navigation }) {
         navigation.navigate("Complain")
     }
 
-
-    const stars = [];
-
-
-    /* for (let i = 0; i < 10; i++) {
-        if( i < props.voteAverage -1)
-        {stars.push(<FontAwesome name="star" size={30} color="gold" key={i} className={styles.fullStar}/>);
-        } else {
-        {stars.push(<FontAwesome key={i} name="star" size={30} color="gold"/>);
-        }
-    };
-    } */
+    const personalStars = [];
+    for (let i = 0; i < 5; i++) {
+      let iconStyle = {};
+      if (i < personalNote) {
+        iconStyle = { 'color': 'gold'};
+      }
+      personalStars.push(<FontAwesome name='star' onPress={() => setPersonalNote(i + 1)} style={iconStyle} size={25}/>);
+    }
 
     return (
         <LinearGradient
@@ -49,11 +47,12 @@ export default function ArrivalScreen({ navigation }) {
                     <View style={styles.note}>
                     <Text style={styles.text}>Notez la course</Text>
                         <View style={styles.icon}>
+                            {/* <FontAwesome name="star" size={30} color="gold"></FontAwesome>
                             <FontAwesome name="star" size={30} color="gold"></FontAwesome>
                             <FontAwesome name="star" size={30} color="gold"></FontAwesome>
                             <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome> */}
+                            {personalStars}
                         </View>
                     </View>
                 </TouchableOpacity>
