@@ -33,12 +33,12 @@ export default function SignUpUserScreen({ navigation }) {
     fetch("https://huguette-backend.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone: phone, email: email, password: password }),
+      body: JSON.stringify({ phone: phone, email: email, password: password,  }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname: data.firstname, token: data.token, lastname: data.lastname }));
+          dispatch(login({ firstname: data.firstname, token: data.token, lastname: data.lastname, picture: data.picture }));
           setEmail("");
           setPhone("");
           setPassword("");
@@ -46,6 +46,8 @@ export default function SignUpUserScreen({ navigation }) {
           console.log('token : ',data.token)
           // navigation.navigate("TabNavigator", { screen: "Map" });
           // navigation.navigate("SignUpPhoto");  
+          console.log(data);
+          console.log(data.url);
         } else {
           setErrorMessage("Identifiants manquants ou incorrects");
           setIsErrorModalVisible(true);

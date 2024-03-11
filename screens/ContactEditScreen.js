@@ -76,7 +76,7 @@ export default function ContactEdit({ navigation }) {
         if (data.result) {
           setEmergencyFirstname(data.emergencyInfos.firstname || "");
           setEmergencyLastname(data.emergencyInfos.lastname || "");
-          setEmergencyPhone(data.emergencyInfos.phone || "");
+          setEmergencyPhone(data.emergencyInfos.phone.toString() || ""); 
           setEmergencyMessage(data.emergencyInfos.emergencyMessage || "");
         }
       })
@@ -110,31 +110,22 @@ export default function ContactEdit({ navigation }) {
                 </View>
                 <View>
                 <TextInput
+          style={styles.text2} placeholder='Prénom' value={emergencyFirstname} onChangeText={text => setEmergencyFirstname(text)}/>
+              <TextInput style={styles.text2} placeholder='Nom' value={emergencyLastname} onChangeText={text => setEmergencyLastname(text)}/>
+                    <TextInput
           style={styles.text2}
-          placeholder='Prénom'
-          value={emergencyFirstname}
-          onChangeText={text => setEmergencyFirstname(text)}
+          placeholder='Téléphone'
+          value={emergencyPhone}
+          onChangeText={text => setEmergencyPhone(text)}
         />
-                    <TextInput style={styles.text2} placeholder='Nom' value={emergencyLastname} 
-    onChangeText={text => setEmergencyLastname(text)}/>
-                    <TextInput style={styles.text2} placeholder='Phone' value={emergencyPhone} 
-    onChangeText={text => setEmergencyPhone(text)}/>
                     <View style={styles.messageInputContainer}>
 
                  <View style={styles.titleContainer}>
                      <Text style={styles.title}>Modifier votre message d'urgence</Text>
                 </View>
-                <TextInput
-          style={styles.messageInput}
-          placeholder="Message personnalisé"
-          multiline={true}
-          numberOfLines={4}
-          value={emergencyMessage}
-          onChangeText={text => setEmergencyMessage(text)}
-        />
+                <TextInput style={styles.messageInput} placeholder="Message personnalisé" multiline={true} numberOfLines={4} value={emergencyMessage}
+                           onChangeText={text => setEmergencyMessage(text)}/>
 
-    value={emergencyMessage} // Lie l'état emergencyMessage à ce TextInput
-    onChangeText={text => setEmergencyMessage(text)} />
                     </View>
                 </View>
                     <View style={styles.buttonContainer}>
@@ -200,7 +191,6 @@ container: {
 titleTop:{
   fontSize: 30,
   color: "#473E66",
-  fontFamily: "OpenSans-Regular",
   paddingBottom: '15%',
 },
 
@@ -210,7 +200,6 @@ text2:{
   fontWeight: "800",
   color: "#473E66",
   margin: 10,
-  fontFamily: "OpenSans-Regular",
   borderBottomColor: "#4F4F4F",
     borderBottomWidth: 1,
 },
@@ -232,7 +221,7 @@ messageInput: {
   padding: 10,
   backgroundColor: "#FFF", // Vous pouvez ajuster cette couleur comme vous le souhaitez
   borderRadius: 10,
-  fontFamily: "OpenSans-Regular",
+  // fontFamily: "OpenSans-Regular",
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
   borderWidth: 1,
 },
@@ -245,7 +234,7 @@ closeIcon: {
 textContainer:{
   width: '80%',
   justifyContent: 'center',
-  fontFamily: "OpenSans-Regular",
+  // fontFamily: "OpenSans-Regular",
 height : '80%',
 paddingTop: '10%',
   
@@ -254,7 +243,7 @@ paddingTop: '10%',
 titleContainer:{
   justifyContent: 'center',
   alignItems: 'center',
-  fontFamily: "OpenSans-Regular",
+  // fontFamily: "OpenSans-Regular",
   paddingBottom: '10%',
   
  
@@ -272,7 +261,7 @@ fontFamily: "OpenSans-Regular",
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
-    fontFamily: "OpenSans-Regular",
+    // fontFamily: "OpenSans-Regular",
     
   },
 

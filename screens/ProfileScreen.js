@@ -155,27 +155,47 @@ export default function ProfileScreen({ navigation }) {
           <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8} >
              <Text style={styles.textButton}>Se déconnecter</Text>
           </TouchableOpacity>
-          <Modal isVisible={isModalVisible} style={styles.modal}>
+
+
+          {/* <Modal isVisible={isModalVisible} style={styles.modal}>
            <View style={styles.modalContent}>
                  
                         <View>
                           <TouchableOpacity>
-                            <Text>Souhaitez-vous vous déconnecter ?</Text>
+                            <Text>Voulez-vous valider vos modifications ?</Text>
                           </TouchableOpacity>
-
+                            <View style={styles.modalButtonContainer}>
                                <View>
-                                  <TouchableOpacity onPress={() => handleLogOut()}>
-                                     <Text>Oui</Text>
+                                  <TouchableOpacity onPress={() => handleLogOut()} style={styles.modalButton}>
+                                     <Text tyle={styles.textModal}>Oui</Text>
                                   </TouchableOpacity>
                                </View>
                                <View>
-                                  <TouchableOpacity onPress={() => handledDontDisconnect()}>
-                                     <Text>non</Text>
+                                  <TouchableOpacity onPress={() => handledDontDisconnect()} style={styles.modalButton}>
+                                     <Text tyle={styles.textModal}>non</Text>
                                   </TouchableOpacity>
                                </View>
+                          </View>
                         </View>     
            </View>
-          </Modal>
+          </Modal> */}
+
+
+          <Modal isVisible={isModalVisible} style={styles.modal}>
+                             <View style={styles.modalContent}>
+                               <Text style={styles.modalText}>Voulez-vous vous déconnecter ?</Text>
+                                  <View style={styles.modalButtonContainer}>
+                                     <TouchableOpacity onPress={() => handleLogOut(false)} style={styles.modalButton}>
+                                        <Text style={styles.textModal}>Oui</Text>
+                                     </TouchableOpacity>
+                                     <TouchableOpacity onPress={() => handledDontDisconnect(false)} style={styles.modalButton}>
+                                       <Text style={styles.textModal}>Non</Text>
+                                     </TouchableOpacity>
+                                  </View>
+                              </View>
+                          </Modal>
+
+
         </View> 
            
 
@@ -289,29 +309,60 @@ button: {
       fontSize: 16,
       
   },
-
-
-  texteModal:{
-    marginTop: 10,
-    fontSize: 15,
-  },
   
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 0,
+  
+modalContent: {
+  backgroundColor: "white",
+  padding: 20,
+  alignItems: "center",
+  borderRadius: 10,
+  borderColor: "rgba(0, 0, 0, 0.1)",
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
   },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+},
 
+modalText: {
+  fontSize: 20,
+  marginBottom: 15,
+  textAlign: "center",
+},
 
-  modalContent: {
-    height: '70%',
-    backgroundColor: "white",
-    padding: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 4,
-    borderColor: "rgba(0, 0, 0, 0.1)",
- 
+modalButtonContainer: {
+  flexDirection: "row",
+  justifyContent: "space-around",
+  width: "100%",
+},
+
+modalButton: {
+  backgroundColor: "#F88559",
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 20,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 1,
   },
+  shadowOpacity: 0.22,
+  shadowRadius: 2.22,
+  elevation: 3,
+},
 
+// Ajoutez un style pour le texte des boutons dans la modale
+modalButtonText: {
+  color: "#fff",
+  fontSize: 16,
+  fontWeight: "600",
+},
+
+textModal: {
+  color: 'white',
+},
 
 });
