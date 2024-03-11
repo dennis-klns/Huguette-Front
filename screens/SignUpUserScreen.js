@@ -165,7 +165,7 @@ export default function SignUpUserScreen({ navigation }) {
             <View style={styles.profile}>
               <Text style={styles.text}>Votre profil</Text>
               <TextInput
-                placeholder="Lastname"
+                placeholder="Nom de famille"
                 onChangeText={(value) =>
                   validateName(value, setLastname, setIsLastnameValid)
                 }
@@ -177,7 +177,7 @@ export default function SignUpUserScreen({ navigation }) {
                 ]}
               />
               <TextInput
-                placeholder="Firstname"
+                placeholder="Prénom"
                 onChangeText={(value) =>
                   validateName(value, setFirstname, setIsFirstnameValid)
                 }
@@ -201,7 +201,7 @@ export default function SignUpUserScreen({ navigation }) {
                 <Text style={styles.errorText}>Entrer un email valide</Text>
               )}
               <TextInput
-                placeholder="Phone"
+                placeholder="Numéro de téléphone"
                 onChangeText={validatePhone}
                 value={phone}
                 style={[
@@ -276,7 +276,7 @@ export default function SignUpUserScreen({ navigation }) {
               </Modal>
 
               <TextInput
-                placeholder="Password"
+                placeholder="Mot de passe"
                 onChangeText={(value) => setPassword(value)}
                 value={password}
                 style={styles.input}
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#473E66",
     margin: 40,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
   },
 
   profile: {
@@ -397,7 +397,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
-    fontFamily: "OpenSans-Regular",
   },
 
   input: {
@@ -432,7 +431,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
