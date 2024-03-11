@@ -330,7 +330,7 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-            {/* </View> */}
+            </View>
               
 
               <View style={styles.isaccompanied}>
