@@ -21,10 +21,10 @@ export default function ConfirmScreen({ navigation }) {
   });
 
   const trip = useSelector((state) => state.trip.value);
-  const dispatch = useDispatch();
 
   const handleValidate = () => {
-    navigation.navigate("ConfirmDriver");
+    navigation.navigate("Waiting");
+    // navigation.navigate("ConfirmDriver")
   };
 
   /*     useEffect(() => {
