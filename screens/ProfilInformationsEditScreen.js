@@ -21,9 +21,12 @@ import {logout} from '../reducers/user';
 export default function ProfilInformations({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
+  const profilePicture = useSelector((state) => state.user.value);
 
-  console.log("user Pic", user.picture);
-  console.log("user name", user);
+  // console.log("user Pic", user.picture);
+  // console.log("user name", user);
+  console.log("user Pic", profilePicture.picture);
+  console.log("user name", profilePicture);
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -60,7 +63,7 @@ export default function ProfilInformations({ navigation }) {
                 <Text style={styles.titleTop}>Profil</Text>
               </View>
               <View>
-              <Image source={{ uri: user.picture }} style={{ width: 200, height: 200, borderRadius: 100, }} />
+              <Image source={{ uri: profilePicture.picture }} style={{ width: 200, height: 200, borderRadius: 100, }} />
                  </View>
               
               <View style={styles.textContainer}>
