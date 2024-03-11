@@ -1,9 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function SosScreen({ navigation }) {
   const handleValidate = () => {
     navigation.navigate("Arrival");
+  };
+
+  const handleBack = () => {
+    navigation.navigate("Route");
   };
 
   const sendSMS = () => {
@@ -44,6 +49,12 @@ export default function SosScreen({ navigation }) {
     colors={['#F1C796', '#EBB2B5', '#E0CAC2']}
     style={styles.linearGradient}
   >
+       
+    <View style={styles.closeIcon} >
+          <TouchableOpacity onPress={() => handleBack()}>
+             <FontAwesome name="times" size={30} color="#333" />
+          </TouchableOpacity>
+       </View>
     <View style={styles.container}>
       <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={sendSMS}>
         <Text style={styles.textEmergency}>Contact en cours</Text>
@@ -56,7 +67,7 @@ export default function SosScreen({ navigation }) {
       <TouchableOpacity
         style={styles.button}
         activeOpacity={0.8}
-        onPress={() => handleValidate()}
+        // onPress={() => handleValidate()}
       >
         <Text style={styles.textButton}>Signaler</Text>
       </TouchableOpacity>
@@ -70,10 +81,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  closeIcon: {
+    marginTop: '20%',
+    marginLeft: '10%',
+    width: '90%',
+  },
+
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    paddingTop: '30%',
   },
 
   emergency: {

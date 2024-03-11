@@ -54,8 +54,9 @@ export default function ContactEdit({ navigation }) {
                      <Text style={styles.title}>Modifier votre contact d'urgence</Text>
                 </View>
                 <View>
-                    <TextInput style={styles.text2} placeholder='Marie'/>
-                    <TextInput style={styles.text2} placeholder='Dune'/>
+                    <TextInput style={styles.text2} placeholder='Prénom'/>
+                    <TextInput style={styles.text2} placeholder='Nom'/>
+                    <TextInput style={styles.text2} placeholder='Phone'/>
                     <View style={styles.messageInputContainer}>
 
                  <View style={styles.titleContainer}>
