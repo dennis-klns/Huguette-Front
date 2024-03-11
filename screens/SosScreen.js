@@ -18,19 +18,46 @@ export default function SosScreen({ navigation }) {
     navigation.navigate("Route");
   };
 
+  // useEffect(() => {
+  //   const fetchEmergencyContact = async () => {
+  //     try {
+  //       // Assurez-vous que l'adresse de votre serveur et le port sont corrects
+  //       console.log(userToken)
+  //       const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
+
+  //       const data = await response.json();
+  //       console.log(data);
+  //           setEmergencyContact({
+  //             phone: data.emergencyInfos.phone,
+  //             message: data.emergencyInfos.emergencyMessage,
+  //           });
+  //     } catch (error) {
+  //       console.error('Erreur lors de la récupération du contact d\'urgence:', error);
+  //       Alert.alert("Erreur", error.toString());
+  //     }
+  //   };
+  
+  //   fetchEmergencyContact();
+  // }, [userToken]);
+
   useEffect(() => {
     const fetchEmergencyContact = async () => {
       try {
-        // Assurez-vous que l'adresse de votre serveur et le port sont corrects
         console.log(userToken)
         const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
 
         const data = await response.json();
         console.log(data);
+
+        if (data && data.emergencyInfos) {
             setEmergencyContact({
-              phone: data.emergencyInfos.phone,
-              message: data.emergencyInfos.emergencyMessage,
+              phone: data.emergencyInfos.phone || '',
+              message: data.emergencyInfos.emergencyMessage || '',
             });
+        } else {
+            // Gérer le cas où emergencyInfos n'est pas présent dans la réponse
+            console.log("emergencyInfos non trouvé dans la réponse");
+        }
       } catch (error) {
         console.error('Erreur lors de la récupération du contact d\'urgence:', error);
         Alert.alert("Erreur", error.toString());
@@ -38,7 +65,7 @@ export default function SosScreen({ navigation }) {
     };
   
     fetchEmergencyContact();
-  }, [userToken]);
+}, [userToken]);
 
 
   // const sendSMS = () => {
