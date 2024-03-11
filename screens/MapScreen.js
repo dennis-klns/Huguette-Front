@@ -21,14 +21,14 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import {
   addArrival,
-  addDeparture,
-  addTripId,
-  addDuration,
-  addDistance,
   addCost,
+  addDeparture,
+  addDistance,
+  addDuration,
+  addLatitude,
+  addLongitude,
+  addTripId,
 } from "../reducers/trip";
-
-import moment from "moment";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -119,12 +119,18 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK");
+          console.log("OK:", data);
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
+          dispatch(addLongitude(data.trip.departure.longitude));
+          dispatch(addLatitude(data.trip.departure.latitude));
+          setArrival({});
+          setDeparture({});
+          setModalVisible(false);
+          navigation.navigate("MapPosition");
 
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
@@ -145,11 +151,6 @@ export default function MapScreen({ navigation }) {
       .catch((error) => {
         console.error("Error:", error);
       });
-
-    setArrival({});
-    setDeparture({});
-    setModalVisible(false);
-    navigation.navigate("MapPosition");
   };
 
   //console.log("tripReducer:", trip);
