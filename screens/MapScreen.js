@@ -21,6 +21,8 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import { addArrival, addDeparture, addTripId, addDuration, addDistance, addCost } from "../reducers/trip";
 
+import moment from 'moment';
+
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   //const [addresses, setAddresses] = useState("");
@@ -92,37 +94,48 @@ export default function MapScreen({ navigation }) {
   const handleValidate = () => {
 
     fetch("https://huguette-backend.vercel.app/trips/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          longitudeD: departure.longitude,
-          latitudeD: departure.latitude,
-          longitudeA: arrival.longitude,
-          latitudeA: arrival.latitude,
-          tokenPassenger: user.token,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            console.log("OK");
-            dispatch(addTripId(data.trip._id));
-            dispatch(addDeparture(data.trip.departure.completeAddress));
-            dispatch(addArrival(data.trip.arrival.completeAddress));
-            dispatch(addDuration(data.trip.estimatedDuration));
-            dispatch(addDistance(data.trip.distance));
-            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
-            // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        longitudeD: departure.longitude,
+        latitudeD: departure.latitude,
+        longitudeA: arrival.longitude,
+        latitudeA: arrival.latitude,
+        tokenPassenger: user.token,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("OK");
+          dispatch(addTripId(data.trip._id));
+          dispatch(addDeparture(data.trip.departure.completeAddress));
+          dispatch(addArrival(data.trip.arrival.completeAddress));
+          dispatch(addDuration(data.trip.estimatedDuration));
+          dispatch(addDistance(data.trip.distance));
 
-            console.log("tripBDD:", data.trip);
+          if (data.trip.estimatedDuration.includes('hour')) {
+
+            const str = data.trip.estimatedDuration
+            const parts = str.split('mins').join('').split('hours')
+            const minutes = Number(parts[0]) * 60 + Number(parts[1])
+            console.log(parts)
+            console.log(minutes)
+            dispatch(addCost(parseFloat(minutes) * 0.90));
           } else {
-            console.error("Failed:", data.error);
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.90))
           }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-  
+
+
+          console.log("tripBDD:", data.trip);
+        } else {
+          console.error("Failed:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
 
     setArrival({});
     setDeparture({});
@@ -130,7 +143,7 @@ export default function MapScreen({ navigation }) {
     navigation.navigate("MapPosition");
   };
 
-  console.log("tripReducer:", trip);
+  //console.log("tripReducer:", trip);
 
 
   useEffect(() => {
@@ -201,11 +214,11 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              
 
-            {/* <View style={styles.autoDeparture}> */}
 
-            <GooglePlacesAutocomplete
+              {/* <View style={styles.autoDeparture}> */}
+
+              <GooglePlacesAutocomplete
                 placeholder="Départ"
                 onChangeText={(value) => setDeparture(value)}
                 value={departure}
@@ -254,11 +267,11 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-           {/*  </View> */}
+              {/*  </View> */}
 
-         {/*    <View style={styles.autoArrival}> */}
+              {/*    <View style={styles.autoArrival}> */}
 
-            <GooglePlacesAutocomplete
+              <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
                 value={arrival}
@@ -306,8 +319,8 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-            {/* </View> */}
-              
+              {/* </View> */}
+
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.text}>Je suis accompagnée</Text>
@@ -418,14 +431,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  autoDeparture:{
+  autoDeparture: {
     height: '20%',
-    width:'90%',
+    width: '90%',
   },
 
-  autoArrival:{
+  autoArrival: {
     height: '20%',
-    width:'90%',
+    width: '90%',
   },
 
   isaccompanied: {
