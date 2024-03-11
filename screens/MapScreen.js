@@ -125,7 +125,7 @@ export default function MapScreen({ navigation }) {
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
+          //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
           dispatch(addLongitude(data.trip.departure.longitude));
           dispatch(addLatitude(data.trip.departure.latitude));
           setArrival({});
