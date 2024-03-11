@@ -11,9 +11,7 @@ import MapView from "react-native-maps";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addDeparture } from "../reducers/trip";
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -57,7 +55,6 @@ export default function MapPositionScreen({ navigation }) {
   // };
 
   const handleValidate = () => {
-
     navigation.navigate("Confirm");
 
     // Je travaille sur cet écran.
@@ -87,17 +84,13 @@ export default function MapPositionScreen({ navigation }) {
     //   .catch((error) => {
     //     console.error("Error:", error);
     //   });
-
-
-      
-
   };
 
   const handleTest = () => {
     navigation.navigate("Confirm");
   };
 
-  useEffect(() => {
+  /*   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -108,6 +101,10 @@ export default function MapPositionScreen({ navigation }) {
         });
       }
     })();
+  }, []); */
+
+  useEffect(() => {
+    setMarkerPosition({ latitude: trip.latitude, longitude: trip.longitude });
   }, []);
 
   return (
@@ -115,14 +112,14 @@ export default function MapPositionScreen({ navigation }) {
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
-      {currentPosition && (
+      {markerPosition && (
         <MapView
           style={styles.map}
           //provider={PROVIDER_GOOGLE}
 
           initialRegion={{
-            latitude: currentPosition.latitude,
-            longitude: currentPosition.longitude,
+            latitude: trip.latitude,
+            longitude: trip.longitude,
             latitudeDelta: 0.001,
             longitudeDelta: 0.001,
           }}
@@ -180,9 +177,9 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height:'9%',
+    height: "9%",
     alignItems: "center",
-    padding: '5%',
+    padding: "5%",
   },
   text: {
     fontSize: 24,
