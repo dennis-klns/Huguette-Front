@@ -71,8 +71,9 @@ export default function WaitingScreen({ navigation }) {
 
                 <View style={styles.card}>
                     <Text style={styles.title}>Récapitulatif</Text>
-                    <Text style={styles.text}>{trip.departure} - {trip.arrival}</Text>
-                    <Text style={styles.text}>Prix - {trip.cost}</Text>
+                    <Text style={styles.text}>De : {trip.departure}</Text>
+                    <Text style={styles.text}>à : {trip.arrival}</Text>
+                    <Text style={styles.text}>Prix - {trip.cost}€</Text>
                 </View>
                 <View style={styles.card}>
                     <Text style={styles.title}>Marguerite</Text>
@@ -91,6 +92,7 @@ export default function WaitingScreen({ navigation }) {
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
                     <Text style={styles.textButton} onPress={() => handleCancel()}>Annuler la course</Text>
                 </TouchableOpacity>
+
             </View>
 
         </LinearGradient>
@@ -115,25 +117,27 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         width: '90%',
-        borderRadius: 10,
+        borderRadius: 30,
         marginTop: 20,
-        padding: 10,
+        padding: 20,
 
 
     },
 
     title: {
         marginTop: 10,
-        fontSize: 18,
+        marginBottom: 10,
+        fontSize: 20,
+        fontFamily: 'Ladislav-Bold',
     },
 
 
 
     text: {
-        fontWeight: '700',
-        marginTop: 10,
+        fontWeight: '500',
+        fontSize: 14,
     },
 
 
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 20,
         backgroundColor: "#F88559",
-        borderRadius: 10,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

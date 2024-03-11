@@ -10,27 +10,52 @@ export default function SosScreen({ navigation }) {
 
   const userToken = useSelector((state) => state.user.value.token);
 
-  const handleValidate = () => {
-    navigation.navigate("Arrival");
-  };
+  
 
   const handleBack = () => {
     navigation.navigate("Route");
   };
 
+  // useEffect(() => {
+  //   const fetchEmergencyContact = async () => {
+  //     try {
+  //       // Assurez-vous que l'adresse de votre serveur et le port sont corrects
+  //       console.log(userToken)
+  //       const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
+
+  //       const data = await response.json();
+  //       console.log(data);
+  //           setEmergencyContact({
+  //             phone: data.emergencyInfos.phone,
+  //             message: data.emergencyInfos.emergencyMessage,
+  //           });
+  //     } catch (error) {
+  //       console.error('Erreur lors de la récupération du contact d\'urgence:', error);
+  //       Alert.alert("Erreur", error.toString());
+  //     }
+  //   };
+  
+  //   fetchEmergencyContact();
+  // }, [userToken]);
+
   useEffect(() => {
     const fetchEmergencyContact = async () => {
       try {
-        // Assurez-vous que l'adresse de votre serveur et le port sont corrects
         console.log(userToken)
         const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
 
         const data = await response.json();
         console.log(data);
+
+        if (data && data.emergencyInfos) {
             setEmergencyContact({
-              phone: data.emergencyInfos.phone,
-              message: data.emergencyInfos.emergencyMessage,
+              phone: data.emergencyInfos.phone || '',
+              message: data.emergencyInfos.emergencyMessage || '',
             });
+        } else {
+            // Gérer le cas où emergencyInfos n'est pas présent dans la réponse
+            console.log("emergencyInfos non trouvé dans la réponse");
+        }
       } catch (error) {
         console.error('Erreur lors de la récupération du contact d\'urgence:', error);
         Alert.alert("Erreur", error.toString());
@@ -38,55 +63,73 @@ export default function SosScreen({ navigation }) {
     };
   
     fetchEmergencyContact();
-  }, [userToken]);
+}, [userToken]);
 
-  //       const data = await response.json();
 
-  //       if (response.ok) {
-  //         setEmergencyContact({
-  //           phone: data.emergencyInfos.phone,
-  //           message: data.emergencyInfos.emergencyMessage,
-  //         });
+  // const sendSMS = () => {
+  //   const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+
+  //   Linking.canOpenURL(url)
+  //     .then((supported) => {
+  //       if (supported) {
+  //         return Linking.openURL(url);
   //       } else {
-  //         throw new Error(data.error || "Une erreur est survenue");
+  //         throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
   //       }
-  //     } catch (error) {
-  //       Alert.alert("Erreur", error.toString());
-  //     }
-  //   };
-
-  //   fetchEmergencyContact();
-  // }, [userToken]); 
+  //     })
+  //     .catch((err) => Alert.alert("Erreur", err.toString()));
+  // };
 
   const sendSMS = () => {
-    const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+    let url = `sms:`;
+    if (emergencyContact.phone && emergencyContact.message) {
+        url += `${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+    }
 
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
+          throw new Error("Impossible d'ouvrir l'URL pour l'envoi de SMS");
         }
       })
       .catch((err) => Alert.alert("Erreur", err.toString()));
-  };
+};
 
-   const makePhoneCall = () => {
-    // Utilisez l'état emergencyPhone pour passer l'appel
-    const url = `tel:${emergencyContact.phone}`;
+
+
+  //  const makePhoneCall = () => {
+  //   // Utilisez l'état emergencyPhone pour passer l'appel
+  //   const url = `tel:${emergencyContact.phone}`;
+
+  //   Linking.canOpenURL(url)
+  //     .then((supported) => {
+  //       if (!supported) {
+  //         console.log('Impossible de lancer un appel');
+  //       } else {
+  //         return Linking.openURL(url);
+  //       }
+  //     })
+  //     .catch((err) => console.error('Une erreur est survenue', err));
+  // };
+
+  const makePhoneCall = () => {
+    let url = `tel:`;
+    if (emergencyContact.phone) {
+        url += `${emergencyContact.phone}`;
+    }
 
     Linking.canOpenURL(url)
       .then((supported) => {
         if (!supported) {
-          console.log('Impossible de lancer un appel');
+          console.log("Impossible de lancer un appel");
         } else {
           return Linking.openURL(url);
         }
       })
-      .catch((err) => console.error('Une erreur est survenue', err));
-  };
-
+      .catch((err) => console.error("Une erreur est survenue", err));
+};
 
 
   return (
@@ -142,12 +185,11 @@ const styles = StyleSheet.create({
   emergency: {
     height: 45,
     justifyContent: "center",
-    paddingTop: 8,
     width: "80%",
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -170,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

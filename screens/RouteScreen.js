@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSelector } from "react-redux";
@@ -22,6 +23,10 @@ export default function RouteScreen({ navigation }) {
 
   const handleSOS = () => {
     navigation.navigate("sos");
+  };
+
+  const handleValidate = () => {
+    navigation.navigate("Arrival");
   };
 
   useEffect(() => {
@@ -116,16 +121,26 @@ export default function RouteScreen({ navigation }) {
           />
         </MapView>
       )}
+      <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Heure d'arrivée approximative :</Text>
+        <Text style={styles.title}>Heure d'arrivée approximative :</Text>
         <Text style={styles.text}>20 h 14</Text>
-        <Text style={styles.text}>Partager ma course en temps réel ...</Text>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton} onPress={() => handleSOS()}>
-            SOS
+
+        <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+          <Text style={styles.textinput}>
+            Partager ma course en temps réel
           </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleSOS()}>
+          <Text style={styles.textButton}> SOS </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.input} activeOpacity={0.8} onPress={() => handleValidate()}>
+          <Text style={styles.textinput}> Je suis arrivée</Text>
+        </TouchableOpacity>
       </View>
+      </ScrollView>
     </LinearGradient>
   );
 }
@@ -144,9 +159,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 50,
   },
+
   text: {
-    fontSize: 24,
-    fontFamily: "OpenSans-Regular",
+    fontSize: 18,
+    fontWeight: '600',
+  },
+
+  title: {
+    fontSize: 22,
+    fontFamily: "Ladislav-Bold",
   },
 
   button: {
@@ -157,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     backgroundColor: "#d63031",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -174,6 +195,29 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+
+  textinput: {
+    fontSize: 14,
+    color: 'gray',
+  },
+
+  input: {
+    height: 45,
+        justifyContent: 'center',
+        width: "80%",
+        padding: 10,
+        marginTop: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+  }
 });
 
 function decodePolyline(encoded) {

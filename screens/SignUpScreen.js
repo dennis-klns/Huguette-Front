@@ -70,6 +70,8 @@ import {
       fontWeight: '600',
       textAlign: 'center',
       color: 'white',
+      fontFamily: 'Ladislav-Bold',
+      
     },
 
 
@@ -79,6 +81,7 @@ import {
       fontWeight: '400',
       textAlign: 'center',
       color: 'white',
+   
     },
     
   
@@ -96,7 +99,7 @@ import {
       marginTop: 20,
       backgroundColor: 'white',
       opacity : 0.5,
-      borderRadius: 10,
+      borderRadius: 30,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,

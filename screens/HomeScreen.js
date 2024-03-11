@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   textgroup: {
     flex: 1,
     justifyContent: "flex-end",
+    marginTop: 70,
   },
 
   buttonsgroup: {
@@ -96,14 +97,14 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 40,
-    paddingTop: 8,
+    height: '12%',
     width: "80%",
+    justifyContent: 'center',
     alignItems: "center",
     marginTop: 10,
     backgroundColor: "white",
     opacity: 0.5,
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -116,9 +117,7 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: "#000",
-    height: 30,
-    fontWeight: "600",
     fontSize: 16,
-    fontFamily: "OpenSans-Regular",
+    fontWeight: '700',
   },
 });
