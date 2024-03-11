@@ -105,8 +105,8 @@ export default function ContactEdit({ navigation }) {
                  <View style={styles.titleContainer}>
                      <Text style={styles.title}>Modifier votre message d'urgence</Text>
                 </View>
-                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4} multiline={true}
-    numberOfLines={4}
+                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4}
+
     value={emergencyMessage} // Lie l'état emergencyMessage à ce TextInput
     onChangeText={text => setEmergencyMessage(text)} />
                     </View>

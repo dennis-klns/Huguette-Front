@@ -100,7 +100,7 @@ export default function SignUpUserScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ phone, token: data.token,firstname, lastname }));
+          dispatch(login({ phone, token: data.token,firstname, lastname })); 
           navigation.navigate("SignUpPhoto");
         } else {
           console.error("Signup failed:", data.error);
