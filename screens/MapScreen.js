@@ -19,16 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import {
-  addArrival,
-  addCost,
-  addDeparture,
-  addDistance,
-  addDuration,
-  addLatitude,
-  addLongitude,
-  addTripId,
-} from "../reducers/trip";
+import { addArrival, addDeparture, addTripId, addDuration, addDistance, addCost } from "../reducers/trip";
+
+import moment from 'moment';
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -119,21 +112,26 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", data);
+          console.log("OK");
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
-          dispatch(addLongitude(data.trip.departure.longitude));
-          dispatch(addLatitude(data.trip.departure.latitude));
-          setArrival({});
-          setDeparture({});
-          setModalVisible(false);
-          navigation.navigate("MapPosition");
-          // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
-          console.log("tripReducerindispatch:", trip);
+
+          if (data.trip.estimatedDuration.includes('hour')) {
+
+            const str = data.trip.estimatedDuration
+            const parts = str.split('mins').join('').split('hours')
+            const minutes = Number(parts[0]) * 60 + Number(parts[1])
+            console.log(parts)
+            console.log(minutes)
+            dispatch(addCost(parseFloat(minutes) * 0.90));
+          } else {
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.90))
+          }
+
+
           console.log("tripBDD:", data.trip);
         } else {
           console.error("Failed:", data.error);
@@ -142,9 +140,16 @@ export default function MapScreen({ navigation }) {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+
+    setArrival({});
+    setDeparture({});
+    setModalVisible(false);
+    navigation.navigate("MapPosition");
   };
 
-  console.log("tripReducer:", trip);
+  //console.log("tripReducer:", trip);
+
 
   useEffect(() => {
     (async () => {
@@ -214,10 +219,12 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
+
+
               {/* <View style={styles.autoDeparture}> */}
 
               <GooglePlacesAutocomplete
-                placeholder="Ma position"
+                placeholder="Départ"
                 onChangeText={(value) => setDeparture(value)}
                 value={departure}
                 onPress={handleDepartureSelect}
@@ -234,7 +241,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 140,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: '50%',
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -266,9 +273,12 @@ export default function MapScreen({ navigation }) {
               />
 
               {/*  </View> */}
+              {/*  </View> */}
 
               {/*    <View style={styles.autoArrival}> */}
+              {/*    <View style={styles.autoArrival}> */}
 
+              <GooglePlacesAutocomplete
               <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
@@ -287,7 +297,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 120,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: '50%',
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -319,6 +329,7 @@ export default function MapScreen({ navigation }) {
               />
 
               {/* </View> */}
+
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.text}>Je suis accompagnée</Text>
@@ -400,6 +411,7 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     margin: 20,
+    height: Dimensions.get("window")
   },
 
   addresse: {
@@ -449,13 +461,13 @@ const styles = StyleSheet.create({
   },
 
   autoDeparture: {
-    height: "20%",
-    width: "90%",
+    height: '20%',
+    width: '90%',
   },
 
   autoArrival: {
-    height: "20%",
-    width: "90%",
+    height: '20%',
+    width: '90%',
   },
 
   isaccompanied: {
