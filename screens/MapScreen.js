@@ -92,11 +92,11 @@ export default function MapScreen({ navigation }) {
   let iconStyleMusic = {};
   let iconStyleMood = {};
   if (music) {
-    iconStyleMusic = { color: "#F88559" };
+    iconStyleMusic = { color: "#EBB2B5" };
   }
 
   if (mood) {
-    iconStyleMood = { color: "#F88559" };
+    iconStyleMood = { color: "#EBB2B5" };
   }
 
   const handleValidate = () => {
@@ -136,12 +136,12 @@ export default function MapScreen({ navigation }) {
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
             const parts = str.split("mins").join("").split("hours");
-            const minutes = Number(parts[0]) * 60 + Number(parts[1]);
+            const minutes = Math.floor(Number(parts[0]) * 60 + Number(parts[1]));
             console.log(parts);
             console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
           } else {
-            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.9));
+            dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9)));
           }
 
           console.log("tripBDD:", data.trip);
@@ -203,8 +203,8 @@ export default function MapScreen({ navigation }) {
         </MapView>
       )}
       <View style={styles.search}>
-        <Text style={styles.text}>Hello {user.firstname},</Text>
-        <Text style={styles.text}>Ou allons nous ?</Text>
+        <Text style={styles.title}>Hello {user.firstname},</Text>
+        <Text style={styles.text}>Où allons-nous ?</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.addresse}>
             <TextInput placeholder="Addresse" />
@@ -261,10 +261,11 @@ export default function MapScreen({ navigation }) {
                   listView: {
                     position: "absolute",
                     top: 50,
-                    borderWidth: 0.5,
-                    borderColor: "black",
+                    borderWidth: 0,
+                    //borderColor: "black",
                     backgroundColor: "#F1C796",
                     marginHorizontal: 20,
+                    opacity: 0.9,
                     elevation: 5,
                     shadowColor: "#000",
                     shadowOpacity: 0.1,
@@ -333,9 +334,9 @@ export default function MapScreen({ navigation }) {
               {/* </View> */}
 
               <View style={styles.isaccompanied}>
-                <Text style={styles.text}>Je suis accompagnée</Text>
+                <Text style={styles.textmodal}>Je suis accompagnée</Text>
                 <Switch
-                  trackColor={{ false: "#F1C796", true: "#F88559" }}
+                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
                   thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={toggleSwitch}
@@ -343,7 +344,7 @@ export default function MapScreen({ navigation }) {
                 />
               </View>
               <View style={styles.mood}>
-                <Text style={styles.text}>MOOD</Text>
+                <Text style={styles.textmodal}>MOOD</Text>
                 <View style={styles.icon}>
                   <FontAwesome
                     name="music"
@@ -362,6 +363,7 @@ export default function MapScreen({ navigation }) {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollView}>
+              <Text style={styles.titlemodal}>Adresses Favorites</Text>
               {addresses}
             </ScrollView>
 
@@ -423,6 +425,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+
   },
 
   search: {
@@ -431,11 +434,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
+  title: {
+    fontSize: 40,
+    marginLeft: 10,
+    fontFamily: 'Ladislav-Bold',
+  },
+
   text: {
     fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 10,
-    fontFamily: "OpenSans-Regular",
+    fontWeight: "400",
+    margin: 10,
   },
 
   // DEBUT DES ELEMENTS DE LA MODAL
@@ -450,7 +458,7 @@ const styles = StyleSheet.create({
     height: "38%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -459,6 +467,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  titlemodal: {
+    fontSize: 22,
+    marginLeft: 10,
+    fontFamily: 'Ladislav-Bold',
+    textAlign: 'center',
   },
 
   autoDeparture: {
@@ -474,17 +489,24 @@ const styles = StyleSheet.create({
   isaccompanied: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    width: "80%",
+    justifyContent: "space-around",
+    width: "100%",
     marginTop: 30,
+  },
+
+  textmodal: {
+    fontSize: 16,
+    margin: 10,
+    fontWeight: '600',
   },
 
   mood: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    width: "80%",
+    width: "100%",
     margin: 30,
+
   },
 
   icon: {
@@ -508,7 +530,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "700",
-    fontFamily: "OpenSans-Regular",
   },
 
   button: {
@@ -518,7 +539,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -542,6 +563,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   errorModalView: {
     margin: 20,
     backgroundColor: "white",

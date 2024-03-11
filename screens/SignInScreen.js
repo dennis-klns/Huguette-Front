@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#473E66",
     margin: 40,
-    fontFamily: "OpenSans-Regular",
   },
 
   profile: {
@@ -234,7 +233,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
-    fontFamily: "OpenSans-Regular",
   },
 
   text2: {
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     paddingTop: 30,
-    fontFamily: "OpenSans-Regular",
+
   },
 
   trait: {
@@ -261,7 +259,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
-    fontFamily: "OpenSans-Regular",
   },
 
   halfinput: {
@@ -271,15 +268,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
 
-  smallinput: {
-    width: "30%",
-    marginTop: 25,
-    borderBottomColor: "#4F4F4F",
-    borderBottomWidth: 1,
-    fontSize: 16,
-    color: "#4F4F4F",
-    fontFamily: "OpenSans-Regular",
-  },
 
   button: {
     height: 40,
@@ -288,7 +276,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -304,7 +292,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
-    fontFamily: "OpenSans-Regular",
   },
 
   modalContent: {

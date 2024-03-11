@@ -26,7 +26,7 @@ export default function ArrivalScreen({ navigation }) {
 
     const stars = [];
 
-  
+
     /* for (let i = 0; i < 10; i++) {
         if( i < props.voteAverage -1)
         {stars.push(<FontAwesome name="star" size={30} color="gold" key={i} className={styles.fullStar}/>);
@@ -46,7 +46,16 @@ export default function ArrivalScreen({ navigation }) {
                 <Text style={styles.title}>Vous êtes arrivée ! </Text>
 
                 <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+                    <View style={styles.note}>
                     <Text style={styles.text}>Notez la course</Text>
+                        <View style={styles.icon}>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
+                        </View>
+                    </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.input} activeOpacity={0.8}>
@@ -54,12 +63,12 @@ export default function ArrivalScreen({ navigation }) {
                 </TouchableOpacity>
 
                 <View style={styles.buttonsgroup}>
-                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={() => handleValidate()}>Valider </Text>
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleValidate()}>
+                        <Text style={styles.textButton} >Valider </Text>
                     </TouchableOpacity>
-                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={() => handleComplain()}>Signaler </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleComplain()}>
+                        <Text style={styles.textButton} >Signaler </Text>
+                    </TouchableOpacity>
                 </View>
 
             </View>
@@ -87,12 +96,21 @@ const styles = StyleSheet.create({
         marginBottom: '20%',
     },
 
+    note: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+
+    icon: {
+        flexDirection: 'row',
+    },
+
     input: {
         height: 45,
         justifyContent: 'center',
-        paddingTop: 8,
         width: "80%",
-        alignItems: "center",
+        padding: 10,
         marginTop: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 10,
@@ -111,7 +129,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
-    buttonsgroup : {
+    buttonsgroup: {
         width: '70%',
         alignItems: 'center',
         marginTop: '30%',
@@ -119,12 +137,12 @@ const styles = StyleSheet.create({
 
     button: {
         height: 40,
-        paddingTop: 8,
         width: "80%",
         alignItems: "center",
+        justifyContent: "center",
         marginTop: 20,
         backgroundColor: "#F88559",
-        borderRadius: 10,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -138,7 +156,6 @@ const styles = StyleSheet.create({
 
     textButton: {
         color: "#fff",
-        height: 30,
         fontWeight: "600",
         fontSize: 16,
     },

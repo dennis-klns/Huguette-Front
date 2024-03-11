@@ -116,22 +116,34 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgba(255, 255, 255, 1)",
     position: "absolute",
-    height: "30%",
+    height: "35%",
     width: "85%",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "center",
     marginTop: "50%",
-    borderRadius: 10,
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 
   title: {
     fontSize: 22,
+    fontFamily: 'Ladislav-Bold',
+    marginBottom: 20,
   },
 
   text: {
     fontWeight: "700",
+    fontSize: 16,
+    marginTop: 20,
   },
 
   button: {
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

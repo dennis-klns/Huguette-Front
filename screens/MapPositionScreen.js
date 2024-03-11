@@ -8,9 +8,10 @@ import {
   View,
 } from "react-native";
 import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Marker } from "react-native-maps";
+
 
 export default function MapPositionScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -130,9 +131,11 @@ export default function MapPositionScreen({ navigation }) {
         </MapView>
       )}
       <View style={styles.container}>
-        <Text style={styles.text}>Ou êtes vous exactement ?</Text>
-        <Text style={styles.text}>Temps de trajet: {trip.duration}</Text>
-        <Text style={styles.text}>Prix : {trip.cost}€</Text>
+        <Text style={styles.title}>Où êtes-vous exactement ?</Text>
+        <Text style={styles.text}>Temps de trajet</Text>
+        <Text style={styles.info}>{trip.duration}</Text>
+        <Text style={styles.text}>Prix</Text>
+        <Text style={styles.info}>{trip.cost}€</Text>
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
@@ -150,6 +153,7 @@ export default function MapPositionScreen({ navigation }) {
           <Text style={styles.textButton}>Suivant</Text>
         </TouchableOpacity> */}
       </View>
+    
     </LinearGradient>
   );
 }
@@ -157,29 +161,35 @@ export default function MapPositionScreen({ navigation }) {
 const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
-    height: "70%",
+    height: "65%",
   },
 
-  button: {
-    width: 150,
-    alignItems: "center",
-    marginTop: 20,
-    paddingTop: 8,
-    backgroundColor: "#ec6e5b",
-    borderRadius: 10,
-  },
+
   linearGradient: {
     flex: 1,
   },
+
   container: {
     width: "100%",
     height: "9%",
     alignItems: "center",
     padding: "5%",
   },
+
   text: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 20,
+  },
+
+  info: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+
+  title: {
     fontSize: 24,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: 'Ladislav-Bold'
   },
 
   button: {
@@ -189,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -205,6 +215,5 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 16,
-    fontFamily: "OpenSans-Regular",
   },
 });
