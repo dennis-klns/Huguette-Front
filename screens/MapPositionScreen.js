@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import MapView from "react-native-maps";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import { Marker } from "react-native-maps";
@@ -20,8 +19,6 @@ export default function MapPositionScreen({ navigation }) {
     longitude: currentPosition?.longitude,
   });
   const [address, setAddress] = useState("");
-
-  const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
 
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
@@ -116,7 +113,6 @@ export default function MapPositionScreen({ navigation }) {
         <MapView
           style={styles.map}
           //provider={PROVIDER_GOOGLE}
-
           initialRegion={{
             latitude: trip.latitude,
             longitude: trip.longitude,
@@ -146,13 +142,13 @@ export default function MapPositionScreen({ navigation }) {
         </TouchableOpacity>
 
         {/* Bouton temporaire pour passer à la page d'après */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
           onPress={() => handleTest()}
         >
           <Text style={styles.textButton}>Suivant</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </LinearGradient>
   );
@@ -183,7 +179,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    fontWeight: "bold",
     fontFamily: "OpenSans-Regular",
   },
 

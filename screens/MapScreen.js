@@ -211,7 +211,7 @@ export default function MapScreen({ navigation }) {
               {/* <View style={styles.autoDeparture}> */}
 
               <GooglePlacesAutocomplete
-                placeholder="Départ"
+                placeholder="Ma position"
                 onChangeText={(value) => setDeparture(value)}
                 value={departure}
                 onPress={handleDepartureSelect}
