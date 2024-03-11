@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
       />
       <View style={styles.textgroup}>
         <Text style={styles.title}>Huguette</Text>
-        <Text style={styles.title}>Get Safe</Text>
+        <Text style={styles.slogan}>Get Safe</Text>
       </View>
 
       <View style={styles.buttonsgroup}>
@@ -67,7 +67,16 @@ const styles = StyleSheet.create({
   title: {
     width: "80%",
     fontSize: 38,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
+    fontWeight: "600",
+    textAlign: "center",
+    color: "white",
+  },
+
+  slogan: {
+    width: "80%",
+    fontSize: 38,
+    fontFamily: "Ladislav-Inline",
     fontWeight: "600",
     textAlign: "center",
     color: "white",
