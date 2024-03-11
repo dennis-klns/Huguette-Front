@@ -40,53 +40,71 @@ export default function SosScreen({ navigation }) {
     fetchEmergencyContact();
   }, [userToken]);
 
-  //       const data = await response.json();
 
-  //       if (response.ok) {
-  //         setEmergencyContact({
-  //           phone: data.emergencyInfos.phone,
-  //           message: data.emergencyInfos.emergencyMessage,
-  //         });
+  // const sendSMS = () => {
+  //   const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+
+  //   Linking.canOpenURL(url)
+  //     .then((supported) => {
+  //       if (supported) {
+  //         return Linking.openURL(url);
   //       } else {
-  //         throw new Error(data.error || "Une erreur est survenue");
+  //         throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
   //       }
-  //     } catch (error) {
-  //       Alert.alert("Erreur", error.toString());
-  //     }
-  //   };
-
-  //   fetchEmergencyContact();
-  // }, [userToken]); 
+  //     })
+  //     .catch((err) => Alert.alert("Erreur", err.toString()));
+  // };
 
   const sendSMS = () => {
-    const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+    let url = `sms:`;
+    if (emergencyContact.phone && emergencyContact.message) {
+        url += `${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
+    }
 
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
+          throw new Error("Impossible d'ouvrir l'URL pour l'envoi de SMS");
         }
       })
       .catch((err) => Alert.alert("Erreur", err.toString()));
-  };
+};
 
-   const makePhoneCall = () => {
-    // Utilisez l'état emergencyPhone pour passer l'appel
-    const url = `tel:${emergencyContact.phone}`;
+
+
+  //  const makePhoneCall = () => {
+  //   // Utilisez l'état emergencyPhone pour passer l'appel
+  //   const url = `tel:${emergencyContact.phone}`;
+
+  //   Linking.canOpenURL(url)
+  //     .then((supported) => {
+  //       if (!supported) {
+  //         console.log('Impossible de lancer un appel');
+  //       } else {
+  //         return Linking.openURL(url);
+  //       }
+  //     })
+  //     .catch((err) => console.error('Une erreur est survenue', err));
+  // };
+
+  const makePhoneCall = () => {
+    let url = `tel:`;
+    if (emergencyContact.phone) {
+        url += `${emergencyContact.phone}`;
+    }
 
     Linking.canOpenURL(url)
       .then((supported) => {
         if (!supported) {
-          console.log('Impossible de lancer un appel');
+          console.log("Impossible de lancer un appel");
         } else {
           return Linking.openURL(url);
         }
       })
-      .catch((err) => console.error('Une erreur est survenue', err));
-  };
-
+      .catch((err) => console.error("Une erreur est survenue", err));
+};
 
 
   return (
