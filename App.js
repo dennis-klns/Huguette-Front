@@ -32,7 +32,6 @@ import DocumentsDriverScreen from "./screens/DocumentsDriverScreen";
 import WaitingFilesScreen from "./screens/WaitingFilesScreen";
 
 
-
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import trip from "./reducers/trip";

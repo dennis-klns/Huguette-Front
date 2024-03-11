@@ -1,8 +1,15 @@
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Linking, Alert, } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 
 export default function SosScreen({ navigation }) {
+
+  const [emergencyContact, setEmergencyContact] = useState({phone: '', message: ''});
+
+  const userToken = useSelector((state) => state.user.value.token);
+
   const handleValidate = () => {
     navigation.navigate("Arrival");
   };
@@ -11,26 +18,63 @@ export default function SosScreen({ navigation }) {
     navigation.navigate("Route");
   };
 
+  useEffect(() => {
+    const fetchEmergencyContact = async () => {
+      try {
+        // Assurez-vous que l'adresse de votre serveur et le port sont corrects
+        console.log(userToken)
+        const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
+
+        const data = await response.json();
+        console.log(data);
+            setEmergencyContact({
+              phone: data.emergencyInfos.phone,
+              message: data.emergencyInfos.emergencyMessage,
+            });
+      } catch (error) {
+        console.error('Erreur lors de la récupération du contact d\'urgence:', error);
+        Alert.alert("Erreur", error.toString());
+      }
+    };
+  
+    fetchEmergencyContact();
+  }, [userToken]);
+
+  //       const data = await response.json();
+
+  //       if (response.ok) {
+  //         setEmergencyContact({
+  //           phone: data.emergencyInfos.phone,
+  //           message: data.emergencyInfos.emergencyMessage,
+  //         });
+  //       } else {
+  //         throw new Error(data.error || "Une erreur est survenue");
+  //       }
+  //     } catch (error) {
+  //       Alert.alert("Erreur", error.toString());
+  //     }
+  //   };
+
+  //   fetchEmergencyContact();
+  // }, [userToken]); 
+
   const sendSMS = () => {
-    
-    const phoneNumber = '0624797127';
-    const message = "Bonjour, je suis actuellement dans une situation inconfortable, est-ce que vous pouvez m'appeler maintenant merci ! ";
-    const url = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+    const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
 
     Linking.canOpenURL(url)
       .then((supported) => {
-        if (!supported) {
-          console.log('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
-        } else {
+        if (supported) {
           return Linking.openURL(url);
+        } else {
+          throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
         }
       })
-      .catch((err) => console.error('Une erreur est survenue', err));
+      .catch((err) => Alert.alert("Erreur", err.toString()));
   };
 
-  const makePhoneCall = () => {
-    const phoneNumber = '0624797127'; // Remplacer par le numéro de votre contact d'urgence
-    const url = `tel:${phoneNumber}`;
+   const makePhoneCall = () => {
+    // Utilisez l'état emergencyPhone pour passer l'appel
+    const url = `tel:${emergencyContact.phone}`;
 
     Linking.canOpenURL(url)
       .then((supported) => {
@@ -42,6 +86,7 @@ export default function SosScreen({ navigation }) {
       })
       .catch((err) => console.error('Une erreur est survenue', err));
   };
+
 
 
   return (
