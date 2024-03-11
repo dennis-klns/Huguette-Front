@@ -72,6 +72,9 @@ const TabNavigator = () => {
   );
 };
 
+
+
+
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
@@ -118,6 +121,7 @@ export default function App() {
           <Stack.Screen name="DocumentsDriver" component={DocumentsDriverScreen} />
           <Stack.Screen name="WaitingFiles" component={WaitingFilesScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

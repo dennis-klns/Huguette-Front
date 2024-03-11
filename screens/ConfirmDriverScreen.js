@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     image : {
         height: '40%',
         width: '80%',
+        borderRadius: 20,
     },
 
     card: {
@@ -84,14 +85,15 @@ const styles = StyleSheet.create({
         height: '30%',
         width: '80%',
         alignItems: 'center',
-        borderRadius: 10,
-        marginTop: 40,
+        borderRadius: 20,
+        marginTop: 30,
 
     },
 
     title: {
         marginTop: 10,
         fontSize: 22,
+        fontFamily: 'Ladislav-Bold',
     },
 
     note: {
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
 
     text: {
         fontWeight: '700',
+        fontSize: 15,
         marginTop: 40,
     },
 
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 20,
         backgroundColor: "#F88559",
-        borderRadius: 10,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

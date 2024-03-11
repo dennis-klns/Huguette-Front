@@ -10,9 +10,7 @@ export default function SosScreen({ navigation }) {
 
   const userToken = useSelector((state) => state.user.value.token);
 
-  const handleValidate = () => {
-    navigation.navigate("Arrival");
-  };
+  
 
   const handleBack = () => {
     navigation.navigate("Route");
@@ -187,12 +185,11 @@ const styles = StyleSheet.create({
   emergency: {
     height: 45,
     justifyContent: "center",
-    paddingTop: 8,
     width: "80%",
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -215,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
