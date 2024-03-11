@@ -59,43 +59,6 @@ useEffect(() => {
 }, []);
 
 
-// const takePicture = async () => {
-//   if (cameraRef.current) {
-//     const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
-//     const uri = photo?.uri;
-//     setPhotoUri(uri);
-
-
-// const formData = new FormData();
-
-// const file = {
-// uri: uri,
-// name: 'photo.jpg',
-// type: 'image/jpeg',
-// };
-
-// formData.append('photoFromFront', file);
-// const user = useSelector((state) => state.value)
-
-// //fetch('https://huguette-backend.vercel.app/upload'
-// //http://192.168.10.154:3000/upload
-
-// fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-//   method: 'POST',
-//   body: formData,
-// }).then((response) => response.json())
-//   .then((data) => {
-//     console.log(data)
-//   })
-//   .catch((error) => {
-//     console.error('Error uploading photo:', error);
-//   });
-//   }
-
-//   if (!hasPermission || !isFocused) {
-//     return <View />;
-//   }
-// };
 
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -120,6 +83,7 @@ const pickImage = async () => {
   console.log("test", pickerResult?.assets[0]?.uri); 
 
   let formData = new FormData();
+  formData.append('token', user.token); 
   formData.append('photoFromLibrairie', {
     uri: pickerResult?.assets[0]?.uri,
     name: 'photo.jpg', 
@@ -143,6 +107,7 @@ const pickImage = async () => {
   })
   .then(data => {
     console.log('librairie2:', data);
+    dispatch(addPicture(data.url));
   })
   .catch((error) => {
     console.error('Error uploading image:', error);

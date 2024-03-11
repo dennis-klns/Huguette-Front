@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSelector } from "react-redux";
@@ -24,42 +25,60 @@ export default function RouteScreen({ navigation }) {
     navigation.navigate("sos");
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `https://maps.googleapis.com/maps/api/directions/json?origin=56 boulevard Pereire, Paris&destination=${trip.arrival}&key=${GOOGLE_API_KEY}`
-        );
-        setDirections(response.data);
-        console.log("API Response:", response.data);
-        console.log("API Distance:", response.data);
-      } catch (error) {
-        console.error("Error fetching directions:", error);
-      }
-    };
+  const handleValidate = () => {
+    navigation.navigate("Arrival");
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetch(`https://huguette-backend.vercel.app/trips/${trip.tripId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(
+              `https://maps.googleapis.com/maps/api/directions/json?origin=${data.trip.departure.completeAddress}&destination=${data.trip.arrival.completeAddress}&key=${GOOGLE_API_KEY}`
+            );
+            console.log("response:", response);
+            setDirections({
+              polyline: data.trip.polyline,
+              departure: data.trip.departure,
+              arrival: data.trip.arrival,
+            });
+            console.log("API Response:", response.data);
+            console.log("API Distance:", response.data);
+          } catch (error) {
+            console.error("Error fetching directions:", error);
+          }
+        };
+        fetchData();
+      });
   }, []);
 
   useEffect(() => {
-    if (
+    /*  if (
       directions &&
       directions.routes &&
       directions.routes.length > 0 &&
       directions.routes[0].legs &&
       directions.routes[0].legs.length > 0
-    ) {
-      const startLocation = directions.routes[0].legs[0].start_location;
-      const endLocation = directions.routes[0].legs[0].end_location;
-      console.log(directions.routes[0].legs[0].distance.text);
-      console.log(directions.routes[0].legs[0].duration.text);
+    ) { */
+    if (directions) {
+      console.log("directions:", directions);
+      const startLocation = {
+        lat: directions.departure.latitude,
+        lng: directions.departure.longitude,
+      };
+      const endLocation = {
+        lat: directions.arrival.latitude,
+        lng: directions.arrival.longitude,
+      };
       const initialRegion = {
         latitude: (startLocation.lat + endLocation.lat) / 2,
         longitude: (startLocation.lng + endLocation.lng) / 2,
         latitudeDelta: Math.abs(startLocation.lat - endLocation.lat) * 2,
         longitudeDelta: Math.abs(startLocation.lng - endLocation.lng) * 2,
       };
-      mapRef.current.animateToRegion(initialRegion);
+      // mapRef.current.animateToRegion(initialRegion);
     }
   }, [directions]);
 
@@ -73,47 +92,55 @@ export default function RouteScreen({ navigation }) {
           ref={mapRef}
           style={styles.map}
           initialRegion={{
-            latitude: directions.routes[0].legs[0].start_location.lat,
-            longitude: directions.routes[0].legs[0].start_location.lng,
+            latitude: directions.departure.latitude,
+            longitude: directions.departure.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
           <Polyline
-            coordinates={decodePolyline(
-              directions.routes[0].overview_polyline.points
-            )}
+            coordinates={decodePolyline(directions.polyline)}
             strokeWidth={6}
             strokeColor="#EBB2B5"
           />
           <Marker
             coordinate={{
-              latitude: directions.routes[0].legs[0].start_location.lat,
-              longitude: directions.routes[0].legs[0].start_location.lng,
+              latitude: directions.departure.latitude,
+              longitude: directions.departure.longitude,
             }}
             title="Départ"
             image={require("../assets/marker.png")}
           />
           <Marker
             coordinate={{
-              latitude: directions.routes[0].legs[0].end_location.lat,
-              longitude: directions.routes[0].legs[0].end_location.lng,
+              latitude: directions.arrival.latitude,
+              longitude: directions.arrival.longitude,
             }}
             title="Arrivée"
             image={require("../assets/marker.png")}
           />
         </MapView>
       )}
+      <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Heure d'arrivée approximative :</Text>
+        <Text style={styles.title}>Heure d'arrivée approximative :</Text>
         <Text style={styles.text}>20 h 14</Text>
-        <Text style={styles.text}>Partager ma course en temps réel ...</Text>
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton} onPress={() => handleSOS()}>
-            SOS
+
+        <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+          <Text style={styles.textinput}>
+            Partager ma course en temps réel
           </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleSOS()}>
+          <Text style={styles.textButton}> SOS </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.input} activeOpacity={0.8} onPress={() => handleValidate()}>
+          <Text style={styles.textinput}> Je suis arrivée</Text>
+        </TouchableOpacity>
       </View>
+      </ScrollView>
     </LinearGradient>
   );
 }
@@ -132,9 +159,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 50,
   },
+
   text: {
-    fontSize: 24,
-    fontFamily: "OpenSans-Regular",
+    fontSize: 18,
+    fontWeight: '600',
+  },
+
+  title: {
+    fontSize: 22,
+    fontFamily: "Ladislav-Bold",
   },
 
   button: {
@@ -145,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     backgroundColor: "#d63031",
-    borderRadius: 10,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -162,6 +195,29 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+
+  textinput: {
+    fontSize: 14,
+    color: 'gray',
+  },
+
+  input: {
+    height: 45,
+        justifyContent: 'center',
+        width: "80%",
+        padding: 10,
+        marginTop: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+  }
 });
 
 function decodePolyline(encoded) {
