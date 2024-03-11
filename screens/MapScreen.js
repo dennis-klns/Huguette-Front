@@ -19,9 +19,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import { addArrival, addDeparture, addTripId, addDuration, addDistance, addCost } from "../reducers/trip";
+import {
+  addArrival,
+  addDeparture,
+  addTripId,
+  addDuration,
+  addDistance,
+  addCost,
+} from "../reducers/trip";
 
-import moment from 'moment';
+import moment from "moment";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -119,18 +126,16 @@ export default function MapScreen({ navigation }) {
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
 
-          if (data.trip.estimatedDuration.includes('hour')) {
-
-            const str = data.trip.estimatedDuration
-            const parts = str.split('mins').join('').split('hours')
-            const minutes = Number(parts[0]) * 60 + Number(parts[1])
-            console.log(parts)
-            console.log(minutes)
-            dispatch(addCost(parseFloat(minutes) * 0.90));
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Number(parts[0]) * 60 + Number(parts[1]);
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(parseFloat(minutes) * 0.9));
           } else {
-            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.90))
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.9));
           }
-
 
           console.log("tripBDD:", data.trip);
         } else {
@@ -141,7 +146,6 @@ export default function MapScreen({ navigation }) {
         console.error("Error:", error);
       });
 
-
     setArrival({});
     setDeparture({});
     setModalVisible(false);
@@ -149,7 +153,6 @@ export default function MapScreen({ navigation }) {
   };
 
   //console.log("tripReducer:", trip);
-
 
   useEffect(() => {
     (async () => {
@@ -219,8 +222,6 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-
-
               {/* <View style={styles.autoDeparture}> */}
 
               <GooglePlacesAutocomplete
@@ -241,7 +242,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 140,
                   },
                   textInputContainer: {
-                    height: '50%',
+                    height: "50%",
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -279,7 +280,6 @@ export default function MapScreen({ navigation }) {
               {/*    <View style={styles.autoArrival}> */}
 
               <GooglePlacesAutocomplete
-              <GooglePlacesAutocomplete
                 placeholder="Arrivée"
                 onChangeText={(value) => setArrival(value)}
                 value={arrival}
@@ -297,7 +297,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 120,
                   },
                   textInputContainer: {
-                    height: '50%',
+                    height: "50%",
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -329,7 +329,6 @@ export default function MapScreen({ navigation }) {
               />
 
               {/* </View> */}
-
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.text}>Je suis accompagnée</Text>
@@ -411,7 +410,7 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     margin: 20,
-    height: Dimensions.get("window")
+    height: Dimensions.get("window"),
   },
 
   addresse: {
@@ -461,13 +460,13 @@ const styles = StyleSheet.create({
   },
 
   autoDeparture: {
-    height: '20%',
-    width: '90%',
+    height: "20%",
+    width: "90%",
   },
 
   autoArrival: {
-    height: '20%',
-    width: '90%',
+    height: "20%",
+    width: "90%",
   },
 
   isaccompanied: {
