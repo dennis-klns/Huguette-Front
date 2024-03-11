@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Image,
@@ -11,7 +12,6 @@ import {
 } from "react-native";
 import Modal from 'react-native-modal'; 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import React, { useState } from "react";
 import {useDispatch,useSelector } from "react-redux";
 import {logoutTrip} from '../reducers/trip';
 import {logout} from '../reducers/user';
@@ -27,6 +27,7 @@ export default function ContactEdit({ navigation }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const user = useSelector((state) => state.user.value);
+  const userToken = useSelector((state) => state.user.value.token); 
 
   const [isModalVisible, setModalVisible] = useState(false);
   
@@ -68,6 +69,20 @@ export default function ContactEdit({ navigation }) {
     });
   };
 
+  useEffect(() => {
+    fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          setEmergencyFirstname(data.emergencyInfos.firstname || "");
+          setEmergencyLastname(data.emergencyInfos.lastname || "");
+          setEmergencyPhone(data.emergencyInfos.phone || "");
+          setEmergencyMessage(data.emergencyInfos.emergencyMessage || "");
+        }
+      })
+      .catch(error => console.log(error));
+  }, [userToken]);
+
   
   return (
  
@@ -94,18 +109,29 @@ export default function ContactEdit({ navigation }) {
                      <Text style={styles.title}>Modifier votre contact d'urgence</Text>
                 </View>
                 <View>
-                    <TextInput style={styles.text2} placeholder='Prénom' value={emergencyFirstname} // Lie l'état emergencyFirstname à ce TextInput
-    onChangeText={text => setEmergencyFirstname(text)} />
-                    <TextInput style={styles.text2} placeholder='Nom' value={emergencyLastname} // Lie l'état emergencyLastname à ce TextInput
+                <TextInput
+          style={styles.text2}
+          placeholder='Prénom'
+          value={emergencyFirstname}
+          onChangeText={text => setEmergencyFirstname(text)}
+        />
+                    <TextInput style={styles.text2} placeholder='Nom' value={emergencyLastname} 
     onChangeText={text => setEmergencyLastname(text)}/>
-                    <TextInput style={styles.text2} placeholder='Phone' value={emergencyPhone} // Lie l'état emergencyPhone à ce TextInput
+                    <TextInput style={styles.text2} placeholder='Phone' value={emergencyPhone} 
     onChangeText={text => setEmergencyPhone(text)}/>
                     <View style={styles.messageInputContainer}>
 
                  <View style={styles.titleContainer}>
                      <Text style={styles.title}>Modifier votre message d'urgence</Text>
                 </View>
-                    <TextInput style={styles.messageInput} placeholder="Votre message personnalisé" multiline={true} numberOfLines={4}
+                <TextInput
+          style={styles.messageInput}
+          placeholder="Message personnalisé"
+          multiline={true}
+          numberOfLines={4}
+          value={emergencyMessage}
+          onChangeText={text => setEmergencyMessage(text)}
+        />
 
     value={emergencyMessage} // Lie l'état emergencyMessage à ce TextInput
     onChangeText={text => setEmergencyMessage(text)} />
