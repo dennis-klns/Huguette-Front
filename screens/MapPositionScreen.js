@@ -87,18 +87,6 @@ export default function MapPositionScreen({ navigation }) {
     navigation.navigate("Confirm");
   };
 
-  /*   useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-          setMarkerPosition(location.coords);
-        });
-      }
-    })();
-  }, []); */
 
   useEffect(() => {
     setMarkerPosition({ latitude: trip.latitude, longitude: trip.longitude });
@@ -120,7 +108,7 @@ export default function MapPositionScreen({ navigation }) {
             longitudeDelta: 0.001,
           }}
           onRegionChange={handleRegionChange}
-          // onTouchEnd={fetchAddressFromCoordinates}
+          onTouchEnd={changeCostPosition}
         >
           <Marker
             coordinate={markerPosition}
