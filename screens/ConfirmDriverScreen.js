@@ -17,7 +17,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function ConfirmDriverScreen({ navigation }) {
 
     const handleValidate = () => {
-        navigation.navigate("Waiting")
+        navigation.navigate("Route")
+        // navigation.navigate("Waiting")
     }
 
 

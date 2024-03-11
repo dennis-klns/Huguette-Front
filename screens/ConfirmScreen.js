@@ -21,12 +21,12 @@ export default function ConfirmScreen({ navigation }) {
         latitude: currentPosition?.latitude || 0,
         longitude: currentPosition?.longitude || 0,
     });
- 
+    
     const trip = useSelector((state) => state.trip.value);
 
     const handleValidate = () => {
-        navigation.navigate("ConfirmDriver")
-    
+        navigation.navigate("Waiting")
+        // navigation.navigate("ConfirmDriver")
     };
 
 
