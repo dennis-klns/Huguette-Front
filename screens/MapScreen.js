@@ -21,14 +21,14 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import {
   addArrival,
-  addCost,
   addDeparture,
-  addDistance,
-  addDuration,
-  addLatitude,
-  addLongitude,
   addTripId,
+  addDuration,
+  addDistance,
+  addCost,
 } from "../reducers/trip";
+
+import moment from "moment";
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -39,6 +39,7 @@ export default function MapScreen({ navigation }) {
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
@@ -99,6 +100,11 @@ export default function MapScreen({ navigation }) {
   }
 
   const handleValidate = () => {
+    if (!departure.completeAddress || !arrival.completeAddress) {
+      setErrorModalVisible(true); // Affiche la modale d'erreur
+      return; // Empêche la navigation si les conditions ne sont pas remplies
+    }
+
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -113,21 +119,24 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", data);
+          console.log("OK");
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
-          dispatch(addLongitude(data.trip.departure.longitude));
-          dispatch(addLatitude(data.trip.departure.latitude));
-          setArrival({});
-          setDeparture({});
-          setModalVisible(false);
-          navigation.navigate("MapPosition");
-          // Calcul du coût à modifier. Il faut écrire un algo pour ça vu qu'on récupère des strings. Ici c'est juste pour donner une idée de ce qu'on peut avoir.
-          console.log("tripReducerindispatch:", trip);
+
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Number(parts[0]) * 60 + Number(parts[1]);
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(parseFloat(minutes) * 0.9));
+          } else {
+            dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 0.9));
+          }
+
           console.log("tripBDD:", data.trip);
         } else {
           console.error("Failed:", data.error);
@@ -136,9 +145,14 @@ export default function MapScreen({ navigation }) {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    setArrival({});
+    setDeparture({});
+    setModalVisible(false);
+    navigation.navigate("MapPosition");
   };
 
-  console.log("tripReducer:", trip);
+  //console.log("tripReducer:", trip);
 
   useEffect(() => {
     (async () => {
@@ -230,7 +244,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 140,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: "50%",
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -283,7 +297,7 @@ export default function MapScreen({ navigation }) {
                     zIndex: 120,
                   },
                   textInputContainer: {
-                    height: 54,
+                    height: "50%",
                     marginHorizontal: 20,
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
@@ -357,6 +371,26 @@ export default function MapScreen({ navigation }) {
             >
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
+            <Modal
+              visible={errorModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.errorModalView}>
+                  <Text style={styles.modalText}>
+                    Veuillez renseigner une arrivée pour votre course
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setErrorModalVisible(false)}
+                  >
+                    <Text style={styles.textStyle}>Fermer</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
           </SafeAreaView>
         </LinearGradient>
       </Modal>
@@ -377,6 +411,7 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     margin: 20,
+    height: Dimensions.get("window"),
   },
 
   addresse: {
@@ -499,5 +534,44 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     fontFamily: "OpenSans-Regular",
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorModalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 16, // Vous pouvez ajuster la taille du texte ici
+  },
+  buttonClose: {
+    backgroundColor: "#F88559", // Couleur du bouton pour fermer la modale, ajustable
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
