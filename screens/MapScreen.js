@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
@@ -297,6 +298,8 @@ export default function MapScreen({ navigation }) {
                 <FontAwesome name="times" size={24} color="#333" />
               </TouchableOpacity>
             </View>
+
+            <View style={styles.shadowContainer}>
             <View style={styles.profile}>
               <View style={styles.autoDeparture}>
                 <GooglePlacesAutocomplete
@@ -428,6 +431,7 @@ export default function MapScreen({ navigation }) {
                 </View>
               </View>
             </View>
+            </View>
 
             <ScrollView contentContainerStyle={styles.scrollView}>
               <Text style={styles.titlemodal}>Adresses Favorites</Text>
@@ -519,20 +523,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  profile: {
+  shadowContainer: {
     width: "80%",
     height: "38%",
     alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: 'transparent', // Assurez-vous que le conteneur d'ombre est transparent
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  
+  profile: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+    }),
   },
 
   titlemodal: {
@@ -541,7 +561,7 @@ const styles = StyleSheet.create({
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
     color: 'red',
-   
+
   },
 
   autoDeparture: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, TouchableOpacity, View, Linking, Alert, } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Linking, Alert, KeyBoardAvoidingView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 
@@ -205,24 +205,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  button: {
-    height: 40,
-    paddingTop: 8,
-    width: "80%",
-    alignItems: "center",
-    marginTop: 20,
-    backgroundColor: "#F88559",
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+  profile: {
+  width: "100%",
+  height: "100%",
+  alignItems: "center",
+  backgroundColor: "rgba(255, 255, 255, 0.5)",
+  borderRadius: 30,
+  ...Platform.select({
+    ios: {
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    marginTop: "30%",
-  },
+  }),
+},
 
   textButton: {
     color: "#fff",
