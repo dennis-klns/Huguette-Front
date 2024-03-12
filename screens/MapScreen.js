@@ -139,7 +139,7 @@ export default function MapScreen({ navigation }) {
             const minutes = Math.floor(Number(parts[0]) * 60 + Number(parts[1]));
             console.log(parts);
             console.log(minutes);
-            dispatch(addCost(parseFloat(minutes) * 0.9));
+            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
           } else {
             dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9)));
           }
@@ -266,7 +266,6 @@ export default function MapScreen({ navigation }) {
                     //borderColor: "black",
                     backgroundColor: "#F1C796",
                     marginHorizontal: 20,
-                    opacity: 0.9,
                     elevation: 5,
                     shadowColor: "#000",
                     shadowOpacity: 0.1,
