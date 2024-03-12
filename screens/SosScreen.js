@@ -145,11 +145,11 @@ export default function SosScreen({ navigation }) {
        </View>
     <View style={styles.container}>
       <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={sendSMS}>
-        <Text style={styles.textEmergency}>Contact en cours</Text>
+        <Text style={styles.textEmergency}>Message d'urgence</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={makePhoneCall}>
-        <Text style={styles.textEmergency}>Contact d'urgence</Text>
+        <Text style={styles.textEmergency}>Appel d'urgence</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -157,7 +157,7 @@ export default function SosScreen({ navigation }) {
         activeOpacity={0.8}
         // onPress={() => handleValidate()}
       >
-        <Text style={styles.textButton}>Signaler</Text>
+        <Text style={styles.textButton}>Retour</Text>
       </TouchableOpacity>
     </View>
   </LinearGradient>
