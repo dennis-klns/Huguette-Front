@@ -225,7 +225,7 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              {/* <View style={styles.autoDeparture}> */}
+              <View style={styles.autoDeparture}>
 
               <GooglePlacesAutocomplete
                 placeholder="Ma position"
@@ -277,11 +277,9 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-              {/*  </View> */}
-              {/*  </View> */}
-
-              {/*    <View style={styles.autoArrival}> */}
-              {/*    <View style={styles.autoArrival}> */}
+               </View>
+         
+                 <View style={styles.autoArrival}>
 
               <GooglePlacesAutocomplete
                 placeholder="Arrivée"
@@ -332,7 +330,7 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-              {/* </View> */}
+              </View>
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.textmodal}>Je suis accompagnée</Text>
