@@ -3,11 +3,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSelector } from "react-redux";
@@ -55,30 +55,24 @@ export default function RouteScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    /*  if (
-      directions &&
-      directions.routes &&
-      directions.routes.length > 0 &&
-      directions.routes[0].legs &&
-      directions.routes[0].legs.length > 0
-    ) { */
     if (directions) {
-      console.log("directions:", directions);
-      const startLocation = {
-        lat: directions.departure.latitude,
-        lng: directions.departure.longitude,
-      };
-      const endLocation = {
-        lat: directions.arrival.latitude,
-        lng: directions.arrival.longitude,
-      };
-      const initialRegion = {
-        latitude: (startLocation.lat + endLocation.lat) / 2,
-        longitude: (startLocation.lng + endLocation.lng) / 2,
-        latitudeDelta: Math.abs(startLocation.lat - endLocation.lat) * 2,
-        longitudeDelta: Math.abs(startLocation.lng - endLocation.lng) * 2,
-      };
-      // mapRef.current.animateToRegion(initialRegion);
+      // Coordonnées des marqueurs de départ et d'arrivée
+      const coordinates = [
+        {
+          latitude: directions.departure.latitude,
+          longitude: directions.departure.longitude,
+        },
+        {
+          latitude: directions.arrival.latitude,
+          longitude: directions.arrival.longitude,
+        },
+      ];
+
+      // Centrer et zoomer sur les coordonnées des marqueurs
+      mapRef.current.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
     }
   }, [directions]);
 
@@ -122,24 +116,32 @@ export default function RouteScreen({ navigation }) {
         </MapView>
       )}
       <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Heure d'arrivée approximative :</Text>
-        <Text style={styles.text}>20 h 14</Text>
+        <View style={styles.container}>
+          <Text style={styles.title}>Heure d'arrivée approximative :</Text>
+          <Text style={styles.text}>20 h 14</Text>
 
-        <TouchableOpacity style={styles.input} activeOpacity={0.8}>
-          <Text style={styles.textinput}>
-            Partager ma course en temps réel
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+            <Text style={styles.textinput}>
+              Partager ma course en temps réel
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleSOS()}>
-          <Text style={styles.textButton}> SOS </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.8}
+            onPress={() => handleSOS()}
+          >
+            <Text style={styles.textButton}> SOS </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.input} activeOpacity={0.8} onPress={() => handleValidate()}>
-          <Text style={styles.textinput}> Je suis arrivée</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.input}
+            activeOpacity={0.8}
+            onPress={() => handleValidate()}
+          >
+            <Text style={styles.textinput}> Je suis arrivée</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   title: {
@@ -198,26 +200,26 @@ const styles = StyleSheet.create({
 
   textinput: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
   },
 
   input: {
     height: 45,
-        justifyContent: 'center',
-        width: "80%",
-        padding: 10,
-        marginTop: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-  }
+    justifyContent: "center",
+    width: "80%",
+    padding: 10,
+    marginTop: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
 
 function decodePolyline(encoded) {

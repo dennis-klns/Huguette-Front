@@ -78,15 +78,70 @@ export default function MapScreen({ navigation }) {
     });
   };
 
-  const toggleSwitch = () =>
+  const toggleSwitch = () => {
     setIsAccompanied((previousState) => !previousState);
+    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("IsAccompanied changed:", data);
+        } else {
+          console.error("Failed IsAccompanied:", data.error);
+        }
+      });
+  };
 
   const changeMood = () => {
     setMood((previousState) => !previousState);
+    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Mood changed:", data);
+        } else {
+          console.error("Failed Mood:", data.error);
+        }
+      });
   };
 
   const changeMusic = () => {
     setMusic((previousState) => !previousState);
+    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Music changed:", data);
+        } else {
+          console.error("Failed Music:", data.error);
+        }
+      });
   };
 
   let iconStyleMusic = {};
@@ -136,12 +191,30 @@ export default function MapScreen({ navigation }) {
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
             const parts = str.split("mins").join("").split("hours");
-            const minutes = Math.floor(Number(parts[0]) * 60 + Number(parts[1]));
+            const minutes = Math.floor(
+              Number(parts[0]) * 60 + Number(parts[1])
+            );
             console.log(parts);
             console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
           } else {
-            dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9)));
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
+          }
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Math.floor(
+              Number(parts[0]) * 60 + Number(parts[1])
+            );
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
+          } else {
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
           }
 
           console.log("tripBDD:", data.trip);
@@ -225,6 +298,7 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
+<<<<<<< HEAD
               
 
             <View style={styles.autoDeparture}>
@@ -334,6 +408,109 @@ export default function MapScreen({ navigation }) {
 
             </View>
               
+=======
+              <View style={styles.autoDeparture}>
+                <GooglePlacesAutocomplete
+                  placeholder="Ma position"
+                  onChangeText={(value) => setDeparture(value)}
+                  value={departure}
+                  onPress={handleDepartureSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 140,
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0,
+                      //borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
+
+              <View style={styles.autoArrival}>
+                <GooglePlacesAutocomplete
+                  placeholder="Arrivée"
+                  onChangeText={(value) => setArrival(value)}
+                  value={arrival}
+                  onPress={handleArrivalSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 120,
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0.5,
+                      borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
+>>>>>>> cfd678bf760157727944b40622ea4393f53f3c90
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.textmodal}>Je suis accompagnée</Text>
@@ -427,7 +604,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
   },
 
   search: {
@@ -439,7 +615,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
+    fontFamily: "Ladislav-Bold",
   },
 
   text: {
@@ -474,8 +650,8 @@ const styles = StyleSheet.create({
   titlemodal: {
     fontSize: 22,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
-    textAlign: 'center',
+    fontFamily: "Ladislav-Bold",
+    textAlign: "center",
   },
 
   autoDeparture: {
@@ -499,7 +675,7 @@ const styles = StyleSheet.create({
   textmodal: {
     fontSize: 16,
     margin: 10,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   mood: {
@@ -508,7 +684,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     margin: 30,
-
   },
 
   icon: {
