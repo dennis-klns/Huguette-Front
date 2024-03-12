@@ -81,6 +81,11 @@ export default function SignUpUserScreen({ navigation }) {
     }
   };
 
+
+  const handleBack = () => {
+    navigation.navigate("Home");
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -151,37 +156,24 @@ export default function SignUpUserScreen({ navigation }) {
                   {passwordResetMessage ===
                     "Voulez-vous changer votre mot de passe ?" && (
                     <View style={styles.answerModal}>
-                      <Button
-                        title="Oui"
-                        onPress={() => handlePasswordResetConfirmation(true)}
-                      />
-                      <Button
-                        title="Non"
-                        onPress={() => handlePasswordResetConfirmation(false)}
-                      />
+                      <Button title="Oui" onPress={() => handlePasswordResetConfirmation(true)}/>
+                      <Button title="Non" onPress={() => handlePasswordResetConfirmation(false)}/>
                     </View>
                   )}
                 </View>
               </Modal>
             </View>
 
-            <TouchableOpacity
-              onPress={signInClick}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
+            <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8}>
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
-            <Modal
-              isVisible={isErrorModalVisible}
-              onBackdropPress={() => setIsErrorModalVisible(false)}
-            >
+            <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
+              <Text style={styles.textButton2}>Retour</Text>
+            </TouchableOpacity>
+            <Modal isVisible={isErrorModalVisible} onBackdropPress={() => setIsErrorModalVisible(false)}>
               <View style={styles.modalContent}>
                 <Text style={styles.textModalValider}>{errorMessage}</Text>
-                <Button
-                  title="Fermer"
-                  onPress={() => setIsErrorModalVisible(false)}
-                />
+                <Button title="Fermer" onPress={() => setIsErrorModalVisible(false)}/>
               </View>
             </Modal>
           </View>
@@ -200,21 +192,24 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: '5%',
   },
 
   title: {
     width: "80%",
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
-    margin: 40,
+    paddingTop :'15%',
+    fontFamily: "Ladislav-Bold",
   },
 
   profile: {
+    paddingTop: '15%',
     width: "100%",
     alignItems: "center",
-    marginBottom: 80,
+    marginBottom: '5',
   },
 
   pay: {
@@ -231,10 +226,11 @@ const styles = StyleSheet.create({
 
   text: {
     width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
+    fontFamily: 'Ladislav-Bold',
   },
 
   text2: {
@@ -243,6 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#473E66",
     paddingTop: 30,
+    fontFamily: 'Ladislav-Bold',
 
   },
 
@@ -259,8 +256,9 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderBottomColor: "#4F4F4F",
     borderBottomWidth: 1,
-    fontSize: 16,
+    fontSize: 20,
     color: "#4F4F4F",
+    fontFamily: 'Ladislav-Bold',
   },
 
   halfinput: {
@@ -268,15 +266,35 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
+    fontFamily: 'Ladislav-Bold',
   },
 
 
   button: {
-    height: 40,
-    paddingTop: 8,
+    height: '7%',
     width: "80%",
     alignItems: "center",
-    marginTop: 20,
+    justifyContent: 'center',
+    marginTop: '20%',
+    backgroundColor: "#F88559",
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+
+  button2: {
+    height: '5%',
+    width: "50%",
+    alignItems: "center",
+    justifyContent: 'center',
+    marginTop: '5%',
     backgroundColor: "#F88559",
     borderRadius: 30,
     shadowColor: "#000",
@@ -291,10 +309,20 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
+   
   },
+
+  textButton2: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+ 
+  },
+
+
+
 
   modalContent: {
     backgroundColor: "white",
@@ -309,6 +337,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 15,
     fontFamily: "OpenSans-Regular",
+    fontFamily: 'Ladislav-Bold',
   },
 
   textModalValider: {
@@ -323,6 +352,7 @@ const styles = StyleSheet.create({
     width: "40%",
     paddingTop: 20,
     flexDirection: "row",
+    fontFamily: 'Ladislav-Bold',
   },
 
   resetPasswordMessage: {
@@ -330,7 +360,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     color: "#4F4F4F",
-    fontFamily: "OpenSans-Regular",
+
+    fontFamily: 'Ladislav-Bold',
   },
 
   passwordContainer: {
@@ -346,6 +377,6 @@ const styles = StyleSheet.create({
     color: "#4F4F4F",
     marginTop: 15,
     textDecorationLine: "underline",
-    fontFamily: "OpenSans-Regular",
+    fontFamily: 'Ladislav-Bold',
   },
 });

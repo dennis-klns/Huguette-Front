@@ -561,13 +561,13 @@ const styles = StyleSheet.create({
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
     color: 'red',
-
+   
   },
 
   autoDeparture: {
     height: "20%",
     width: "90%",
-    zIndex: 120,
+    zIndex: 150,
   },
 
   autoArrival: {

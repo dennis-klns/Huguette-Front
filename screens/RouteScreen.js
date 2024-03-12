@@ -17,7 +17,7 @@ export default function RouteScreen({ navigation }) {
 
   const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
-
+  const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
 
   const handleSOS = () => {
@@ -81,52 +81,51 @@ export default function RouteScreen({ navigation }) {
       style={styles.linearGradient}
     >
       <View style={styles.container}>
-      {directions && (
-        <MapView
-          ref={mapRef}
-          style={styles.map}
-          initialRegion={{
-            latitude: directions.departure.latitude,
-            longitude: directions.departure.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Polyline
-            coordinates={decodePolyline(directions.polyline)}
-            strokeWidth={6}
-            strokeColor="#EBB2B5"
-          />
-          <Marker
-            coordinate={{
+        {directions && (
+          <MapView
+            ref={mapRef}
+            style={styles.map}
+            initialRegion={{
               latitude: directions.departure.latitude,
               longitude: directions.departure.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
             }}
-            title="Départ"
-            image={require("../assets/marker.png")}
-          />
-          <Marker
-            coordinate={{
-              latitude: directions.arrival.latitude,
-              longitude: directions.arrival.longitude,
-            }}
-            title="Arrivée"
-            image={require("../assets/marker.png")}
-          />
-        </MapView>
-      )}
-      <ScrollView>
-          <Text style={styles.title}>Arrivée approximative dans :</Text>
-          <Text style={styles.text}>{trip.duration}</Text>
-
-
-            {/* <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+          >
+            <Polyline
+              coordinates={decodePolyline(directions.polyline)}
+              strokeWidth={6}
+              strokeColor="#EBB2B5"
+            />
+            <Marker
+              coordinate={{
+                latitude: directions.departure.latitude,
+                longitude: directions.departure.longitude,
+              }}
+              title="Départ"
+              image={require("../assets/marker.png")}
+            />
+            <Marker
+              coordinate={{
+                latitude: directions.arrival.latitude,
+                longitude: directions.arrival.longitude,
+              }}
+              title="Arrivée"
+              image={require("../assets/marker.png")}
+            />
+          </MapView>
+        )}
+        <ScrollView>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>Arrivée approximative dans :</Text>
+            <Text style={styles.text}>{trip.duration}</Text>
+          </View>
+          {/* <TouchableOpacity style={styles.input} activeOpacity={0.8}>
               <Text style={styles.textinput}>
                 Partager ma course en temps réel
               </Text>
             </TouchableOpacity> */}
           <View style={styles.buttonsgroup}>
-
             <TouchableOpacity
               style={styles.button}
               activeOpacity={0.8}
@@ -140,12 +139,11 @@ export default function RouteScreen({ navigation }) {
               activeOpacity={0.8}
               onPress={() => handleValidate()}
             >
-              <Text style={styles.textinput}> Je suis arrivée</Text>
+              <Text style={styles.textinput}>Course terminée</Text>
             </TouchableOpacity>
           </View>
-
-      </ScrollView>
-        </View>
+        </ScrollView>
+      </View>
     </LinearGradient>
   );
 }
@@ -161,28 +159,29 @@ const styles = StyleSheet.create({
   },
 
   container: {
-   flex: 1,
-   alignItems: 'center',
+    flex: 1,
+    alignItems: "center",
   },
 
-  text: {
-    fontSize: 18,
-    fontWeight: "600",
-
+  textContainer: {
+    alignItems: "center",
   },
 
   title: {
     fontSize: 22,
     fontFamily: "Ladislav-Bold",
-    marginTop: 50,
-  
+    marginTop: "20%",
+  },
+  text: {
+    fontSize: 18,
+    margin: 20,
   },
 
   buttonsgroup: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 40,
-    height: '70%',
+    alignItems: "center",
+    justifyContent: "space-around",
+    height: "70%",
+    margin: "3%",
   },
 
   button: {
@@ -209,16 +208,16 @@ const styles = StyleSheet.create({
   },
 
   textinput: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 16,
+    color: "#fff",
   },
 
   input: {
-    width: '100%',
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "#F88559",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
