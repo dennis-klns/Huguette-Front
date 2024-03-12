@@ -540,16 +540,19 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
+    color: 'red'
   },
 
   autoDeparture: {
     height: "20%",
     width: "90%",
+    zIndex: 120,
   },
 
   autoArrival: {
     height: "20%",
     width: "90%",
+    zIndex: 120,
   },
 
   isaccompanied: {
