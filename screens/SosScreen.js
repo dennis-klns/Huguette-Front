@@ -155,7 +155,7 @@ export default function SosScreen({ navigation }) {
       <TouchableOpacity
         style={styles.button}
         activeOpacity={0.8}
-        // onPress={() => handleValidate()}
+        onPress={() => handleValidate()}
       >
         <Text style={styles.textButton}>Retour</Text>
       </TouchableOpacity>
