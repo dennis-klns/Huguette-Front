@@ -298,117 +298,6 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-<<<<<<< HEAD
-              
-
-            <View style={styles.autoDeparture}>
-
-              <GooglePlacesAutocomplete
-                placeholder="Ma position"
-                onChangeText={(value) => setDeparture(value)}
-                value={departure}
-                onPress={handleDepartureSelect}
-                fetchDetails={true}
-                query={{
-                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                  language: "fr",
-                  components: "country:fr",
-                }}
-                styles={{
-                  container: {
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 140,
-                  },
-                  textInputContainer: {
-                    height: "50%",
-                    marginHorizontal: 20,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                  },
-                  textInput: {
-                    backgroundColor: "transparent",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    marginBottom: 20,
-                    fontSize: 16,
-                    padding: 10,
-                    fontFamily: "OpenSans-Regular",
-                  },
-                  listView: {
-                    position: "absolute",
-                    top: 50,
-                    borderWidth: 0,
-                    //borderColor: "black",
-                    backgroundColor: "#F1C796",
-                    marginHorizontal: 20,
-                    opacity: 0.9,
-                    elevation: 5,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowOffset: { x: 0, y: 0 },
-                    shadowRadius: 15,
-                    marginTop: 10,
-                  },
-                }}
-              />
-
-            </View>
-
-            <View style={styles.autoArrival}>
-
-              <GooglePlacesAutocomplete
-                placeholder="Arrivée"
-                onChangeText={(value) => setArrival(value)}
-                value={arrival}
-                onPress={handleArrivalSelect}
-                fetchDetails={true}
-                query={{
-                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                  language: "fr",
-                  components: "country:fr",
-                }}
-                styles={{
-                  container: {
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 120,
-                  },
-                  textInputContainer: {
-                    height: "50%",
-                    marginHorizontal: 20,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                  },
-                  textInput: {
-                    backgroundColor: "transparent",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    marginBottom: 20,
-                    fontSize: 16,
-                    padding: 10,
-                    fontFamily: "OpenSans-Regular",
-                  },
-                  listView: {
-                    position: "absolute",
-                    top: 50,
-                    borderWidth: 0.5,
-                    borderColor: "black",
-                    backgroundColor: "#F1C796",
-                    marginHorizontal: 20,
-                    elevation: 5,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowOffset: { x: 0, y: 0 },
-                    shadowRadius: 15,
-                    marginTop: 10,
-                  },
-                }}
-              />
-
-            </View>
-              
-=======
               <View style={styles.autoDeparture}>
                 <GooglePlacesAutocomplete
                   placeholder="Ma position"
@@ -510,7 +399,6 @@ export default function MapScreen({ navigation }) {
                   }}
                 />
               </View>
->>>>>>> cfd678bf760157727944b40622ea4393f53f3c90
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.textmodal}>Je suis accompagnée</Text>
@@ -542,7 +430,7 @@ export default function MapScreen({ navigation }) {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollView}>
-              <Text style={styles.titlemodal}>Adresses Favorites</Text>
+              <Text style={styles.titleModal}>Adresses Favorites</Text>
               {addresses}
             </ScrollView>
 
@@ -628,15 +516,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent:'center',
   },
 
   profile: {
     width: "80%",
-    height: "38%",
+    height: "40%",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-    borderRadius: 30,
+    // borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -647,7 +535,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  titlemodal: {
+  titleModal: {
     fontSize: 22,
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
@@ -693,15 +581,22 @@ const styles = StyleSheet.create({
   },
 
   addresses: {
-    marginTop: 20,
+    marginTop: '2%',
     color: "#000",
     borderBottomColor: "#4F4F4F",
     borderBottomWidth: 1,
+    width:'100%',
+    height:'30%',
   },
 
   scrollView: {
-    width: Dimensions.get("window").width,
-    padding: 30,
+    // width: Dimensions.get("window").width,
+    marginTop: '10%',
+    justifyContent: "center",
+    width:'100%',
+    height: '60%',
+    // padding: "10%",
+    // position:"absolute",
   },
 
   name: {
