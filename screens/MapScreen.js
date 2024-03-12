@@ -136,12 +136,16 @@ export default function MapScreen({ navigation }) {
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
             const parts = str.split("mins").join("").split("hours");
-            const minutes = Math.floor(Number(parts[0]) * 60 + Number(parts[1]));
+            const minutes = Math.floor(
+              Number(parts[0]) * 60 + Number(parts[1])
+            );
             console.log(parts);
             console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
           } else {
-            dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9)));
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
           }
 
           console.log("tripBDD:", data.trip);
@@ -426,7 +430,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
   },
 
   search: {
@@ -438,7 +441,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
+    fontFamily: "Ladislav-Bold",
   },
 
   text: {
@@ -473,8 +476,8 @@ const styles = StyleSheet.create({
   titlemodal: {
     fontSize: 22,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
-    textAlign: 'center',
+    fontFamily: "Ladislav-Bold",
+    textAlign: "center",
   },
 
   autoDeparture: {
@@ -498,7 +501,7 @@ const styles = StyleSheet.create({
   textmodal: {
     fontSize: 16,
     margin: 10,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   mood: {
@@ -507,7 +510,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     margin: 30,
-
   },
 
   icon: {

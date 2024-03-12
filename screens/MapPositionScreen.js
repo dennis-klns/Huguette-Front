@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView from "react-native-maps";
-import { Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCost,
@@ -17,8 +16,6 @@ import {
   addLatitude,
   addLongitude,
 } from "../reducers/trip";
-
-
 
 export default function MapPositionScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -164,8 +161,8 @@ export default function MapPositionScreen({ navigation }) {
           initialRegion={{
             latitude: trip.latitude,
             longitude: trip.longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
+            latitudeDelta: 0.003,
+            longitudeDelta: 0.003,
           }}
           onRegionChange={handleRegionChange}
           onTouchEnd={changeCostPostion}
@@ -200,7 +197,6 @@ export default function MapPositionScreen({ navigation }) {
           <Text style={styles.textButton}>Suivant</Text>
         </TouchableOpacity> */}
       </View>
-    
     </LinearGradient>
   );
 }
@@ -210,7 +206,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: "65%",
   },
-
 
   linearGradient: {
     flex: 1,
@@ -225,7 +220,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 20,
   },
 
@@ -236,7 +231,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontFamily: 'Ladislav-Bold'
+    fontFamily: "Ladislav-Bold",
   },
 
   button: {
