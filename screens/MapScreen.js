@@ -227,7 +227,7 @@ export default function MapScreen({ navigation }) {
             <View style={styles.profile}>
               
 
-            {/* <View style={styles.autoDeparture}> */}
+            <View style={styles.autoDeparture}>
 
               <GooglePlacesAutocomplete
                 placeholder="Ma position"
@@ -279,9 +279,9 @@ export default function MapScreen({ navigation }) {
                 }}
               />
 
-           {/*  </View> */}
+            </View>
 
-         {/*    <View style={styles.autoArrival}> */}
+            <View style={styles.autoArrival}>
 
               <GooglePlacesAutocomplete
                 placeholder="Arrivée"
