@@ -88,7 +88,6 @@ export default function MapScreen({ navigation }) {
         token: user.token,
         music: music,
         mood: mood,
-        
       }),
     })
       .then((response) => response.json())
@@ -98,9 +97,8 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed IsAccompanied:", data.error);
         }
-      }
-      )
-  }
+      });
+  };
 
   const changeMood = () => {
     setMood((previousState) => !previousState);
@@ -121,14 +119,12 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Mood:", data.error);
         }
-      }
-      )
-  }
+      });
+  };
 
-
-const changeMusic = () => {
-  setMusic((previousState) => !previousState);
-  fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+  const changeMusic = () => {
+    setMusic((previousState) => !previousState);
+    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -145,320 +141,337 @@ const changeMusic = () => {
         } else {
           console.error("Failed Music:", data.error);
         }
-      }
-      )
-};
+      });
+  };
 
-let iconStyleMusic = {};
-let iconStyleMood = {};
-if (music) {
-  iconStyleMusic = { color: "#EBB2B5" };
-}
-
-if (mood) {
-  iconStyleMood = { color: "#EBB2B5" };
-}
-
-const handleValidate = () => {
-  if (!arrival.completeAddress) {
-    setErrorModalVisible(true); // Affiche la modale d'erreur
-    return; // Empêche la navigation si les conditions ne sont pas remplies
+  let iconStyleMusic = {};
+  let iconStyleMood = {};
+  if (music) {
+    iconStyleMusic = { color: "#EBB2B5" };
   }
 
-  fetch("https://huguette-backend.vercel.app/trips/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      longitudeD: departure.longitude,
-      latitudeD: departure.latitude,
-      longitudeA: arrival.longitude,
-      latitudeA: arrival.latitude,
-      tokenPassenger: user.token,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.result) {
-        console.log("OK:", data);
-        dispatch(addTripId(data.trip._id));
-        dispatch(addDeparture(data.trip.departure.completeAddress));
-        dispatch(addArrival(data.trip.arrival.completeAddress));
-        dispatch(addDuration(data.trip.estimatedDuration));
-        dispatch(addDistance(data.trip.distance));
-        //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
-        dispatch(addLongitude(data.trip.departure.longitude));
-        dispatch(addLatitude(data.trip.departure.latitude));
-        setArrival({});
-        setDeparture({});
-        setModalVisible(false);
-        navigation.navigate("MapPosition");
+  if (mood) {
+    iconStyleMood = { color: "#EBB2B5" };
+  }
 
-        if (data.trip.estimatedDuration.includes("hour")) {
-          const str = data.trip.estimatedDuration;
-          const parts = str.split("mins").join("").split("hours");
-          const minutes = Math.floor(Number(parts[0]) * 60 + Number(parts[1]));
-          console.log(parts);
-          console.log(minutes);
-          dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
-        } else {
-          dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9)));
-        }
-
-        console.log("tripBDD:", data.trip);
-      } else {
-        console.error("Failed:", data.error);
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-};
-
-//console.log("tripReducer:", trip);
-
-useEffect(() => {
-  (async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status === "granted") {
-      Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-        setCurrentPosition(location.coords);
-        setDeparture(location.coords);
-      });
+  const handleValidate = () => {
+    if (!arrival.completeAddress) {
+      setErrorModalVisible(true); // Affiche la modale d'erreur
+      return; // Empêche la navigation si les conditions ne sont pas remplies
     }
-  })();
-}, [modalVisible]);
 
-// Affichage des adresses favorites
-const addresses = addressesList.map((data, i) => {
+    fetch("https://huguette-backend.vercel.app/trips/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        longitudeD: departure.longitude,
+        latitudeD: departure.latitude,
+        longitudeA: arrival.longitude,
+        latitudeA: arrival.latitude,
+        tokenPassenger: user.token,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("OK:", data);
+          dispatch(addTripId(data.trip._id));
+          dispatch(addDeparture(data.trip.departure.completeAddress));
+          dispatch(addArrival(data.trip.arrival.completeAddress));
+          dispatch(addDuration(data.trip.estimatedDuration));
+          dispatch(addDistance(data.trip.distance));
+          //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
+          dispatch(addLongitude(data.trip.departure.longitude));
+          dispatch(addLatitude(data.trip.departure.latitude));
+          setArrival({});
+          setDeparture({});
+          setModalVisible(false);
+          navigation.navigate("MapPosition");
+
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Math.floor(
+              Number(parts[0]) * 60 + Number(parts[1])
+            );
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(parseFloat(minutes) * 0.9));
+          } else {
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
+          }
+          if (data.trip.estimatedDuration.includes("hour")) {
+            const str = data.trip.estimatedDuration;
+            const parts = str.split("mins").join("").split("hours");
+            const minutes = Math.floor(
+              Number(parts[0]) * 60 + Number(parts[1])
+            );
+            console.log(parts);
+            console.log(minutes);
+            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
+          } else {
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
+          }
+
+          console.log("tripBDD:", data.trip);
+        } else {
+          console.error("Failed:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  //console.log("tripReducer:", trip);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status === "granted") {
+        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+          setCurrentPosition(location.coords);
+          setDeparture(location.coords);
+        });
+      }
+    })();
+  }, [modalVisible]);
+
+  // Affichage des adresses favorites
+  const addresses = addressesList.map((data, i) => {
+    return (
+      <View key={i} style={styles.addresses}>
+        <Text style={styles.name}>{data.name}</Text>
+        <Text>{data.address}</Text>
+      </View>
+    );
+  });
+
   return (
-    <View key={i} style={styles.addresses}>
-      <Text style={styles.name}>{data.name}</Text>
-      <Text>{data.address}</Text>
-    </View>
-  );
-});
+    <LinearGradient
+      colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+      style={styles.linearGradient}
+    >
+      {currentPosition && (
+        <MapView
+          style={styles.map}
+          //provider={PROVIDER_GOOGLE}
 
-return (
-  <LinearGradient
-    colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-    style={styles.linearGradient}
-  >
-    {currentPosition && (
-      <MapView
-        style={styles.map}
-        //provider={PROVIDER_GOOGLE}
-
-        initialRegion={{
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
-        }}
-      >
-        <Marker
-          coordinate={currentPosition}
-          title="Vous êtes ici"
-          image={require("../assets/marker.png")}
-        />
-      </MapView>
-    )}
-    <View style={styles.search}>
-      <Text style={styles.title}>Hello {user.firstname},</Text>
-      <Text style={styles.text}>Où allons-nous ?</Text>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <View style={styles.addresse}>
-          <TextInput placeholder="Addresse" />
-          <FontAwesome name="search" size={30} color="grey"></FontAwesome>
-        </View>
-      </TouchableOpacity>
-    </View>
-    <Modal visible={modalVisible} transparent={true} animationType="slide">
-      <LinearGradient
-        colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-        style={styles.linearGradient}
-      >
-        <SafeAreaView style={styles.container}>
-          <View style={styles.modalHeader}>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <FontAwesome name="times" size={24} color="#333" />
-            </TouchableOpacity>
+          initialRegion={{
+            latitude: currentPosition.latitude,
+            longitude: currentPosition.longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001,
+          }}
+        >
+          <Marker
+            coordinate={currentPosition}
+            title="Vous êtes ici"
+            image={require("../assets/marker.png")}
+          />
+        </MapView>
+      )}
+      <View style={styles.search}>
+        <Text style={styles.title}>Hello {user.firstname},</Text>
+        <Text style={styles.text}>Où allons-nous ?</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <View style={styles.addresse}>
+            <TextInput placeholder="Addresse" />
+            <FontAwesome name="search" size={30} color="grey"></FontAwesome>
           </View>
-          <View style={styles.profile}>
-            {/* <View style={styles.autoDeparture}> */}
+        </TouchableOpacity>
+      </View>
+      <Modal visible={modalVisible} transparent={true} animationType="slide">
+        <LinearGradient
+          colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+          style={styles.linearGradient}
+        >
+          <SafeAreaView style={styles.container}>
+            <View style={styles.modalHeader}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <FontAwesome name="times" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.profile}>
+              {/* <View style={styles.autoDeparture}> */}
 
-            <GooglePlacesAutocomplete
-              placeholder="Ma position"
-              onChangeText={(value) => setDeparture(value)}
-              value={departure}
-              onPress={handleDepartureSelect}
-              fetchDetails={true}
-              query={{
-                key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                language: "fr",
-                components: "country:fr",
-              }}
-              styles={{
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                  zIndex: 140,
-                },
-                textInputContainer: {
-                  height: "50%",
-                  marginHorizontal: 20,
-                  borderTopWidth: 0,
-                  borderBottomWidth: 0,
-                },
-                textInput: {
-                  backgroundColor: "transparent",
-                  borderBottomWidth: 1,
-                  borderColor: "black",
-                  marginBottom: 20,
-                  fontSize: 16,
-                  padding: 10,
-                  fontFamily: "OpenSans-Regular",
-                },
-                listView: {
-                  position: "absolute",
-                  top: 50,
-                  borderWidth: 0,
-                  //borderColor: "black",
-                  backgroundColor: "#F1C796",
-                  marginHorizontal: 20,
-                  elevation: 5,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowOffset: { x: 0, y: 0 },
-                  shadowRadius: 15,
-                  marginTop: 10,
-                },
-              }}
-            />
-
-            {/*  </View> */}
-            {/*  </View> */}
-
-            {/*    <View style={styles.autoArrival}> */}
-            {/*    <View style={styles.autoArrival}> */}
-
-            <GooglePlacesAutocomplete
-              placeholder="Arrivée"
-              onChangeText={(value) => setArrival(value)}
-              value={arrival}
-              onPress={handleArrivalSelect}
-              fetchDetails={true}
-              query={{
-                key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                language: "fr",
-                components: "country:fr",
-              }}
-              styles={{
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                  zIndex: 120,
-                },
-                textInputContainer: {
-                  height: "50%",
-                  marginHorizontal: 20,
-                  borderTopWidth: 0,
-                  borderBottomWidth: 0,
-                },
-                textInput: {
-                  backgroundColor: "transparent",
-                  borderBottomWidth: 1,
-                  borderColor: "black",
-                  marginBottom: 20,
-                  fontSize: 16,
-                  padding: 10,
-                  fontFamily: "OpenSans-Regular",
-                },
-                listView: {
-                  position: "absolute",
-                  top: 50,
-                  borderWidth: 0.5,
-                  borderColor: "black",
-                  backgroundColor: "#F1C796",
-                  marginHorizontal: 20,
-                  elevation: 5,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowOffset: { x: 0, y: 0 },
-                  shadowRadius: 15,
-                  marginTop: 10,
-                },
-              }}
-            />
-
-            {/* </View> */}
-
-            <View style={styles.isaccompanied}>
-              <Text style={styles.textmodal}>Je suis accompagnée</Text>
-              <Switch
-                trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
-                thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isAccompanied}
+              <GooglePlacesAutocomplete
+                placeholder="Ma position"
+                onChangeText={(value) => setDeparture(value)}
+                value={departure}
+                onPress={handleDepartureSelect}
+                fetchDetails={true}
+                query={{
+                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                  language: "fr",
+                  components: "country:fr",
+                }}
+                styles={{
+                  container: {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 140,
+                  },
+                  textInputContainer: {
+                    height: "50%",
+                    marginHorizontal: 20,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                  },
+                  textInput: {
+                    backgroundColor: "transparent",
+                    borderBottomWidth: 1,
+                    borderColor: "black",
+                    marginBottom: 20,
+                    fontSize: 16,
+                    padding: 10,
+                    fontFamily: "OpenSans-Regular",
+                  },
+                  listView: {
+                    position: "absolute",
+                    top: 50,
+                    borderWidth: 0,
+                    //borderColor: "black",
+                    backgroundColor: "#F1C796",
+                    marginHorizontal: 20,
+                    elevation: 5,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowOffset: { x: 0, y: 0 },
+                    shadowRadius: 15,
+                    marginTop: 10,
+                  },
+                }}
               />
-            </View>
-            <View style={styles.mood}>
-              <Text style={styles.textmodal}>MOOD</Text>
-              <View style={styles.icon}>
-                <FontAwesome
-                  name="music"
-                  onPress={() => changeMusic()}
-                  size={25}
-                  style={iconStyleMusic}
-                />
-                <FontAwesome
-                  name="moon-o"
-                  onPress={() => changeMood()}
-                  size={25}
-                  style={iconStyleMood}
+
+              {/*  </View> */}
+              {/*  </View> */}
+
+              {/*    <View style={styles.autoArrival}> */}
+              {/*    <View style={styles.autoArrival}> */}
+
+              <GooglePlacesAutocomplete
+                placeholder="Arrivée"
+                onChangeText={(value) => setArrival(value)}
+                value={arrival}
+                onPress={handleArrivalSelect}
+                fetchDetails={true}
+                query={{
+                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                  language: "fr",
+                  components: "country:fr",
+                }}
+                styles={{
+                  container: {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 120,
+                  },
+                  textInputContainer: {
+                    height: "50%",
+                    marginHorizontal: 20,
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                  },
+                  textInput: {
+                    backgroundColor: "transparent",
+                    borderBottomWidth: 1,
+                    borderColor: "black",
+                    marginBottom: 20,
+                    fontSize: 16,
+                    padding: 10,
+                    fontFamily: "OpenSans-Regular",
+                  },
+                  listView: {
+                    position: "absolute",
+                    top: 50,
+                    borderWidth: 0.5,
+                    borderColor: "black",
+                    backgroundColor: "#F1C796",
+                    marginHorizontal: 20,
+                    elevation: 5,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.1,
+                    shadowOffset: { x: 0, y: 0 },
+                    shadowRadius: 15,
+                    marginTop: 10,
+                  },
+                }}
+              />
+
+              {/* </View> */}
+
+              <View style={styles.isaccompanied}>
+                <Text style={styles.textmodal}>Je suis accompagnée</Text>
+                <Switch
+                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
+                  thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isAccompanied}
                 />
               </View>
-            </View>
-          </View>
-
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            <Text style={styles.titlemodal}>Adresses Favorites</Text>
-            {addresses}
-          </ScrollView>
-
-          <TouchableOpacity
-            onPress={() => handleValidate()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Valider</Text>
-          </TouchableOpacity>
-          <Modal
-            visible={errorModalVisible}
-            transparent={true}
-            animationType="slide"
-            onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.errorModalView}>
-                <Text style={styles.modalText}>
-                  Veuillez renseigner une arrivée pour votre course
-                </Text>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setErrorModalVisible(false)}
-                >
-                  <Text style={styles.textStyle}>Fermer</Text>
-                </TouchableOpacity>
+              <View style={styles.mood}>
+                <Text style={styles.textmodal}>MOOD</Text>
+                <View style={styles.icon}>
+                  <FontAwesome
+                    name="music"
+                    onPress={() => changeMusic()}
+                    size={25}
+                    style={iconStyleMusic}
+                  />
+                  <FontAwesome
+                    name="moon-o"
+                    onPress={() => changeMood()}
+                    size={25}
+                    style={iconStyleMood}
+                  />
+                </View>
               </View>
             </View>
-          </Modal>
-        </SafeAreaView>
-      </LinearGradient>
-    </Modal>
-  </LinearGradient>
-);
+
+            <ScrollView contentContainerStyle={styles.scrollView}>
+              <Text style={styles.titlemodal}>Adresses Favorites</Text>
+              {addresses}
+            </ScrollView>
+
+            <TouchableOpacity
+              onPress={() => handleValidate()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Valider</Text>
+            </TouchableOpacity>
+            <Modal
+              visible={errorModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.errorModalView}>
+                  <Text style={styles.modalText}>
+                    Veuillez renseigner une arrivée pour votre course
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setErrorModalVisible(false)}
+                  >
+                    <Text style={styles.textStyle}>Fermer</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          </SafeAreaView>
+        </LinearGradient>
+      </Modal>
+    </LinearGradient>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -485,7 +498,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
   },
 
   search: {
@@ -497,7 +509,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
+    fontFamily: "Ladislav-Bold",
   },
 
   text: {
@@ -532,8 +544,8 @@ const styles = StyleSheet.create({
   titlemodal: {
     fontSize: 22,
     marginLeft: 10,
-    fontFamily: 'Ladislav-Bold',
-    textAlign: 'center',
+    fontFamily: "Ladislav-Bold",
+    textAlign: "center",
   },
 
   autoDeparture: {
@@ -557,7 +569,7 @@ const styles = StyleSheet.create({
   textmodal: {
     fontSize: 16,
     margin: 10,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   mood: {
@@ -566,7 +578,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     margin: 30,
-
   },
 
   icon: {
