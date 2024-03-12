@@ -31,7 +31,6 @@ export default function MapPositionScreen({ navigation }) {
   const handleRegionChange = (region) => {
     setMarkerPosition(region); // Met à jour la position du marker avec la nouvelle région
     console.log("region", markerPosition);
-    console.log(trip);
   };
 
   // const fetchAddressFromCoordinates = async () => {

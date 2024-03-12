@@ -540,8 +540,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
-    color: 'red',
-   
+    color: "red",
   },
 
   autoDeparture: {
