@@ -174,11 +174,16 @@ const handleValidation = () => {
                   <Modal isVisible={isModalVisible} style={styles.modal}>
                     <View style={styles.modalContent}>
                       {photoUri ? (
-                        <View>
+                        <View >
                           <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
-                          <TouchableOpacity onPress={handleValidation}>
-                            <Text>Validerr</Text>
-                          </TouchableOpacity>
+                          <View style={styles.modalButtonContainer}>
+                             <TouchableOpacity onPress={handleValidation} style={styles.modalButton}>
+                               <Text style={styles.textModal}>Valider</Text>
+                             </TouchableOpacity>
+                             <TouchableOpacity  style={styles.modalButton}>
+                               <Text style={styles.textModal}>Annuler</Text>
+                             </TouchableOpacity>
+                          </View>
                         </View>
                       ) : hasPermission ? (
                         <Camera style={styles.camera} type={type} ref={cameraRef} flashMode={flashMode}>
@@ -219,7 +224,7 @@ const handleValidation = () => {
               <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button2} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Passer</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button} activeOpacity={0.8}>
+              <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Valider</Text>
               </TouchableOpacity>
             </View>
@@ -373,21 +378,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
       },
       
-      modal: {
-        justifyContent: 'flex-end',
-        margin: 0,
-      },
-
-
-      modalContent: {
-        height: '70%',
-        backgroundColor: "white",
-        padding: 22,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-     
+    
+      textModal2: {
+        color: 'white',
       },
 
       camera: {
@@ -418,7 +411,74 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
       },
+
+      modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+      },
       
+      modalContent: {
+        backgroundColor: "white",
+        padding: 20,
+        alignItems: "center",
+        justifyContent: 'center',
+        borderRadius: 20,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        maxHeight: '85%', // Ajuste selon le besoin pour plus de contenu
+        width: '68%',
+      },
+      
+      modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        
+        marginTop: 10, // Ajuste pour plus d'espacement
+        width: '80%', // Assure que les boutons utilisent tout l'espace disponible
+      },
+      
+      modalButton: {
+        backgroundColor: "#F88559",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        justifyContent: 'center', // Centre le texte à l'intérieur du bouton
+        alignItems: 'center', // Assure que le contenu est centré horizontalement
+        width: '40%', // Ajuste la largeur des boutons selon le besoin
+      },
+      
+      textModal: {
+        color: 'white',
+        textAlign: 'center', // Assure que le texte est bien centré dans le bouton
+        fontWeight: '600',
+        fontSize: 10,
+      },
+      
+      // Style pour l'aperçu de l'image et le bouton "Valider"
+      imagePreview: {
+        width: 200,
+        height: 200,
+        borderRadius: 20, // Adoucit les coins de l'aperçu de l'image
+        marginTop: 20,
+      },
+      
+      // Utilise les styles existants pour le bouton "Valider"
+      validationButton: {
+        marginTop: 20,
+        backgroundColor: "#F88559",
+        borderRadius: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+      },
+      
+      validationButtonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "600",
+        textAlign: "center", // Centre le texte dans le bouton
+      },
+
+
     });
     
 
