@@ -14,8 +14,7 @@ import { useSelector } from "react-redux";
 
 export default function RouteScreen({ navigation }) {
   const [directions, setDirections] = useState(null);
-  const [origin, setOrigin] = useState(null);
-  const [destination, setDestination] = useState(null);
+
   const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
 
@@ -81,6 +80,7 @@ export default function RouteScreen({ navigation }) {
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
+      <View style={styles.container}>
       {directions && (
         <MapView
           ref={mapRef}
@@ -116,33 +116,36 @@ export default function RouteScreen({ navigation }) {
         </MapView>
       )}
       <ScrollView>
-        <View style={styles.container}>
-          <Text style={styles.title}>Heure d'arrivée approximative :</Text>
-          <Text style={styles.text}>20 h 14</Text>
+          <Text style={styles.title}>Arrivée approximative dans :</Text>
+          <Text style={styles.text}>{trip.duration}</Text>
 
-          <TouchableOpacity style={styles.input} activeOpacity={0.8}>
-            <Text style={styles.textinput}>
-              Partager ma course en temps réel
-            </Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.8}
-            onPress={() => handleSOS()}
-          >
-            <Text style={styles.textButton}> SOS </Text>
-          </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+              <Text style={styles.textinput}>
+                Partager ma course en temps réel
+              </Text>
+            </TouchableOpacity> */}
+          <View style={styles.buttonsgroup}>
 
-          <TouchableOpacity
-            style={styles.input}
-            activeOpacity={0.8}
-            onPress={() => handleValidate()}
-          >
-            <Text style={styles.textinput}> Je suis arrivée</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.8}
+              onPress={() => handleSOS()}
+            >
+              <Text style={styles.textButton}> SOS </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.input}
+              activeOpacity={0.8}
+              onPress={() => handleValidate()}
+            >
+              <Text style={styles.textinput}> Je suis arrivée</Text>
+            </TouchableOpacity>
+          </View>
+
       </ScrollView>
+        </View>
     </LinearGradient>
   );
 }
@@ -150,35 +153,43 @@ export default function RouteScreen({ navigation }) {
 const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
-    height: "70%",
+    height: "60%",
   },
 
   linearGradient: {
     flex: 1,
   },
+
   container: {
-    width: "100%",
-    alignItems: "center",
-    padding: 50,
+   flex: 1,
+   alignItems: 'center',
   },
 
   text: {
     fontSize: 18,
     fontWeight: "600",
+
   },
 
   title: {
     fontSize: 22,
     fontFamily: "Ladislav-Bold",
+    marginTop: 50,
+  
+  },
+
+  buttonsgroup: {
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginTop: 40,
+    height: '70%',
   },
 
   button: {
-    height: 40,
-    paddingTop: 8,
-    width: "30%",
+    height: 50,
+    width: "50%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
     backgroundColor: "#d63031",
     borderRadius: 30,
     shadowColor: "#000",
@@ -193,7 +204,6 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
   },
@@ -204,11 +214,10 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    height: 45,
+    width: '100%',
     justifyContent: "center",
-    width: "80%",
+    alignItems: "center",
     padding: 10,
-    marginTop: 20,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
     shadowColor: "#000",

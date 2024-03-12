@@ -57,8 +57,8 @@ export default function WaitingScreen({ navigation }) {
 
         <View style={styles.card}>
           <Text style={styles.title}>Récapitulatif</Text>
-          <Text style={styles.text}>De : {trip.departure}</Text>
-          <Text style={styles.text}>à : {trip.arrival}</Text>
+          <Text style={styles.text}>De : <Text style={styles.info}>{trip.departure}</Text></Text>
+          <Text style={styles.text}>à : <Text style={styles.info}>{trip.arrival}</Text></Text>
           <Text style={styles.text}>Prix - {trip.cost}€</Text>
         </View>
         <View style={styles.card}>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: "50%",
+    height: "45%",
     width: "100%",
   },
 
@@ -104,7 +104,9 @@ const styles = StyleSheet.create({
     width: "90%",
     borderRadius: 30,
     marginTop: 20,
-    padding: 20,
+    paddingBottom: 20,
+    paddingTop: 20,
+   
   },
 
   title: {
@@ -112,11 +114,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     fontFamily: "Ladislav-Bold",
+    alignSelf: 'center',
   },
 
   text: {
-    fontWeight: "500",
+    fontWeight: "800",
     fontSize: 14,
+    paddingLeft: 40,
+  },
+
+  info: {
+    fontSize: 14,
+    fontWeight: "400",
+    paddingLeft: 40,
   },
 
   button: {

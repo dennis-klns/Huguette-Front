@@ -84,8 +84,8 @@ export default function ConfirmScreen({ navigation }) {
           <Text style={styles.info}> {trip.distance}</Text>
           <Text style={styles.text}>Temps de trajet estimé :</Text>
           <Text style={styles.info}> {trip.duration}</Text>
-          <Text style={styles.text}>Prix : </Text>
-          <Text style={styles.info}> {trip.cost}€</Text>
+          <Text style={styles.text}>Prix :</Text>
+          <Text style={styles.info}>{trip.cost}€</Text>
         </View>
 
         <TouchableOpacity
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "rgba(255, 255, 255, 1)",
+    padding: 20,
     position: "absolute",
-    height: "35%",
     width: "85%",
     alignItems: "center",
     justifyContent: "center",
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     marginTop: 20,
+    marginBottom: 15,
   },
 
   button: {
