@@ -298,113 +298,107 @@ export default function MapScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              {/* <View style={styles.autoDeparture}> */}
+              <View style={styles.autoDeparture}>
+                <GooglePlacesAutocomplete
+                  placeholder="Ma position"
+                  onChangeText={(value) => setDeparture(value)}
+                  value={departure}
+                  onPress={handleDepartureSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 140,
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0,
+                      //borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
 
-              <GooglePlacesAutocomplete
-                placeholder="Ma position"
-                onChangeText={(value) => setDeparture(value)}
-                value={departure}
-                onPress={handleDepartureSelect}
-                fetchDetails={true}
-                query={{
-                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                  language: "fr",
-                  components: "country:fr",
-                }}
-                styles={{
-                  container: {
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 140,
-                  },
-                  textInputContainer: {
-                    height: "50%",
-                    marginHorizontal: 20,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                  },
-                  textInput: {
-                    backgroundColor: "transparent",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    marginBottom: 20,
-                    fontSize: 16,
-                    padding: 10,
-                    fontFamily: "OpenSans-Regular",
-                  },
-                  listView: {
-                    position: "absolute",
-                    top: 50,
-                    borderWidth: 0,
-                    //borderColor: "black",
-                    backgroundColor: "#F1C796",
-                    marginHorizontal: 20,
-                    elevation: 5,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowOffset: { x: 0, y: 0 },
-                    shadowRadius: 15,
-                    marginTop: 10,
-                  },
-                }}
-              />
-
-              {/*  </View> */}
-              {/*  </View> */}
-
-              {/*    <View style={styles.autoArrival}> */}
-              {/*    <View style={styles.autoArrival}> */}
-
-              <GooglePlacesAutocomplete
-                placeholder="Arrivée"
-                onChangeText={(value) => setArrival(value)}
-                value={arrival}
-                onPress={handleArrivalSelect}
-                fetchDetails={true}
-                query={{
-                  key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                  language: "fr",
-                  components: "country:fr",
-                }}
-                styles={{
-                  container: {
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 120,
-                  },
-                  textInputContainer: {
-                    height: "50%",
-                    marginHorizontal: 20,
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                  },
-                  textInput: {
-                    backgroundColor: "transparent",
-                    borderBottomWidth: 1,
-                    borderColor: "black",
-                    marginBottom: 20,
-                    fontSize: 16,
-                    padding: 10,
-                    fontFamily: "OpenSans-Regular",
-                  },
-                  listView: {
-                    position: "absolute",
-                    top: 50,
-                    borderWidth: 0.5,
-                    borderColor: "black",
-                    backgroundColor: "#F1C796",
-                    marginHorizontal: 20,
-                    elevation: 5,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.1,
-                    shadowOffset: { x: 0, y: 0 },
-                    shadowRadius: 15,
-                    marginTop: 10,
-                  },
-                }}
-              />
-
-              {/* </View> */}
+              <View style={styles.autoArrival}>
+                <GooglePlacesAutocomplete
+                  placeholder="Arrivée"
+                  onChangeText={(value) => setArrival(value)}
+                  value={arrival}
+                  onPress={handleArrivalSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 120,
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0.5,
+                      borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
 
               <View style={styles.isaccompanied}>
                 <Text style={styles.textmodal}>Je suis accompagnée</Text>
