@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   autoDeparture: {
     height: "20%",
     width: "90%",
-    zIndex: 120,
+    zIndex: 150,
   },
 
   autoArrival: {

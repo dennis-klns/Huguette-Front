@@ -17,7 +17,7 @@ export default function RouteScreen({ navigation }) {
 
   const mapRef = useRef(null);
   const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
-
+  const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
 
   const handleSOS = () => {
