@@ -174,7 +174,7 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", data);
+          console.log("OK:", trip);
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
