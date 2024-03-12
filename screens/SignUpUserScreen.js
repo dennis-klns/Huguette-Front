@@ -70,11 +70,11 @@ export default function SignUpUserScreen({ navigation }) {
       return;
     }
 
-    //   if (password.length < 5) {
-    //     setInfoModalMessage('Le mot de passe doit contenir au moins 5 caractères.');
-    //     setIsInfoModalVisible(true);
-    //     return;
-    //   }
+      if (password.length < 5) {
+        setInfoModalMessage('Le mot de passe doit contenir au moins 5 caractères.');
+        setIsInfoModalVisible(true);
+        return;
+      }
 
     if (!validatePasswordsMatch()) {
       setInfoModalMessage("Les mots de passe saisis ne correspondent pas.");
@@ -118,7 +118,7 @@ export default function SignUpUserScreen({ navigation }) {
   };
 
   const validateName = (value, setName, setIsValid) => {
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\u00C0-\u00FF]+$/;
     setName(value);
     setIsValid(nameRegex.test(value) || value === "");
   };
