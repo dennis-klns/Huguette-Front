@@ -1,11 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
-    Image,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
+    Modal,
+    SafeAreaView,
+    TextInput,
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -16,8 +18,30 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function ArrivalScreen({ navigation }) {
 
     const [personalNote, setPersonalNote] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [comment, setComment] = useState('')
 
     const handleValidate = () => {
+
+        // A ENVOYER DANS LE BACKEND 
+        /*  fetch("https://huguette-backend.vercel.app/reviews/passenger", {
+             method: "PUT",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({
+                 isAccompanied: isAccompanied,
+                 token: user.token,
+                 music: music,
+                 mood: mood,
+             }),
+         })
+             .then((response) => response.json())
+             .then((data) => {
+                 if (data.result) {
+                     console.log("Music changed:", data);
+                 } else {
+                     console.error("Failed Music:", data.error);
+                 }
+             }); */
         navigation.navigate("Map")
     }
 
@@ -27,12 +51,14 @@ export default function ArrivalScreen({ navigation }) {
 
     const personalStars = [];
     for (let i = 0; i < 5; i++) {
-      let iconStyle = {};
-      if (i < personalNote) {
-        iconStyle = { 'color': 'gold'};
-      }
-      personalStars.push(<FontAwesome name='star' onPress={() => setPersonalNote(i + 1)} style={iconStyle} size={25}/>);
+        let iconStyle = {};
+        if (i < personalNote) {
+            iconStyle = { 'color': 'gold' };
+        }
+        personalStars.push(<FontAwesome key={i} name='star' onPress={() => setPersonalNote(i + 1)} style={iconStyle} size={25} />);
     }
+
+
 
     return (
         <LinearGradient
@@ -45,7 +71,7 @@ export default function ArrivalScreen({ navigation }) {
 
                 <TouchableOpacity style={styles.input} activeOpacity={0.8}>
                     <View style={styles.note}>
-                    <Text style={styles.text}>Notez la course</Text>
+                        <Text style={styles.text}>Notez la course</Text>
                         <View style={styles.icon}>
                             {/* <FontAwesome name="star" size={30} color="gold"></FontAwesome>
                             <FontAwesome name="star" size={30} color="gold"></FontAwesome>
@@ -57,7 +83,7 @@ export default function ArrivalScreen({ navigation }) {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.input} activeOpacity={0.8}>
+                <TouchableOpacity style={styles.input} activeOpacity={0.8} onPress={() => setModalVisible(true)}>
                     <Text style={styles.text}>Commenter la course (facultatif) </Text>
                 </TouchableOpacity>
 
@@ -69,15 +95,39 @@ export default function ArrivalScreen({ navigation }) {
                         <Text style={styles.textButton} >Signaler </Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
+
+            <Modal visible={modalVisible} transparent={true} animationType="slide">
+                <LinearGradient
+                    colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+                    style={styles.linearGradient}
+                >
+                    <SafeAreaView style={styles.containerModal}>
+                        <View style={styles.modalHeader}>
+                            <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                <FontAwesome name="times" size={24} color="#333" />
+                            </TouchableOpacity>
+
+                            <TextInput style={styles.messageInput} placeholder="Ecrivez votre commentaire" multiline={true} numberOfLines={4} value={comment}
+                           onChangeText={text => setComment(text)}/>
+
+                            <TouchableOpacity
+                                onPress={() => handleValidate()}
+                                style={styles.modalButton}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={styles.textButton}>Envoyer</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </SafeAreaView>
+                </LinearGradient>
+            </Modal>
 
         </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
-
 
     linearGradient: {
         flex: 1,
@@ -157,5 +207,45 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "600",
         fontSize: 16,
+    },
+
+    // DEBUT DES CARACTERISTIQUES DE LA MODALE
+
+    containerModal: {
+        flex: 1,
+        justifyContent: 'center',
+    
+    },
+    messageInput: {
+        height: '55%',
+        fontSize: 16,
+        color: "#473E66",
+        margin: 10,
+        padding: 10,
+        backgroundColor: "#FFF", // Vous pouvez ajuster cette couleur comme vous le souhaitez
+        borderRadius: 10,
+        // fontFamily: "OpenSans-Regular",
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+      },
+
+      modalButton: {
+        height: 40,
+        width: '80%',
+        alignSelf: 'center',
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        backgroundColor: "#F88559",
+        borderRadius: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+
     },
 });

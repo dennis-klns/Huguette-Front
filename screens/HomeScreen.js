@@ -9,7 +9,7 @@ import {
 
 export default function HomeScreen({ navigation }) {
   const handleSignUp = () => {
-    navigation.navigate("SignUp")
+    navigation.navigate("SignUp");
     // navigation.navigate("SignUpPhoto");
     //navigation.navigate("SignUp")
     //navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -84,22 +84,22 @@ const styles = StyleSheet.create({
 
   textgroup: {
     flex: 1,
-    justifyContent: "flex-end",
-    marginTop: 70,
+    justifyContent: "flex-start",
+    margin: "4%",
   },
 
   buttonsgroup: {
     width: "80%",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: "8%",
     flex: 1,
     justifyContent: "flex-end",
   },
 
   button: {
-    height: '12%',
+    height: "12%",
     width: "80%",
-    justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
     backgroundColor: "white",
@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
   textButton: {
     color: "#000",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
