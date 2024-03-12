@@ -243,7 +243,7 @@ const handleValidation = () => {
           <TouchableOpacity onPress={handleTakePhoto} style={styles.cameraButton}>
             <FontAwesome name="camera" size={25} color="#ffffff" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setCameraVisible(false)} style={styles.cameraButton}>
+          <TouchableOpacity onPress={() => setIsCameraVisible(false)} style={styles.cameraButton}>
             <FontAwesome name="times" size={25} color="#ffffff" />
           </TouchableOpacity>
         </View>

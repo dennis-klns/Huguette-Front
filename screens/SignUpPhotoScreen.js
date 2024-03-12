@@ -60,6 +60,7 @@ useEffect(() => {
 
 
 
+
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -116,6 +117,8 @@ const pickImage = async () => {
   setIsPhotoUploaded(true);
 
 };
+
+
 
 
 const handleTakePhoto = async () => {

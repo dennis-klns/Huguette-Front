@@ -148,6 +148,10 @@ export default function SignUpUserScreen({ navigation }) {
     setIsPickerVisible(false);
   };
 
+  const handleBack = () => {
+    navigation.navigate("SignUp");
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -345,6 +349,9 @@ export default function SignUpUserScreen({ navigation }) {
                 />
               </View>
             </Modal>
+            <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
+              <Text style={styles.textButton2}>Retour</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
@@ -365,38 +372,42 @@ const styles = StyleSheet.create({
 
   title: {
     width: "80%",
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
-    margin: 40,
+    paddingTop :'15%',
     fontFamily: "Ladislav-Bold",
   },
 
   profile: {
     width: "100%",
     alignItems: "center",
-    marginBottom: 80,
-  },
-
-  pay: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
+    marginBottom: '10%',
   },
 
   paywith: {
     width: "100%",
     alignItems: "center",
-    marginBottom: 50,
+    marginBottom: '20%',
+   
   },
+
+  pay: {
+    width: "100%",
+    alignItems: "center",
+   
+    
+  },
+
 
   text: {
     width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "800",
     color: "#473E66",
-    margin: 10,
+    paddingTop :'15%',
+    fontFamily: 'Ladislav-Bold',
   },
 
   input: {
@@ -406,6 +417,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
+    fontFamily: 'Ladislav-Bold',
   },
 
   halfinput: {
@@ -413,6 +425,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
+    fontFamily: 'Ladislav-Bold',
   },
 
   smallinput: {
@@ -425,11 +438,10 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 40,
-    paddingTop: 8,
+    height: 45,
     width: "80%",
     alignItems: "center",
-    marginTop: 20,
+    justifyContent :'center',
     backgroundColor: "#F88559",
     borderRadius: 30,
     shadowColor: "#000",
@@ -440,11 +452,45 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    
+  },
+
+  button2: {
+    height: '3%',
+    width: "50%",
+    alignItems: "center",
+    justifyContent: 'center',
+    marginTop: '5%',
+    backgroundColor: "#F88559",
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    marginBottom: '10%',
+  },
+
+
+  textButton: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+   
+  },
+
+  textButton2: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+ 
   },
 
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
   },
