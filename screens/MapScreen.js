@@ -53,7 +53,7 @@ export default function MapScreen({ navigation }) {
     },
     {
       name: "La Capsule",
-      address: "56 boulevard Pereire, PARIS",
+      address: "16 rue des Boulets, PARIS",
     },
   ];
 
@@ -291,7 +291,7 @@ export default function MapScreen({ navigation }) {
           colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
           style={styles.linearGradient}
         >
-          <SafeAreaView style={styles.container}>
+          {/* <SafeAreaView style={styles.container}> */}
             <View style={styles.modalHeader}>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <FontAwesome name="times" size={24} color="#333" />
@@ -332,10 +332,22 @@ export default function MapScreen({ navigation }) {
                       fontFamily: "OpenSans-Regular",
                     },
                     listView: {
+                      height:'400%',
+                      width:'100%',
                       position: "absolute",
-                      top: 50,
+                      top: '10%',
                       borderWidth: 0,
-                      //borderColor: "black",
+                      borderColor: "black",
+                      marginHorizontal: 20,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: '20%',
+                      /*position: "absolute",
+                      top: 50,
+                      borderWidth: 0.5,
+                      borderColor: "black",
                       backgroundColor: "#F1C796",
                       marginHorizontal: 20,
                       elevation: 5,
@@ -343,7 +355,7 @@ export default function MapScreen({ navigation }) {
                       shadowOpacity: 0.1,
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
-                      marginTop: 10,
+                      marginTop: 10,*/ 
                     },
                   }}
                 />
@@ -383,7 +395,19 @@ export default function MapScreen({ navigation }) {
                       fontFamily: "OpenSans-Regular",
                     },
                     listView: {
+                      height:'400%',
+                      width:'100%',
                       position: "absolute",
+                      top: '10%',
+                      borderWidth: 0,
+                      borderColor: "black",
+                      marginHorizontal: 20,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: '20%',
+                      /*position: "absolute",
                       top: 50,
                       borderWidth: 0.5,
                       borderColor: "black",
@@ -394,7 +418,7 @@ export default function MapScreen({ navigation }) {
                       shadowOpacity: 0.1,
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
-                      marginTop: 10,
+                      marginTop: 10,*/ 
                     },
                   }}
                 />
@@ -461,7 +485,7 @@ export default function MapScreen({ navigation }) {
                 </View>
               </View>
             </Modal>
-          </SafeAreaView>
+          {/* </SafeAreaView> */}
         </LinearGradient>
       </Modal>
     </LinearGradient>
@@ -472,6 +496,7 @@ const styles = StyleSheet.create({
   // Caractéristiques pour la page principale
   linearGradient: {
     flex: 1,
+    alignItems:'center',
   },
 
   map: {
@@ -480,8 +505,9 @@ const styles = StyleSheet.create({
   },
 
   modalHeader: {
-    margin: 20,
-    height: Dimensions.get("window"),
+    margin: '1%',
+    // height: Dimensions.get("window"),
+    height:'4%',
   },
 
   addresse: {
@@ -515,8 +541,10 @@ const styles = StyleSheet.create({
   // DEBUT DES ELEMENTS DE LA MODAL
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent:'center',
+    // width:'100%',
+    // height:'100%',
+    // alignItems: "center",
+    // justifyContent:'center'
   },
 
   profile: {
@@ -537,9 +565,9 @@ const styles = StyleSheet.create({
 
   titleModal: {
     fontSize: 22,
-    marginLeft: 10,
+    // marginLeft: 10,
     fontFamily: "Ladislav-Bold",
-    textAlign: "center",
+    // textAlign: "center",
   },
 
   autoDeparture: {
@@ -581,22 +609,22 @@ const styles = StyleSheet.create({
   },
 
   addresses: {
-    marginTop: '2%',
+    marginTop: '7%',
+    // marginBottom: '2%',
     color: "#000",
-    borderBottomColor: "#4F4F4F",
-    borderBottomWidth: 1,
+    // borderBottomColor: "#4F4F4F",
+    // borderBottomWidth: 1,
     width:'100%',
-    height:'30%',
+    height:'20%',
   },
 
   scrollView: {
     // width: Dimensions.get("window").width,
     marginTop: '10%',
-    justifyContent: "center",
     width:'100%',
-    height: '60%',
+    height: '80%',
     // padding: "10%",
-    // position:"absolute",
+    // position:'absolute'
   },
 
   name: {
