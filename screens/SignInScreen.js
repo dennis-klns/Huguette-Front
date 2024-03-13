@@ -92,6 +92,13 @@ export default function SignUpUserScreen({ navigation }) {
       style={styles.linearGradient}
     >
       <SafeAreaView style={{ flex: 1 }}>
+
+      <View style={styles.closeIcon}>
+          <TouchableOpacity onPress={handleBack}>
+            <FontAwesome name="times" size={30} color="#333" />
+          </TouchableOpacity>
+        </View>
+
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollView}
           resetScrollToCoords={{ x: 0, y: 0 }}
@@ -168,9 +175,9 @@ export default function SignUpUserScreen({ navigation }) {
             <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8}>
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
+            {/* <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
               <Text style={styles.textButton2}>Retour</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <Modal isVisible={isErrorModalVisible} onBackdropPress={() => setIsErrorModalVisible(false)}>
               <View style={styles.modalContent}>
                 <Text style={styles.textModalValider}>{errorMessage}</Text>
@@ -189,11 +196,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  closeIcon:{
+   paddingLeft: '5%',
+   paddingTop: '3%',
+  },
+
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: '5%',
+    paddingTop: '10%',
   },
 
   title: {
@@ -202,7 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
-    paddingTop :'15%',
+    paddingTop :'5%',
     fontFamily: "Ladislav-Bold",
   },
 

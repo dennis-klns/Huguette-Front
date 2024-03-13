@@ -30,6 +30,7 @@ import WaitingScreen from "./screens/WaitingScreen";
 import SignUpDriverScreen from "./screens/SignUpDriverScreen";
 import DocumentsDriverScreen from "./screens/DocumentsDriverScreen";
 import WaitingFilesScreen from "./screens/WaitingFilesScreen";
+import WaitingDriverConfirmedScreen from "./screens/WaitingDriverConfirmedScreen";
 
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -120,6 +121,7 @@ export default function App() {
           <Stack.Screen name="SignUpdriver" component={SignUpDriverScreen} />
           <Stack.Screen name="DocumentsDriver" component={DocumentsDriverScreen} />
           <Stack.Screen name="WaitingFiles" component={WaitingFilesScreen} />
+          <Stack.Screen name="WaitingDriverConfirmed" component={WaitingDriverConfirmedScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           
         </Stack.Navigator>

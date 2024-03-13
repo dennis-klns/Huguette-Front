@@ -16,6 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Modal from "react-native-modal";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function SignUpDriverScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -148,11 +149,22 @@ export default function SignUpDriverScreen({ navigation }) {
     setIsPickerVisible(false);
   };
 
+  const handleBack = () => {
+    navigation.navigate("Home");
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
+
+<View style={styles.closeIcon}>
+          <TouchableOpacity onPress={handleBack}>
+            <FontAwesome name="times" size={30} color="#333" />
+          </TouchableOpacity>
+        </View>
+
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollView}
@@ -334,6 +346,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  closeIcon:{
+    paddingLeft: '5%',
+    paddingTop: '15%',
+   },
+
   container: {
     flex: 1,
     alignItems: "center",
@@ -342,12 +359,12 @@ const styles = StyleSheet.create({
 
   title: {
     width: "80%",
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
     margin: 40,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
   },
 
   profile: {
@@ -370,11 +387,11 @@ const styles = StyleSheet.create({
 
   text: {
     width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "800",
     color: "#473E66",
     margin: 10,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
   },
 
   input: {
@@ -384,6 +401,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 16,
     color: "#4F4F4F",
+    fontFamily: "Ladislav-Bold",
   },
 
   halfinput: {
@@ -403,13 +421,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 40,
-    paddingTop: 8,
+    height: 45,
     width: "80%",
     alignItems: "center",
-    marginTop: 20,
+    justifyContent :'center',
     backgroundColor: "#F88559",
-    borderRadius: 10,
+    borderRadius: 30,
+    marginBottom: '7%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -418,14 +436,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginBottom: '10%',
+    
   },
+
+  
+
 
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
+   
   },
 
   invalidInput: {
@@ -438,6 +459,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 14,
+    fontFamily: "Ladislav-Bold",
   },
 
   datePickerContainer: {
@@ -486,10 +508,12 @@ const styles = StyleSheet.create({
 
   genderText: {
     fontSize: 16,
+    fontFamily: "Ladislav-Bold",
   },
 
   texteModal: {
     marginTop: 10,
     fontSize: 15,
+    fontFamily: "Ladislav-Bold",
   },
 });

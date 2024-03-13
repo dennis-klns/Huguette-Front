@@ -7,6 +7,7 @@ import {
     Button,
   } from 'react-native';
   import { LinearGradient } from "expo-linear-gradient";
+  import FontAwesome from "react-native-vector-icons/FontAwesome";
   
   
   export default function SignUpScreen({ navigation }) {
@@ -20,11 +21,21 @@ import {
         navigation.navigate('SignUpdriver');
     
     }
+
+    const handleBack = () => {
+      navigation.navigate("Home");
+    };
   
     return (
         
         <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
+        <View style={styles.closeIcon}>
+          <TouchableOpacity onPress={handleBack}>
+            <FontAwesome name="times" size={30} color="#333" />
+          </TouchableOpacity>
+        </View>
         <SafeAreaView style={styles.container}>
+
 
         <View style={styles.textgroup}>
         <Text style={styles.title}>BIENVENUE ! </Text>
@@ -51,6 +62,11 @@ import {
     linearGradient: {
         flex: 1,
       },
+
+      closeIcon:{
+        paddingLeft: '5%',
+        paddingTop: '15%',
+       },
 
     container: {
       flex: 1,
