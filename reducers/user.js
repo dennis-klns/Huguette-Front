@@ -31,8 +31,21 @@ export const userSlice = createSlice({
     addPicture: (state, action) => {
       state.value.picture = action.payload;
     },
+    updateFirstname: (state, action) => {
+      state.value.firstname = action.payload;
+    },
+    updateLastname: (state, action) => {
+      state.value.lastname = action.payload;
+    },
   },
 });
 
-export const { login, logout, addAddresses, addPicture } = userSlice.actions;
+export const {
+  login,
+  logout,
+  addAddresses,
+  addPicture,
+  updateFirstname,
+  updateLastname,
+} = userSlice.actions;
 export default userSlice.reducer;
