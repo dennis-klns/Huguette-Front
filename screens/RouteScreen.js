@@ -75,6 +75,15 @@ export default function RouteScreen({ navigation }) {
     }
   }, [directions]);
 
+  useEffect(() => {
+    // Démarre un compte à rebours de 5 secondes au chargement du composant
+    const timer = setTimeout(() => {
+      navigation.navigate("Arrival"); // Navigue vers la nouvelle page après 5 secondes
+    }, 6000); // 5000 millisecondes = 5 secondes
+
+    return () => clearTimeout(timer); // Nettoie le timer si le composant est démonté avant que le timer se termine
+  }, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -151,7 +160,7 @@ export default function RouteScreen({ navigation }) {
 const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
-    height: "60%",
+    height: "55%",
   },
 
   linearGradient: {
@@ -160,7 +169,6 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    alignItems: "center",
   },
 
   textContainer: {
@@ -171,17 +179,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Ladislav-Bold",
     marginTop: "20%",
+    marginBottom: "5%",
   },
+
   text: {
     fontSize: 18,
-    margin: 20,
+    marginBottom: "5%",
   },
 
   buttonsgroup: {
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
     height: "70%",
-    margin: "3%",
   },
 
   button: {
@@ -213,7 +222,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: "100%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
