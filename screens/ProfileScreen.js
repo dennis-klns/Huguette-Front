@@ -71,53 +71,76 @@ export default function ProfileScreen({ navigation }) {
       <View style={styles.container}>
         <SafeAreaView>
 
+        <Text style={styles.title}>Votre Profil</Text>
+
           <View style={styles.bar}>
-            <FontAwesome name="bolt" size={25} color="#3e3e3e" style={styles.icon}/>
-            <View style={styles.navigation}>
+            <FontAwesome name="bolt" size={25} color="#3e3e3e" />
+          
+            <View style={styles.textContainer}>
             <Text style={styles.text}>Conductrice/ Passagère</Text>
+            <View style={styles.icon}>
             <Switch
               trackColor={{ false: "#F1C796", true: "#F88559" }}
               //thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
               ios_backgroundColor="#3e3e3e"
             //onValueChange={toggleSwitch}
             //value={isAccompanied}
+         
             />
             </View>
+            </View>
+         
           </View>
 
 
 
           <TouchableOpacity onPress={() => handleProfileInfo()} style={styles.bar} activeOpacity={0.3}>
-            <FontAwesome name="user" size={26} color="#3e3e3e" style={styles.icon}/>
-            <View style={styles.navigation}>
+            <FontAwesome name="user" size={26} color="#3e3e3e" />
+            <View style={styles.textContainer}>
             <Text style={styles.text}>Informations personnelles</Text>
+            <View style={styles.icon}>
             <FontAwesome name="arrow-right" size={20} color="#3e3e3e" />
             </View>
+            </View>
+           
+          
 
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleFavorite()} style={styles.bar} activeOpacity={0.3}>
-            <FontAwesome name="car" size={20} color="#3e3e3e" style={styles.icon}/>
-            <View style={styles.navigation}>
+            <FontAwesome name="car" size={20} color="#3e3e3e" />
+         
+            <View style={styles.textContainer}>
             <Text style={styles.text}>Adresses favorites</Text>
-            <FontAwesome name="arrow-right" size={20} color="#3e3e3e" />
+            <View style={styles.icon}>
+            <FontAwesome name="arrow-right" size={20} color="#3e3e3e"/>
             </View>
+            </View>
+          
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handlePaiement()} style={styles.bar} activeOpacity={0.3}>
-            <FontAwesome name="money" size={21} color="#3e3e3e" style={styles.icon}/>
-          <View style={styles.navigation}>
+            <FontAwesome name="money" size={21} color="#3e3e3e" />
+        
+            <View style={styles.textContainer}>
             <Text style={styles.text}>Paiement</Text>
-            <FontAwesome name="arrow-right" size={20} color="#3e3e3e" />
+            <View style={styles.icon}>
+            <FontAwesome name="arrow-right" size={20} color="#3e3e3e"/>
             </View>
+            </View>
+        
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleContact()} style={styles.bar} activeOpacity={0.3}>
-            <FontAwesome name="phone" size={25} color="#3e3e3e" style={styles.icon}/>
-          <View style={styles.navigation}>
+            <FontAwesome name="phone" size={25} color="#3e3e3e" />
+      
+            <View style={styles.textContainer}>
             <Text style={styles.text}>Contact d'urgence</Text>
-            <FontAwesome name="arrow-right" size={20} color="#3e3e3e" />
+            <View style={styles.icon}>
+            <FontAwesome name="arrow-right" size={20} color="#3e3e3e"/>
             </View>
+            </View>
+        
           </TouchableOpacity>
 
 
@@ -159,41 +182,54 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: '25%',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
+ 
 
   },
 
+  title: {
+    fontSize: 40,
+    marginLeft: 10,
+    fontFamily: "Ladislav-Bold",
+    alignSelf: 'center',
+    marginBottom: '10%',
+  },
+
   bar: {
-    width: Dimensions.get("window").width,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '2%',
+    padding: '5%',
+  },
+
+  
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  textContainer: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  
+  text: {
+    fontSize: 20,
+    fontFamily: 'Ladislav-Bold',
+    marginLeft: '10%',
 
   },
 
   icon: {
-    alignItems: 'flex-start',
-    marginRight: '5%',
+    alignSelf: 'flex-end',
 
   },
 
-  navigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '91%'
-  },
-
-  text: {
-    fontSize: 20,
-    fontFamily: 'Ladislav-Bold',
-
-  },
 
 
   button: {
-    marginTop: '90%',
     height: '8%',
     alignItems: "center",
     justifyContent: 'center',
