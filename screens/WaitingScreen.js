@@ -55,19 +55,25 @@ export default function WaitingScreen({ navigation }) {
           style={styles.image}
         />
 
+      
+          <Text style={styles.mainTitle}>Nous recherchons votre conductrice...</Text>
+       
+        
+
         <View style={styles.card}>
           <Text style={styles.title}>Récapitulatif</Text>
           <Text style={styles.text}>De : <Text style={styles.info}>{trip.departure}</Text></Text>
           <Text style={styles.text}>à : <Text style={styles.info}>{trip.arrival}</Text></Text>
           <Text style={styles.text}>Prix - {trip.cost}€</Text>
         </View>
-        <View style={styles.card}>
+     {/*    <View style={styles.card}>
           <Text style={styles.title}>Marguerite</Text>
           <Text style={styles.text}>Mood: #fun #music</Text>
-        </View>
+        </View> */}
         <View style={styles.card}>
           <Text style={styles.title}>Votre code</Text>
-          <Text style={styles.text}>7543</Text>
+          <Text style={styles.infoCode}>(à communiquer à votre conductrice)</Text>
+          <Text style={styles.code}>7543 </Text>
         </View>
 
         {/* <View style={styles.card}>
@@ -99,6 +105,15 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
+
+  mainTitle: {
+    marginTop: '10%',
+    fontSize: 23,
+    fontFamily: "Ladislav-Bold",
+    color: 'white',
+  
+
+  },
   card: {
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     width: "90%",
@@ -129,10 +144,23 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
 
+  code: {
+    fontWeight: "800",
+    fontSize: 20,
+    alignSelf: 'center',
+  },
+
+  infoCode: {
+    fontSize: 14,
+    fontWeight: "400",
+    alignSelf: 'center',
+    marginBottom: '2%',
+  },
+
   button: {
     height: 40,
-    paddingTop: 8,
     width: "80%",
+    justifyContent: 'center',
     alignItems: "center",
     marginTop: 20,
     backgroundColor: "#F88559",
@@ -149,7 +177,6 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
   },
