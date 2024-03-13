@@ -147,6 +147,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
+  info: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+
   button: {
     height: 40,
     paddingTop: 8,
