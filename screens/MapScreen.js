@@ -29,8 +29,12 @@ import {
   addLongitude,
   addTripId,
 } from "../reducers/trip";
+import {
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 export default function MapScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [currentPosition, setCurrentPosition] = useState(null);
   //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,8 +68,15 @@ export default function MapScreen({ navigation }) {
     setDeparture({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
-      completeAddress: data.description,
+      completeAddress: data?.description,
     });
+    if(!departure.completeAddress) {
+      setDeparture({
+        latitude: trip.latitude,
+        longitude: trip.longitude,
+        completeAddress: trip.departure,
+      });
+    }
   };
 
   const handleArrivalSelect = (data, details) => {
@@ -74,78 +85,26 @@ export default function MapScreen({ navigation }) {
     setArrival({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
-      completeAddress: data.description,
+      completeAddress: data?.description,
     });
   };
 
   const toggleSwitch = () => {
-    setIsAccompanied((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("IsAccompanied changed:", data);
-        } else {
-          console.error("Failed IsAccompanied:", data.error);
-        }
-      });
+    setIsAccompanied(!isAccompanied);
   };
 
   const changeMood = () => {
-    setMood((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("Mood changed:", data);
-        } else {
-          console.error("Failed Mood:", data.error);
-        }
-      });
+    setMood(!mood);
   };
 
   const changeMusic = () => {
-    setMusic((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("Music changed:", data);
-        } else {
-          console.error("Failed Music:", data.error);
-        }
-      });
+    setMusic(!music);
+   
   };
 
   let iconStyleMusic = {};
   let iconStyleMood = {};
+
   if (music) {
     iconStyleMusic = { color: "#EBB2B5" };
   }
@@ -159,6 +118,26 @@ export default function MapScreen({ navigation }) {
       setErrorModalVisible(true); // Affiche la modale d'erreur
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
+
+    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // if (data.result) {
+        //   console.log( data);
+        // } else {
+        //   console.error( data.error);
+        // }
+      });
+
 
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
@@ -174,19 +153,17 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", trip);
+          // console.log("OK:", trip);
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
           dispatch(addLongitude(data.trip.departure.longitude));
           dispatch(addLatitude(data.trip.departure.latitude));
           setArrival({});
           setDeparture({});
-          setModalVisible(false);
-          navigation.navigate("MapPosition");
+          setModalVisible(false);   
 
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
@@ -194,30 +171,17 @@ export default function MapScreen({ navigation }) {
             const minutes = Math.floor(
               Number(parts[0]) * 60 + Number(parts[1])
             );
-            console.log(parts);
-            console.log(minutes);
+            // console.log(parts);
+            // console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
+            
           } else {
-            dispatch(
-              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
-            );
-          }
-          if (data.trip.estimatedDuration.includes("hour")) {
-            const str = data.trip.estimatedDuration;
-            const parts = str.split("mins").join("").split("hours");
-            const minutes = Math.floor(
-              Number(parts[0]) * 60 + Number(parts[1])
-            );
-            console.log(parts);
-            console.log(minutes);
-            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
-          } else {
-            dispatch(
-              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
             );
           }
 
-          console.log("tripBDD:", data.trip);
+          navigation.navigate("MapPosition");
+          // console.log("tripBDD:", data.trip);
         } else {
           console.error("Failed:", data.error);
         }
@@ -237,6 +201,9 @@ export default function MapScreen({ navigation }) {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           setCurrentPosition(location.coords);
           setDeparture(location.coords);
+          dispatch(addLongitude(location.coords.longitude));
+          dispatch(addLatitude(location.coords.latitude));
+          dispatch(addDeparture('Ma Position'));
         });
       }
     })();
@@ -261,8 +228,7 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           //provider={PROVIDER_GOOGLE}
-
-          initialRegion={{
+            initialRegion={{
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
             latitudeDelta: 0.001,
@@ -276,6 +242,17 @@ export default function MapScreen({ navigation }) {
           />
         </MapView>
       )}
+      {/* <View style={{
+          flex: 1,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+
+          // Paddings to handle safe area
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          }}> */}
       <View style={styles.search}>
         <Text style={styles.title}>Hello {user.firstname},</Text>
         <Text style={styles.text}>Où allons-nous ?</Text>
@@ -291,7 +268,17 @@ export default function MapScreen({ navigation }) {
           colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
           style={styles.linearGradient}
         >
-          {/* <SafeAreaView style={styles.container}> */}
+          <View style={{
+          flex: 1,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+
+          // Paddings to handle safe area
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          }}>
             <View style={styles.modalHeader}>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <FontAwesome name="times" size={24} color="#333" />
@@ -427,7 +414,7 @@ export default function MapScreen({ navigation }) {
               <View style={styles.isaccompanied}>
                 <Text style={styles.textmodal}>Je suis accompagnée</Text>
                 <Switch
-                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
+                  trackColor={{ false: "#3e3e3e", true: "#EBB2B5" }}
                   thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={toggleSwitch}
@@ -451,6 +438,7 @@ export default function MapScreen({ navigation }) {
                   />
                 </View>
               </View>
+
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollView}>
@@ -458,19 +446,22 @@ export default function MapScreen({ navigation }) {
               {addresses}
             </ScrollView>
 
+            <View style={styles.button}>
             <TouchableOpacity
               onPress={() => handleValidate()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
+              
+              activeOpacity={0.8}>
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
+            </View>
+
             <Modal
               visible={errorModalVisible}
               transparent={true}
               animationType="slide"
               onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
             >
+              
               <View style={styles.centeredView}>
                 <View style={styles.errorModalView}>
                   <Text style={styles.modalText}>
@@ -485,10 +476,13 @@ export default function MapScreen({ navigation }) {
                 </View>
               </View>
             </Modal>
-          {/* </SafeAreaView> */}
+          </View>
         </LinearGradient>
+        
       </Modal>
+      {/* </View> */}
     </LinearGradient>
+    
   );
 }
 
@@ -522,6 +516,7 @@ const styles = StyleSheet.create({
 
   search: {
     width: "100%",
+    height:'40%',
     justifyContent: "center",
     margin: 10,
   },
@@ -540,7 +535,7 @@ const styles = StyleSheet.create({
 
   // DEBUT DES ELEMENTS DE LA MODAL
   container: {
-    flex: 1,
+    // flex: 1,
     // width:'100%',
     // height:'100%',
     // alignItems: "center",
@@ -626,7 +621,7 @@ const styles = StyleSheet.create({
     width:'100%',
     height: '80%',
     // padding: "10%",
-    // position:'absolute'
+    // position:'absolute',
   },
 
   name: {
@@ -635,13 +630,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 40,
-    paddingTop: 8,
+    height: '5%',
     width: "80%",
     alignItems: "center",
-    marginTop: 20,
+    justifyContent:'center',
+    marginTop: '2%',
     backgroundColor: "#F88559",
-    borderRadius: 30,
+    borderRadius: '20%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

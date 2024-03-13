@@ -30,6 +30,10 @@ import WaitingScreen from "./screens/WaitingScreen";
 import SignUpDriverScreen from "./screens/SignUpDriverScreen";
 import DocumentsDriverScreen from "./screens/DocumentsDriverScreen";
 import WaitingFilesScreen from "./screens/WaitingFilesScreen";
+import {
+  SafeAreaProvider,
+
+} from 'react-native-safe-area-context';
 
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -93,6 +97,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -124,6 +129,7 @@ export default function App() {
           
         </Stack.Navigator>
       </NavigationContainer>
+      </SafeAreaProvider>
     </Provider>
   );
 }

@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 export default function HomeScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const handleSignUp = () => {
     navigation.navigate("SignUp");
     // navigation.navigate("SignUpPhoto");
@@ -19,7 +23,19 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("SignIn");
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={{
+      flex: 1,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: "#ffffff",
+
+      // Paddings to handle safe area
+      paddingTop: insets.top,
+      paddingBottom: insets.bottom,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+      
+    }}>
       <Image
         source={require("../assets/huguette.png")}
         resizeMode="cover"
@@ -47,16 +63,11 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.textButton}>Se connecter</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-  },
 
   image: {
     height: "120%",

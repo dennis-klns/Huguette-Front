@@ -14,8 +14,14 @@ import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
+import {
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+
 
 export default function SignUpUserScreen({ navigation }) {
+
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -87,55 +93,62 @@ export default function SignUpUserScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient
-      colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-      style={styles.linearGradient}
-    >
-      <SafeAreaView style={{ flex: 1 }}>
-        <KeyboardAwareScrollView
+      <LinearGradient
+        colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+        style={styles.linearGradient}>
+        <View style={{
+          flex: 1,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+
+          // Paddings to handle safe area
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          }}>
+          <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollView}
           resetScrollToCoords={{ x: 0, y: 0 }}
-          scrollEnabled={true}
-        >
-          <View style={styles.container}>
-            <Text style={styles.title}>Connexion</Text>
+          scrollEnabled={true}> 
 
-            <View style={styles.profile}>
-              <Text style={styles.text}>Votre profil</Text>
-              <TextInput
-                placeholder="Email"
-                onChangeText={(value) => setEmail(value)}
-                value={email}
-                style={styles.input}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-              <Text style={styles.text2}> ou </Text>
-              <TextInput
-                placeholder="Phone"
-                onChangeText={(value) => setPhone(value)}
-                value={phone}
-                style={styles.input}
-              />
-              <View style={styles.trait}></View>
-              <View style={styles.passwordContainer}>
+            <View style={styles.container}>
+
+              <Text style={styles.title}>Connexion</Text>
+
+              <View style={styles.profile}>
+                <Text style={styles.text}>Votre profil</Text>
+                <TextInput
+                  placeholder="Email"
+                  onChangeText={(value) => setEmail(value)}
+                  value={email}
+                  style={styles.input}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
+                <Text style={styles.text2}> ou </Text>
+                <TextInput
+                  placeholder="Phone"
+                  onChangeText={(value) => setPhone(value)}
+                  value={phone}
+                  style={styles.input}
+                />
+                <View style={styles.trait}></View>
+                <View style={styles.passwordContainer}>
                 <TextInput
                   placeholder="Password"
                   onChangeText={(value) => setPassword(value)}
                   value={password}
                   secureTextEntry={passwordVisibility}
                   style={styles.input}
-                  autoCapitalize="none"
-                />
+                  autoCapitalize="none"/>
                 <TouchableOpacity
                   onPressIn={handlePressIn}
-                  onPressOut={handlePressOut}
-                >
+                  onPressOut={handlePressOut}>
                   <FontAwesome
                     name={passwordVisibility ? "eye-slash" : "eye"}
                     size={20}
-                    color="#4F4F4F"
-                  />
+                    color="#4F4F4F"/>
                 </TouchableOpacity>
               </View>
 
@@ -147,8 +160,7 @@ export default function SignUpUserScreen({ navigation }) {
 
               <Modal
                 isVisible={isPasswordResetModalVisible}
-                onBackdropPress={() => setIsPasswordResetModalVisible(false)}
-              >
+                onBackdropPress={() => setIsPasswordResetModalVisible(false)}>
                 <View style={styles.modalContent}>
                   <Text style={styles.resetPasswordMessage}>
                     {passwordResetMessage}
@@ -162,8 +174,10 @@ export default function SignUpUserScreen({ navigation }) {
                   )}
                 </View>
               </Modal>
-            </View>
 
+            </View>
+            
+          <View style={styles.buttonsContainer}>
             <TouchableOpacity onPress={signInClick} style={styles.button} activeOpacity={0.8}>
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
@@ -171,17 +185,19 @@ export default function SignUpUserScreen({ navigation }) {
               <Text style={styles.textButton2}>Retour</Text>
             </TouchableOpacity>
             <Modal isVisible={isErrorModalVisible} onBackdropPress={() => setIsErrorModalVisible(false)}>
-              <View style={styles.modalContent}>
-                <Text style={styles.textModalValider}>{errorMessage}</Text>
-                <Button title="Fermer" onPress={() => setIsErrorModalVisible(false)}/>
+                <View style={styles.modalContent}>
+                  <Text style={styles.textModalValider}>{errorMessage}</Text>
+                  <Button title="Fermer" onPress={() => setIsErrorModalVisible(false)}/>
+                </View>
+              </Modal>
               </View>
-            </Modal>
-          </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    </LinearGradient>
+
+            </View> 
+          </KeyboardAwareScrollView> 
+        </View>
+      </LinearGradient>
   );
-}
+} 
 
 const styles = StyleSheet.create({
   linearGradient: {
@@ -189,7 +205,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    flex: 1,
+    width: '100%',
+    height:'80%',
     alignItems: "center",
     justifyContent: "center",
     paddingTop: '5%',
@@ -269,13 +286,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Ladislav-Bold',
   },
 
+  buttonsContainer: {
+    width: '100%',
+    height:'20%',
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
   button: {
-    height: '7%',
+    height: '40%',
     width: "80%",
     alignItems: "center",
     justifyContent: 'center',
-    marginTop: '20%',
+    marginTop: '15%',
     backgroundColor: "#F88559",
     borderRadius: 30,
     shadowColor: "#000",
@@ -290,7 +313,7 @@ const styles = StyleSheet.create({
 
 
   button2: {
-    height: '5%',
+    height: '40%',
     width: "50%",
     alignItems: "center",
     justifyContent: 'center',
@@ -320,9 +343,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
  
   },
-
-
-
 
   modalContent: {
     backgroundColor: "white",
