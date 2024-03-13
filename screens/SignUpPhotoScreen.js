@@ -180,7 +180,7 @@ const handleValidation = () => {
                              <TouchableOpacity onPress={handleValidation} style={styles.modalButton}>
                                <Text style={styles.textModal}>Valider</Text>
                              </TouchableOpacity>
-                             <TouchableOpacity  style={styles.modalButton}>
+                             <TouchableOpacity  onPress={() => setModalVisible(false)} style={styles.modalButton}>
                                <Text style={styles.textModal}>Annuler</Text>
                              </TouchableOpacity>
                           </View>
