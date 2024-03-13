@@ -126,6 +126,7 @@ export default function SignUpUserScreen({ navigation }) {
                   secureTextEntry={passwordVisibility}
                   style={styles.input}
                   autoCapitalize="none"
+                  
                 />
                 <TouchableOpacity
                   onPressIn={handlePressIn}
