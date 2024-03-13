@@ -16,6 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Modal from "react-native-modal";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function SignUpUserScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -40,6 +41,8 @@ export default function SignUpUserScreen({ navigation }) {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [passwordIcon, setPasswordIcon] = useState("eye-slash");
 
   const [cardNumber, setCardNumber] = useState("");
   const [expdate, setExpdate] = useState("");
@@ -152,6 +155,19 @@ export default function SignUpUserScreen({ navigation }) {
     navigation.navigate("SignUp");
   };
 
+  const handlePressIn = () => {
+    setPasswordVisibility(false);
+  };
+
+  const handlePressOut = () => {
+    setPasswordVisibility(true);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility(!passwordVisibility);
+    setPasswordIcon(passwordVisibility ? "eye" : "eye-slash");
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -250,7 +266,7 @@ export default function SignUpUserScreen({ navigation }) {
                 <Text
                   style={[
                     styles.genderText,
-                    { color: gender ? "#4F4F4F" : "rgba(80, 80, 80, 0.35)" },
+                    { color: gender ? "#4F4F4F" : "rgba(80, 80, 80, 0.35)",fontFamily: 'Ladislav-Bold', },
                   ]}
                 >
                   {gender || "Sélectionner le genre"}
@@ -278,25 +294,26 @@ export default function SignUpUserScreen({ navigation }) {
                   </Picker>
                 </View>
               </Modal>
+             
+              <View style={styles.inputPasswordContainer}>
+                 <TextInput placeholder="Mot de passe" onChangeText={setPassword} value={password} autoCapitalize="none"
+                            secureTextEntry={passwordVisibility} // Cache le mot de passe basé sur passwordVisibility
+                            style={styles.inputPassword} textContentType="none"/>
+                      <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut} >
+                          <FontAwesome name={passwordVisibility ? "eye-slash" : "eye"} size={20} color="#4F4F4F"/>
+                      </TouchableOpacity>
+              </View>
 
-              <TextInput
-                placeholder="Mot de passe"
-                onChangeText={(value) => setPassword(value)}
-                value={password}
-                style={styles.input}
-                autoCapitalize="none"
-                secureTextEntry={true}
-                textContentType="oneTimeCode"
-              />
-              <TextInput
-                placeholder="Confirmer le mot de passe"
-                onChangeText={setConfirmPassword}
-                value={confirmPassword}
-                style={styles.input}
-                autoCapitalize="none"
-                secureTextEntry={true}
-              />
-            </View>
+              <View style={styles.inputPasswordContainer}>
+                  <TextInput placeholder="Confirmer le mot de passe" onChangeText={setConfirmPassword} value={confirmPassword}
+                             secureTextEntry={passwordVisibility} // Assurez-vous d'utiliser la même logique pour les deux champs
+                             style={styles.inputPassword} textContentType="none"/>
+                       <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut}>
+                           <FontAwesome name={passwordIcon} size={20} color="#4F4F4F" />
+                       </TouchableOpacity>
+              </View>
+
+           </View>
 
             <View style={styles.pay}>
               <Text style={styles.text}>Payer avec</Text>
@@ -420,6 +437,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Ladislav-Bold',
   },
 
+  inputPassword: {
+    width: "80%",
+    marginTop: 15,
+    fontSize: 16,
+    color: "#4F4F4F",
+    fontFamily: 'Ladislav-Bold',
+  },
+
   halfinput: {
     width: "100%",
     display: "flex",
@@ -526,6 +551,7 @@ const styles = StyleSheet.create({
   datePickerButtonText: {
     fontSize: 16,
     color: "rgba(80, 80, 80, 0.35)",
+    fontFamily: 'Ladislav-Bold',
   },
 
   calendrier: {
@@ -549,6 +575,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-start",
     marginTop: 5,
+    fontFamily: 'Ladislav-Bold',
   },
 
   genderText: {
@@ -559,4 +586,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 15,
   },
+
+  inputPasswordContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: "80%",
+    marginTop: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#4F4F4F",
+  },
+  
+  // inputPassword: {
+  //   flex: 1, // Permet au champ de texte de prendre toute la largeur disponible
+  //   fontSize: 16,
+  //   color: "#4F4F4F",
+  // },
+  
+  passwordToggle: {
+    padding: 10, // Ajoute de l'espace autour de l'icône pour une meilleure accessibilité
+  },
+
 });

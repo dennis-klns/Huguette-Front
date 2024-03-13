@@ -61,6 +61,44 @@ useEffect(() => {
 
 
 
+
+
+
+
+const handleTakePhoto = async () => {
+  if (cameraRef.current) {
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+    const uri = photo?.uri;
+    setPhotoUri(uri);
+  }
+};
+
+const handleValidation = () => {
+  console.log(user.token);
+  if (photoUri) {
+    const formData = new FormData();
+    formData.append('photoFromFront', {
+      uri: photoUri,
+      name: 'photo.jpg',
+      type: 'image/jpeg',
+    });
+    
+    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Réponse du backend :', data);
+      dispatch(addPicture(data.url));
+      toggleModal();
+    })
+    .catch(error => console.error('Erreur lors de la validation de la photo :', error));
+  } else {
+    console.error('Aucune photo à valider');
+  }
+};
+
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -118,46 +156,9 @@ const pickImage = async () => {
 
 };
 
-
-
-
-const handleTakePhoto = async () => {
-  if (cameraRef.current) {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
-    const uri = photo?.uri;
-    setPhotoUri(uri);
-  }
-};
-
-const handleValidation = () => {
-  console.log(user.token);
-  if (photoUri) {
-    const formData = new FormData();
-    formData.append('photoFromFront', {
-      uri: photoUri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
-    });
-
-    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Réponse du backend :', data);
-        dispatch(addPicture(data.url));
-        toggleModal();
-      })
-      .catch(error => console.error('Erreur lors de la validation de la photo :', error));
-  } else {
-    console.error('Aucune photo à valider');
-  }
-};
-
-    return (
-
-      <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
+return (
+  
+  <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
           <View style={styles.container}>
@@ -247,12 +248,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    width: "80%", 
-    fontSize: 24,
+    width: "80%",
+    fontSize: 40,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
-    margin: 40,
+    paddingTop :'15%',
+    fontFamily: "Ladislav-Bold",
 
   },
 
@@ -265,19 +267,19 @@ const styles = StyleSheet.create({
 
   text: {
     width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "800",
     color: "#473E66",
-    margin: 10,
+    paddingTop :'15%',
+    fontFamily: 'Ladislav-Bold',
   },
-
   photoContainer: {
     width: '80%',
     height: '50%', 
     maxHeight: '65%', 
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    // borderWidth: 2,
   },
   
   photoContent: {
@@ -293,6 +295,7 @@ const styles = StyleSheet.create({
 
   text1:{
     fontSize: 19,
+    fontFamily: 'Ladislav-Bold',
   },
 
   buttonContainer:{
