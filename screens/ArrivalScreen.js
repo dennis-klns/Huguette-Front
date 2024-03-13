@@ -8,6 +8,7 @@ import {
     Modal,
     SafeAreaView,
     TextInput,
+    KeyboardAvoidingView
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -96,7 +97,7 @@ export default function ArrivalScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
-
+            <KeyboardAvoidingView>
             <Modal visible={modalVisible} transparent={true} animationType="slide">
                 <LinearGradient
                     colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -122,6 +123,7 @@ export default function ArrivalScreen({ navigation }) {
                     </SafeAreaView>
                 </LinearGradient>
             </Modal>
+            </KeyboardAvoidingView>
 
         </LinearGradient>
     );

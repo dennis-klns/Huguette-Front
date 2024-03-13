@@ -81,7 +81,7 @@ export default function MapScreen({ navigation }) {
 
   const toggleSwitch = () => {
     setIsAccompanied((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -98,12 +98,12 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed IsAccompanied:", data.error);
         }
-      });
+      }); */
   };
 
   const changeMood = () => {
     setMood((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -120,12 +120,12 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Mood:", data.error);
         }
-      });
+      }); */
   };
 
   const changeMusic = () => {
     setMusic((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -142,7 +142,7 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Music:", data.error);
         }
-      });
+      }); */
   };
 
   let iconStyleMusic = {};
@@ -225,6 +225,25 @@ export default function MapScreen({ navigation }) {
       })
       .catch((error) => {
         console.error("Error:", error);
+      });
+
+      fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Music changed:", data);
+        } else {
+          console.error("Failed Music:", data.error);
+        }
       });
   };
 
