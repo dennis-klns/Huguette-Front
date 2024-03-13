@@ -28,11 +28,11 @@ export const userSlice = createSlice({
     addAddresses: (state, action) => {
       state.value.addresses.push(action.payload);
     },
-    addPicture: (state,action) => {
+    addPicture: (state, action) => {
       state.value.picture = action.payload;
-    }
+    },
   },
 });
 
-export const { login, logout, addAddresses,addPicture } = userSlice.actions;
+export const { login, logout, addAddresses, addPicture } = userSlice.actions;
 export default userSlice.reducer;
