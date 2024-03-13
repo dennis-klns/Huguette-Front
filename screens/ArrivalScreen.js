@@ -1,13 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
     Modal,
-    SafeAreaView,
     TextInput,
+    KeyboardAvoidingView
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -17,31 +18,34 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ArrivalScreen({ navigation }) {
 
+    // DONNER LES ETATS INITIAUX DES ELEMENTS
+
     const [personalNote, setPersonalNote] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [comment, setComment] = useState('')
 
+    const trip = useSelector((state) => state.trip.value)
+
+    // POUR VALIDER ET CLOTURER LA COURSE + ENVOI DANS LE BACK END DE LA NOTE DE LA COURSE
     const handleValidate = () => {
 
-        // A ENVOYER DANS LE BACKEND 
-        /*  fetch("https://huguette-backend.vercel.app/reviews/passenger", {
-             method: "PUT",
-             headers: { "Content-Type": "application/json" },
-             body: JSON.stringify({
-                 isAccompanied: isAccompanied,
-                 token: user.token,
-                 music: music,
-                 mood: mood,
-             }),
-         })
-             .then((response) => response.json())
-             .then((data) => {
-                 if (data.result) {
-                     console.log("Music changed:", data);
-                 } else {
-                     console.error("Failed Music:", data.error);
-                 }
-             }); */
+        fetch("https://huguette-backend.vercel.app/reviews", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tripId: trip.tripId,
+                noteByPassenger: personalNote,
+                commentByPassenger: null,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.result) {
+                    console.log("Reviews updated:", data);
+                } else {
+                    console.error("Failed reviews:", data.error);
+                }
+            })
         navigation.navigate("Map")
     }
 
@@ -49,6 +53,32 @@ export default function ArrivalScreen({ navigation }) {
         navigation.navigate("Complain")
     }
 
+
+// EN CAS DE COMMENTAIRE DANS LA MODAL - ENVOI DANS LE BACK END DU COMMENT
+    const handleComment = () => {
+        fetch("https://huguette-backend.vercel.app/reviews", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tripId: trip.tripId,
+                noteByPassenger: personalNote,
+                commentByPassenger: comment,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.result) {
+                    console.log("Reviews updated:", data);
+                } else {
+                    console.error("Failed reviews:", data.error);
+                }
+                setComment('')
+                setModalVisible(false)
+            })
+
+    }
+
+    // POUR NOTER LA COURSE PAR DES ETOILES
     const personalStars = [];
     for (let i = 0; i < 5; i++) {
         let iconStyle = {};
@@ -73,11 +103,7 @@ export default function ArrivalScreen({ navigation }) {
                     <View style={styles.note}>
                         <Text style={styles.text}>Notez la course</Text>
                         <View style={styles.icon}>
-                            {/* <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome> */}
+
                             {personalStars}
                         </View>
                     </View>
@@ -96,30 +122,33 @@ export default function ArrivalScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
-
             <Modal visible={modalVisible} transparent={true} animationType="slide">
                 <LinearGradient
                     colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
                     style={styles.linearGradient}
                 >
-                    <SafeAreaView style={styles.containerModal}>
+                    <View style={styles.containerModal}>
                         <View style={styles.modalHeader}>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <FontAwesome name="times" size={24} color="#333" />
                             </TouchableOpacity>
+                        </View>
 
+                        <Text style={styles.textModal} >On vous écoute...</Text>
+
+                        <KeyboardAvoidingView>
                             <TextInput style={styles.messageInput} placeholder="Ecrivez votre commentaire" multiline={true} numberOfLines={4} value={comment}
-                           onChangeText={text => setComment(text)}/>
+                                onChangeText={value => setComment(value)} />
 
                             <TouchableOpacity
-                                onPress={() => handleValidate()}
+                                onPress={() => handleComment()}
                                 style={styles.modalButton}
                                 activeOpacity={0.8}
                             >
                                 <Text style={styles.textButton}>Envoyer</Text>
                             </TouchableOpacity>
-                        </View>
-                    </SafeAreaView>
+                        </KeyboardAvoidingView>
+                    </View>
                 </LinearGradient>
             </Modal>
 
@@ -214,22 +243,30 @@ const styles = StyleSheet.create({
     containerModal: {
         flex: 1,
         justifyContent: 'center',
-    
+        margin: '5%',
     },
+
+    textModal: {
+        fontSize: 30,
+        color: 'white',
+        fontFamily: 'Ladislav-Bold',
+        alignSelf: 'center',
+        marginBottom: '10%',
+        marginTop: '10%',
+    },
+
     messageInput: {
-        height: '55%',
+        height: '45%',
         fontSize: 16,
         color: "#473E66",
         margin: 10,
         padding: 10,
-        backgroundColor: "#FFF", // Vous pouvez ajuster cette couleur comme vous le souhaitez
         borderRadius: 10,
-        // fontFamily: "OpenSans-Regular",
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
-      },
+    },
 
-      modalButton: {
+    modalButton: {
         height: 40,
         width: '80%',
         alignSelf: 'center',

@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
@@ -80,7 +81,7 @@ export default function MapScreen({ navigation }) {
 
   const toggleSwitch = () => {
     setIsAccompanied((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -97,12 +98,12 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed IsAccompanied:", data.error);
         }
-      });
+      }); */
   };
 
   const changeMood = () => {
     setMood((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -119,12 +120,12 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Mood:", data.error);
         }
-      });
+      }); */
   };
 
   const changeMusic = () => {
     setMusic((previousState) => !previousState);
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -141,7 +142,7 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Music:", data.error);
         }
-      });
+      }); */
   };
 
   let iconStyleMusic = {};
@@ -225,6 +226,25 @@ export default function MapScreen({ navigation }) {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+      fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Music changed:", data);
+        } else {
+          console.error("Failed Music:", data.error);
+        }
+      });
   };
 
   //console.log("tripReducer:", trip);
@@ -297,6 +317,8 @@ export default function MapScreen({ navigation }) {
                 <FontAwesome name="times" size={24} color="#333" />
               </TouchableOpacity>
             </View>
+
+            <View style={styles.shadowContainer}>
             <View style={styles.profile}>
               <View style={styles.autoDeparture}>
                 <GooglePlacesAutocomplete
@@ -428,6 +450,7 @@ export default function MapScreen({ navigation }) {
                 </View>
               </View>
             </View>
+            </View>
 
             <ScrollView contentContainerStyle={styles.scrollView}>
               <Text style={styles.titlemodal}>Adresses Favorites</Text>
@@ -519,20 +542,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  profile: {
+  shadowContainer: {
     width: "80%",
     height: "38%",
     alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: 'transparent', // Assurez-vous que le conteneur d'ombre est transparent
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  
+  profile: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+    }),
   },
 
   titlemodal: {
@@ -540,7 +579,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
-    color: "red",
+    color: 'red',
+   
   },
 
   autoDeparture: {
