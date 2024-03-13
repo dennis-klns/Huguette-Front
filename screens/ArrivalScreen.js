@@ -74,11 +74,7 @@ export default function ArrivalScreen({ navigation }) {
                     <View style={styles.note}>
                         <Text style={styles.text}>Notez la course</Text>
                         <View style={styles.icon}>
-                            {/* <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome>
-                            <FontAwesome name="star" size={30} color="gold"></FontAwesome> */}
+                           
                             {personalStars}
                         </View>
                     </View>
@@ -103,11 +99,13 @@ export default function ArrivalScreen({ navigation }) {
                     colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
                     style={styles.linearGradient}
                 >
-                    <SafeAreaView style={styles.containerModal}>
+                    <View style={styles.containerModal}>
                         <View style={styles.modalHeader}>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <FontAwesome name="times" size={24} color="#333" />
                             </TouchableOpacity>
+                            <Text style={styles.text} >On vous écoute</Text>
+                            </View>
 
                             <TextInput style={styles.messageInput} placeholder="Ecrivez votre commentaire" multiline={true} numberOfLines={4} value={comment}
                            onChangeText={text => setComment(text)}/>
@@ -119,8 +117,7 @@ export default function ArrivalScreen({ navigation }) {
                             >
                                 <Text style={styles.textButton}>Envoyer</Text>
                             </TouchableOpacity>
-                        </View>
-                    </SafeAreaView>
+                    </View>
                 </LinearGradient>
             </Modal>
             </KeyboardAvoidingView>
@@ -216,17 +213,19 @@ const styles = StyleSheet.create({
     containerModal: {
         flex: 1,
         justifyContent: 'center',
-    
+        margin: '5%',
     },
+
+
+
+
     messageInput: {
-        height: '55%',
+        height: '45%',
         fontSize: 16,
         color: "#473E66",
         margin: 10,
         padding: 10,
-        backgroundColor: "#FFF", // Vous pouvez ajuster cette couleur comme vous le souhaitez
         borderRadius: 10,
-        // fontFamily: "OpenSans-Regular",
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
       },
