@@ -22,6 +22,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import {addPicture} from '../reducers/user'
+import ImageResizer from 'react-native-image-resizer';
 
 export default function SignUpPhotoScreen({ navigation }) {
 
@@ -30,8 +31,12 @@ export default function SignUpPhotoScreen({ navigation }) {
   const [photoUri, setPhotoUri] = useState(null);
 
   const user = useSelector((state) => state.user.value)
+  const profilePicture = useSelector((state) => state.user.value);
 
   const toggleModal = () => {
+    if (!isModalVisible) { // Si on est sur le point d'ouvrir la modale
+      setPhotoUri(null); // On réinitialise l'URI de la photo pour cacher l'aperçu précédent
+    }
     setModalVisible(!isModalVisible);
   };
   
@@ -41,6 +46,15 @@ export default function SignUpPhotoScreen({ navigation }) {
     navigation.navigate('TabNavigator', { screen: 'Map'});
 
 }
+
+const [isAlertModalVisible, setAlertModalVisible] = useState(false);
+const handleMapScreenWithPhoto = () => {
+  if (photoUri) { // Si une photo a été sélectionnée
+    navigation.navigate('TabNavigator', { screen: 'Map'});
+  } else { // Si aucune photo n'a été sélectionnée
+    setAlertModalVisible(true); // Afficher le modal d'alerte
+  }
+};
 
 const dispatch = useDispatch();
 const isFocused = useIsFocused();
@@ -108,23 +122,27 @@ const pickImage = async () => {
   }
   
   const pickerResult = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true, 
-    quality: 1, 
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true, // Permet l'édition de l'image
+    aspect: [4, 3], // Aspect ratio de l'image éditée
+    quality: 0.5, // Compression de l'image (0.5 = 50% de la qualité originale)
   });
+
 
 
   console.log(pickerResult); 
 
-  if (pickerResult?.assets[0]?.canceled === true) {
-    setPhotoUri(pickerResult.assets[0].uri);
+  if (!pickerResult.assets[0].canceled) {
+    
+    const uri = (pickerResult.assets[0].uri);
+    setPhotoUri(pickerResult.uri)
   }
   console.log("test", pickerResult?.assets[0]?.uri); 
 
   let formData = new FormData();
   formData.append('token', user.token); 
   formData.append('photoFromLibrairie', {
-    uri: pickerResult?.assets[0]?.uri,
+    uri: pickerResult.assets[0].uri,
     name: 'photo.jpg', 
     type: 'image/jpeg', 
   });
@@ -147,12 +165,16 @@ const pickImage = async () => {
   .then(data => {
     console.log('librairie2:', data);
     dispatch(addPicture(data.url));
+    setPhotoUri(data.url)
   })
   .catch((error) => {
     console.error('Error uploading image:', error);
   });
 
-  setIsPhotoUploaded(true);
+  if (!pickerResult.cancelled) {
+    setPhotoUri(pickerResult.uri);
+    setIsPhotoUploaded(true);
+  }
 
 };
 
@@ -213,7 +235,9 @@ return (
                 </View>
                 {photoUri && (
                   
-    <Image source={{ uri: photoUri }} style={styles.imagePreview} />
+    // <Image source={{ uri: photoUri }} style={styles.imagePreview} />
+    <Image source={profilePicture.picture ? { uri: profilePicture.picture } : require('../assets/profilpicturephoto.png')}
+                                 style={{ width: 200, height: 200, borderRadius: 100 }} />
     
   )}
   {isPhotoUploaded && (
@@ -225,9 +249,17 @@ return (
               <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button2} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Passer</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8}>
+              <TouchableOpacity onPress={() => handleMapScreenWithPhoto()} style={styles.button} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Valider</Text>
               </TouchableOpacity>
+                  <Modal isVisible={isAlertModalVisible} style={styles.modal}>
+                       <View style={styles.modalContent}>
+                            <Text style={styles.alertModalText}>Veuillez ajouter une photo</Text>
+                            <TouchableOpacity onPress={() => setAlertModalVisible(false)} style={styles.modalButton}>
+                            <Text style={styles.textModal}>OK</Text>
+                            </TouchableOpacity>
+                       </View>
+                 </Modal>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -261,7 +293,7 @@ const styles = StyleSheet.create({
   profile: {
     width: "100%",
     alignItems: "center",
-    marginBottom: 80,
+    marginBottom: '10%',
   
   },
 
@@ -273,12 +305,16 @@ const styles = StyleSheet.create({
     paddingTop :'15%',
     fontFamily: 'Ladislav-Bold',
   },
+  
   photoContainer: {
     width: '80%',
     height: '50%', 
     maxHeight: '65%', 
     alignItems: 'center',
     justifyContent: 'center',
+    borderBottomColor: "#4F4F4F",
+    borderTopWidth: 1,
+    paddingTop: '5%',
     // borderWidth: 2,
   },
   
@@ -484,4 +520,5 @@ const styles = StyleSheet.create({
 
     });
     
+
 
