@@ -17,7 +17,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function ConfirmDriverScreen({ navigation }) {
 
     const handleValidate = () => {
-        navigation.navigate("Route")
+        navigation.navigate("WaitingDriverConfirmed")
         // navigation.navigate("Waiting")
     }
 
@@ -52,8 +52,8 @@ export default function ConfirmDriverScreen({ navigation }) {
 
                 </View>
 
-                <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Valider la conductrice</Text>
+                <TouchableOpacity onPress={()=>handleValidate()} style={styles.button} activeOpacity={0.8}>
+                    <Text style={styles.textButton} >Valider la conductrice</Text>
                 </TouchableOpacity>
             </View>
 
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
 
     button: {
         height: 40,
-        paddingTop: 8,
         width: "80%",
+        justifyContent: 'center',
         alignItems: "center",
         marginTop: 20,
         backgroundColor: "#F88559",
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
 
     textButton: {
         color: "#fff",
-        height: 30,
         fontWeight: "600",
         fontSize: 16,
+        fontFamily: "Ladislav-Bold",
     },
 });
