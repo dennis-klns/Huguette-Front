@@ -309,13 +309,13 @@ export default function ProfilInformations({ navigation }) {
                 <Text style={styles.title}>Modifiez vos informations :</Text>
               </View>
               <TextInput
-                style={styles.text2}
+                style={styles.info}
                 placeholder={user.firstname}
                 value={updatedFirstname}
                 onChangeText={setUpdatedFirstname}
               />
               <TextInput
-                style={styles.text2}
+                style={styles.info}
                 placeholder={user.lastname}
                 value={updatedLastname}
                 onChangeText={setUpdatedLastname}
@@ -361,7 +361,6 @@ export default function ProfilInformations({ navigation }) {
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
-    paddingTop: "20%",
   },
 
   container: {
@@ -406,50 +405,31 @@ const styles = StyleSheet.create({
   textContainer: {
     width: "80%",
     alignItems: "center",
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
     padding: "2%",
   },
 
   titleContainer: {
     alignItems: "center",
-    fontFamily: "OpenSans-Regular",
     margin: "3%",
   },
 
   title: {
     fontSize: 20,
     color: "#473E66",
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
     paddingBottom: "5%",
   },
 
-  text: {
-    width: "80%",
-    fontSize: 30,
-    fontWeight: "800",
-    color: "#473E66",
-    fontFamily: "OpenSans-Regular",
-  },
 
-  text2: {
+  info: {
     width: "80%",
     fontSize: 16,
-    fontWeight: "800",
     color: "#473E66",
     margin: "3%",
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
     borderBottomColor: "#4F4F4F",
     borderBottomWidth: 1,
-  },
-
-  input: {
-    height: "10%",
-    width: "80%",
-    marginTop: 25,
-    borderBottomColor: "#4F4F4F",
-    borderBottomWidth: 1,
-    fontSize: 25,
-    color: "#4F4F4F",
   },
 
   photo: {
@@ -464,8 +444,9 @@ const styles = StyleSheet.create({
 
   textButton: {
     color: "#fff",
-    fontWeight: "600",
     fontSize: 16,
+    fontWeight: '600',
+
   },
 
   button: {
@@ -475,7 +456,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F88559",
     borderRadius: 25,
     shadowColor: "#000",
-    margin: "3%",
+    margin: "2%",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -484,6 +465,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   buttonValidate: {
     height: "30%",
     width: "60%",
@@ -492,7 +474,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F88559",
     borderRadius: 25,
     shadowColor: "#000",
-    margin: "3%",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -501,9 +482,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  modal: {
-    justifyContent: "center",
-  },
+
   modalContent: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",
     padding: 20,
@@ -549,21 +528,18 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 
-  // Ajoutez un style pour le texte des boutons dans la modale
-  modalButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-
   textModal: {
     color: "white",
   },
+
+
+  // CARACTERISTIQUES POUR LA CAMERA
 
   camera: {
     width: "100%",
     height: "80%",
   },
+
   cameraContent: {
     flex: 1,
     backgroundColor: "transparent",
@@ -572,6 +548,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     margin: 20,
   },
+
   cameraButton: {
     backgroundColor: "#F88559",
     borderRadius: "20%",
@@ -580,13 +557,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  modalContent2: {
-    height: "70%",
-    backgroundColor: "white",
-    padding: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 4,
-    borderColor: "rgba(0, 0, 0, 0.1)",
-  },
 });
