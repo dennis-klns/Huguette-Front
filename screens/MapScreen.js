@@ -74,69 +74,16 @@ export default function MapScreen({ navigation }) {
 
   const toggleSwitch = () => {
     setIsAccompanied((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("IsAccompanied changed:", data);
-       } else {
-         console.error("Failed IsAccompanied:", data.error);
-       }
-     }); */
   };
 
   const changeMood = () => {
     setMood((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("Mood changed:", data);
-       } else {
-         console.error("Failed Mood:", data.error);
-       }
-     }); */
+
   };
 
   const changeMusic = () => {
     setMusic((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("Music changed:", data);
-       } else {
-         console.error("Failed Music:", data.error);
-       }
-     }); */
-  };
+  }
 
   let iconStyleMusic = {};
   let iconStyleMood = {};
@@ -257,7 +204,7 @@ export default function MapScreen({ navigation }) {
     fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
   .then(response => response.json())
   .then(data => {
-    console.log('favoriteAddresses',data);
+
     const addressesList= [];
     if(data.home) {
       addressesList.push({
@@ -275,30 +222,21 @@ export default function MapScreen({ navigation }) {
     if(addressesList) {
       setAddresses(addressesList.map((data, i) => {
         return (
-          <View key={i} style={styles.addresses}>
+          <TouchableOpacity key={i} style={styles.addresses} onPress={() =>  dispatch(addArrival(data[i].latitude))}>
             <Text style={styles.name}>{data.name}</Text>
             <Text>{data.address}</Text>
-          </View>
+          </TouchableOpacity>
         );
       }))
     }
    
   }).then((data) =>{
-    console.log('après fetch',(data));
+    console.log('Failed set Addresses',(data));
   });
 
   }, [modalVisible]);
 
-  // Affichage des adresses favorites
-  // const addresses = addressesList.map((data, i) => {
-  //   return (
-  //     <View key={i} style={styles.addresses}>
-  //       <Text style={styles.name}>{data.name}</Text>
-  //       <Text>{data.address}</Text>
-  //     </View>
-  //   );
-  // });
-  
+
  
 
   return (
