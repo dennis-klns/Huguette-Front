@@ -343,9 +343,9 @@ const styles = StyleSheet.create({
 
   button: {
     height: 40,
-    paddingTop: 8,
     width: "80%",
     alignItems: "center",
+    justifyContent: 'center',
     marginTop: 20,
     backgroundColor: "#F88559",
     borderRadius: 10,
@@ -361,9 +361,9 @@ const styles = StyleSheet.create({
 
   button2: {
     height: 40,
-    paddingTop: 8,
     width: "40%",
     alignItems: "center",
+    justifyContent :'center',
     marginTop: 20,
     backgroundColor: "#EAAC8B",
     borderRadius: 10,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
 
     textButton: {
         color: '#fff',
-        height: 30,
+        // height: 30,
         fontWeight: '600',
         fontSize: 16,
     },

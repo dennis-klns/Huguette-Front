@@ -109,9 +109,9 @@ import {
   
     button: {
       height: 40,
-      paddingTop: 8,
       width: '80%',
       alignItems: 'center',
+      justifyContent: 'center',
       marginTop: 20,
       backgroundColor: 'white',
       opacity : 0.5,
@@ -128,7 +128,6 @@ import {
   
     textButton: {
       color: '#000',
-      height: 30,
       fontWeight: '600',
       fontSize: 16,
     },

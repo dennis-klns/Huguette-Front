@@ -139,9 +139,10 @@ buttonContainer:{
 button: {
   
   height: 40,
-  paddingTop: 8,
+  // paddingTop: 8,
   width: "60%",
   alignItems: "center",
+  justifyContent: 'center',
   marginTop: 20,
   backgroundColor: "#EAAC8B",
   borderRadius: 10,
@@ -158,7 +159,7 @@ button: {
 
   textButton: {
       color: '#fff',
-      height: 30,
+      // height: 30,
       fontWeight: '600',
       fontSize: 16,
       

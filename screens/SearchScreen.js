@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
 
     button: {
         height: 40,
-        paddingTop: 8,
+        // paddingTop: 8,
         width: '80%',
         alignItems: 'center',
         marginTop: 20,
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
 
     textButton: {
         color: '#fff',
-        height: 30,
+        // height: 30,
         fontWeight: '600',
         fontSize: 16,
     },
