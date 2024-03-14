@@ -45,22 +45,15 @@ export default function MapScreen({ navigation }) {
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+
 
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
 
   // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
-  const addressesList = [
-    {
-      name: "Maison",
-      address: "16 rue des Boulets, PARIS",
-    },
-    {
-      name: "La Capsule",
-      address: "16 rue des Boulets, PARIS",
-    },
-  ];
+
 
   // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
@@ -212,15 +205,49 @@ export default function MapScreen({ navigation }) {
   }, [modalVisible]);
 
   // Affichage des adresses favorites
-  const addresses = addressesList.map((data, i) => {
-    return (
-      <View key={i} style={styles.addresses}>
-        <Text style={styles.name}>{data.name}</Text>
-        <Text>{data.address}</Text>
-      </View>
-    );
-  });
+  // const addresses = addressesList.map((data, i) => {
+  //   return (
+  //     <View key={i} style={styles.addresses}>
+  //       <Text style={styles.name}>{data.name}</Text>
+  //       <Text>{data.address}</Text>
+  //     </View>
+  //   );
+  // });
   
+  useEffect(() => {
+    fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
+  .then(response => response.json())
+  .then(data => {
+    console.log('favoriteAddresses',data);
+    const addressesList= [];
+    if(data.home.completeAddress) {
+      addressesList.push({
+        name: "Maison",
+        address: data.home.completeAddress,
+      })
+    }
+    if (data.work.completeAddress) {
+      addressesList.push({
+        name: "Travail",
+        address: data.work.completeAddress,
+      })
+    }
+
+    if(addressesList) {
+      setAddresses(addressesList.map((data, i) => {
+        return (
+          <View key={i} style={styles.addresses}>
+            <Text style={styles.name}>{data.name}</Text>
+            <Text>{data.address}</Text>
+          </View>
+        );
+      }))
+    }
+   
+  }).then((data) =>{
+    console('après fetch',(data));
+  });
+  }, []);
 
   return (
     <LinearGradient
