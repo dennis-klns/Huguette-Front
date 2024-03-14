@@ -26,7 +26,7 @@ export default function FavoritAdresses({ navigation }) {
     setModalVisible(!isModalVisible);
   };
 
-  /*   const handleHome = (data, details) => {
+  const handleHome = (data, details) => {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
     setHomeUpdate({
@@ -34,10 +34,15 @@ export default function FavoritAdresses({ navigation }) {
       longitude: details.geometry?.location.lng,
       completeAddress: data.description,
     });
-  }; */
-
-  const handleWork = () => {
-    console.log("Adresse travail:", workUpdate);
+  };
+  const handleWork = (data, details) => {
+    console.log("Data départ:", data);
+    console.log("Details départ:", details.geometry?.location);
+    setHomeUpdate({
+      latitude: details.geometry?.location.lat,
+      longitude: details.geometry?.location.lng,
+      completeAddress: data.description,
+    });
   };
 
   return (
@@ -68,7 +73,7 @@ export default function FavoritAdresses({ navigation }) {
                   placeholder="Adresse Domicile"
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
-                  //onPress={() => handleHome()}
+                  onPress={handleHome}
                   fetchDetails={true}
                   query={{
                     key: GOOGLE_PLACES_API_KEY,
@@ -126,6 +131,7 @@ export default function FavoritAdresses({ navigation }) {
                   placeholder="Adresse Travail"
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
+                  onPress={handleWork}
                   fetchDetails={true}
                   query={{
                     key: GOOGLE_PLACES_API_KEY,
