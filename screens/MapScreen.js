@@ -73,69 +73,17 @@ export default function MapScreen({ navigation }) {
   };
 
   const toggleSwitch = () => {
-    setIsAccompanied((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("IsAccompanied changed:", data);
-       } else {
-         console.error("Failed IsAccompanied:", data.error);
-       }
-     }); */
+    setIsAccompanied(!isAccompanied);
+    
   };
 
   const changeMood = () => {
-    setMood((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("Mood changed:", data);
-       } else {
-         console.error("Failed Mood:", data.error);
-       }
-     }); */
+    setMood(!mood);
+    
   };
 
   const changeMusic = () => {
-    setMusic((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-     method: "PUT",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-       isAccompanied: isAccompanied,
-       token: user.token,
-       music: music,
-       mood: mood,
-     }),
-   })
-     .then((response) => response.json())
-     .then((data) => {
-       if (data.result) {
-         console.log("Music changed:", data);
-       } else {
-         console.error("Failed Music:", data.error);
-       }
-     }); */
+    setMusic(!music);
   };
 
   let iconStyleMusic = {};
