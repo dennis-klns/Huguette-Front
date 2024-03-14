@@ -1,6 +1,7 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
+import { useSelector} from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -18,6 +19,8 @@ export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [homeUpdate, setHomeUpdate] = useState({});
   const [workUpdate, setWorkUpdate] = useState({});
+
+const user = useSelector((state) => state.user.value);
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -38,12 +41,42 @@ export default function FavoritAdresses({ navigation }) {
   const handleWork = (data, details) => {
     console.log("Data départ:", data);
     console.log("Details départ:", details.geometry?.location);
-    setHomeUpdate({
+    setWorkUpdate({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
       completeAddress: data.description,
     });
   };
+
+
+  const setNewAddress = () => {
+
+    console.log(user.token)
+    console.log(homeUpdate)
+    console.log(workUpdate)
+
+
+    fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token : user.token,
+        longitudeH: homeUpdate.longitude,
+        latitudeH : homeUpdate.latitude,
+        longitudeW : workUpdate.longitude,
+        latitudeW: workUpdate.latitude,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Addresses updated", data);
+        } else {
+          console.error("Update Addresses Failed:", data.error);
+        }
+      });
+      setModalVisible(false)
+  }
 
   return (
     <LinearGradient
@@ -207,7 +240,7 @@ export default function FavoritAdresses({ navigation }) {
                 </Text>
                 <View style={styles.modalButtonContainer}>
                   <TouchableOpacity
-                    onPress={() => setModalVisible(false)}
+                    onPress={() => setNewAddress()}
                     style={styles.modalButton}
                   >
                     <Text style={styles.textModal}>Oui</Text>
