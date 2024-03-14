@@ -7,8 +7,8 @@ const initialState = {
     firstname: null,
     lastname: null,
     picture: null,
-    home: {longitude:null, latitude:null, completeAddress:null},
-    work: {longitude:null, latitude:null, completeAddress:null},
+    home: {},
+    work: {},
   },
 };
 

@@ -29,6 +29,8 @@ import {
   addLatitude,
   addLongitude,
   addTripId,
+  addHome,
+  addWork,
 } from "../reducers/trip";
 
 export default function MapScreen({ navigation }) {
@@ -122,7 +124,6 @@ export default function MapScreen({ navigation }) {
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
           dispatch(addLongitude(data.trip.departure.longitude));
           dispatch(addLatitude(data.trip.departure.latitude));
           setArrival({});
@@ -212,24 +213,31 @@ export default function MapScreen({ navigation }) {
         name: "Maison",
         address: data.home.completeAddress,
       })
+    dispatch(addHome(data.home));
     }
     if (data.work) {
       addressesList.push({
         name: "Travail",
         address: data.work.completeAddress,
       })
+      dispatch(addWork(data.work));
+
     }
 
     if(addressesList) {
       setAddresses(addressesList.map((data, i) => {
         return (
+        <TouchableOpacity key={i} onPress={() => console.log('this',this)}>
           <View key={i} style={styles.addresses}>
             <Text style={styles.name}>{data.name}</Text>
             <Text>{data.address}</Text>
           </View>
+        </TouchableOpacity>
         );
       }))
     }
+
+
    
   }).then((data) =>{
     console.log('après fetch',(data));
