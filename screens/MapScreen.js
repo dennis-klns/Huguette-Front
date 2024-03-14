@@ -29,13 +29,13 @@ import {
   addLatitude,
   addLongitude,
   addTripId,
-  addHome,
-  addWork,
 } from "../reducers/trip";
+
+import { addHome, addWork } from '../reducers/user'
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
-  //const [addresses, setAddresses] = useState("");
+
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState({});
@@ -44,6 +44,9 @@ export default function MapScreen({ navigation }) {
   const [music, setMusic] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const [home, setHome] = useState({});
+  const [work, setWork] = useState({});
+
 
 
   const user = useSelector((state) => state.user.value);
@@ -51,7 +54,7 @@ export default function MapScreen({ navigation }) {
   const dispatch = useDispatch();
 
   // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
- 
+
 
   // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
@@ -76,12 +79,12 @@ export default function MapScreen({ navigation }) {
 
   const toggleSwitch = () => {
     setIsAccompanied(!isAccompanied);
-    
+
   };
 
   const changeMood = () => {
     setMood(!mood);
-    
+
   };
 
   const changeMusic = () => {
@@ -118,7 +121,7 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", trip);
+          // console.log("OK:", trip);
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
@@ -137,39 +140,25 @@ export default function MapScreen({ navigation }) {
             const minutes = Math.floor(
               Number(parts[0]) * 60 + Number(parts[1])
             );
-            console.log(parts);
-            console.log(minutes);
+            // console.log(parts);
+            // console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
           } else {
             dispatch(
               addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
             );
           }
-          if (data.trip.estimatedDuration.includes("hour")) {
-            const str = data.trip.estimatedDuration;
-            const parts = str.split("mins").join("").split("hours");
-            const minutes = Math.floor(
-              Number(parts[0]) * 60 + Number(parts[1])
-            );
-            console.log(parts);
-            console.log(minutes);
-            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
-          } else {
-            dispatch(
-              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
-            );
-          }
 
-          console.log("tripBDD:", data.trip);
+          // console.log("tripBDD:", data.trip);
         } else {
           console.error("Failed:", data.error);
         }
-      })
+      }).then(()=>{})
       .catch((error) => {
         console.error("Error:", error);
       });
 
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+    fetch("https://huguette-backend.vercel.app/users/moodpassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -181,6 +170,7 @@ export default function MapScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('RRRRRRRRRRRR',data)
         if (data.result) {
           console.log("Music changed:", data);
         } else {
@@ -190,6 +180,16 @@ export default function MapScreen({ navigation }) {
   };
 
   //console.log("tripReducer:", trip);
+
+  const determineAddress = (placeTitle) => {
+
+    // console.log(placeTitle);
+    placeTitle === 'Maison' ? setArrival(home) :  setArrival(work);
+    // console.log(arrival);
+    // console.log('reducer user',user);
+    // const foundPlace= user[placeTitle === "Travail" ? "work" : "home"]
+    // if (foundPlace) setArrival(foundPlace)
+  }
 
   useEffect(() => {
     (async () => {
@@ -203,286 +203,277 @@ export default function MapScreen({ navigation }) {
       }
     })();
 
+    
+
     fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
-  .then(response => response.json())
-  .then(data => {
-    console.log('favoriteAddresses',data);
-    const addressesList= [];
-    if(data.home) {
-      addressesList.push({
-        name: "Maison",
-        address: data.home.completeAddress,
-      })
-    dispatch(addHome(data.home));
-    }
-    if (data.work) {
-      addressesList.push({
-        name: "Travail",
-        address: data.work.completeAddress,
-      })
-      dispatch(addWork(data.work));
+      .then(response => response.json())
+      .then(data => {
 
-    }
+        const addressesList = [];
+        if (data.home) {
+          addressesList.push({
+            name: "Maison",
+            address: data.home.completeAddress,
+          })
+          setHome(data.home);
+          // console.log('homeBDD',data.home)
+        }
+        if (data.work) {
+          addressesList.push({
+            name: "Travail",
+            address: data.work.completeAddress,
+          })
+          setWork(data.work);
+          // console.log('workBDD',data.work)
+  }
 
-    if(addressesList) {
-      setAddresses(addressesList.map((data, i) => {
-        return (
-        <TouchableOpacity key={i} onPress={() => console.log('this',this)}>
-          <View key={i} style={styles.addresses}>
-            <Text style={styles.name}>{data.name}</Text>
-            <Text>{data.address}</Text>
-          </View>
+
+
+    if (addressesList) {
+    setAddresses(addressesList.map((data, i) => {
+      return (
+        <TouchableOpacity key={i} style={styles.addresses} onPress={() => determineAddress(data.name)}>
+          <Text style={styles.name}>{data.name}</Text>
+          <Text>{data.address}</Text>
         </TouchableOpacity>
-        );
-      }))
-    }
+      );
+    }))
+  }
 
-
-   
-  }).then((data) =>{
-    console.log('après fetch',(data));
-  });
+}).then(() => {
+  // console.log('Set Addresses');
+});
 
   }, [modalVisible]);
 
-  // Affichage des adresses favorites
-  // const addresses = addressesList.map((data, i) => {
-  //   return (
-  //     <View key={i} style={styles.addresses}>
-  //       <Text style={styles.name}>{data.name}</Text>
-  //       <Text>{data.address}</Text>
-  //     </View>
-  //   );
-  // });
-  
- 
 
-  return (
-    <LinearGradient
-      colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-      style={styles.linearGradient}
-    >
-      {currentPosition && (
-        <MapView
-          style={styles.map}
-          //provider={PROVIDER_GOOGLE}
 
-          initialRegion={{
-            latitude: currentPosition.latitude,
-            longitude: currentPosition.longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
-          }}
-        >
-          <Marker
-            coordinate={currentPosition}
-            title="Vous êtes ici"
-            image={require("../assets/marker.png")}
-          />
-        </MapView>
-      )}
-      <View style={styles.search}>
-        <Text style={styles.title}>Hello {user.firstname},</Text>
-        <Text style={styles.text}>Où allons-nous ?</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <View style={styles.addresse}>
-            <TextInput placeholder="Addresse" />
-            <FontAwesome name="search" size={30} color="grey"></FontAwesome>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <Modal visible={modalVisible} transparent={true} animationType="slide">
-        <LinearGradient
-          colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-          style={styles.linearGradient}
-        >
-          <SafeAreaView style={styles.container}>
-            <View style={styles.modalHeader}>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <FontAwesome name="times" size={24} color="#333" />
-              </TouchableOpacity>
-            </View>
+return (
+  <LinearGradient
+    colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+    style={styles.linearGradient}
+  >
+    {currentPosition && (
+      <MapView
+        style={styles.map}
+        //provider={PROVIDER_GOOGLE}
 
-            <View style={styles.shadowContainer}>
-              <View style={styles.profile}>
-                <View style={styles.autoDeparture}>
-                  <GooglePlacesAutocomplete
-                    placeholder="Ma position"
-                    textInputProps={{
-                      placeholderTextColor: 'grey',
-                    }}
-                    onChangeText={(value) => setDeparture(value)}
-                    value={departure}
-                    onPress={handleDepartureSelect}
-                    fetchDetails={true}
-                    query={{
-                      key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                      language: "fr",
-                      components: "country:fr",
-                    }}
-                    styles={{
-                      container: {
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 140,
-                      },
-                      textInputContainer: {
-                        height: "50%",
-                        marginHorizontal: 20,
-                        borderTopWidth: 0,
-                        borderBottomWidth: 0,
-                      },
-                      textInput: {
-                        backgroundColor: "transparent",
-                        borderBottomWidth: 1,
-                        borderColor: "black",
-                        marginBottom: 20,
-                        fontSize: 16,
-                        padding: 10,
-                        fontFamily: "OpenSans-Regular",
-                      },
-                      listView: {
-                        position: "absolute",
-                        top: 50,
-                        borderWidth: 0,
-                        //borderColor: "black",
-                        backgroundColor: "#F1C796",
-                        marginHorizontal: 20,
-                        elevation: 5,
-                        shadowColor: "#000",
-                        shadowOpacity: 0.1,
-                        shadowOffset: { x: 0, y: 0 },
-                        shadowRadius: 15,
-                        marginTop: 10,
-                      },
-                    }}
-                  />
-                </View>
-
-                <View style={styles.autoArrival}>
-                  <GooglePlacesAutocomplete
-                    placeholder="Arrivée"
-                    textInputProps={{
-                      placeholderTextColor: 'grey',
-                    }}
-                    onChangeText={(value) => setArrival(value)}
-                    value={arrival}
-                    onPress={handleArrivalSelect}
-                    fetchDetails={true}
-                    query={{
-                      key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                      language: "fr",
-                      components: "country:fr",
-                    }}
-                    styles={{
-                      container: {
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 120,
-                        
-                      },
-                      textInputContainer: {
-                        height: "50%",
-                        marginHorizontal: 20,
-                        borderTopWidth: 0,
-                        borderBottomWidth: 0,
-                        
-                      },
-                      textInput: {
-                        backgroundColor: "transparent",
-                        borderBottomWidth: 1,
-                        borderColor: "black",
-                        marginBottom: 20,
-                        fontSize: 16,
-                        padding: 10,
-                        fontFamily: "OpenSans-Regular",
-                      
-                      },
-                      listView: {
-                        position: "absolute",
-                        top: 50,
-                        borderWidth: 0.5,
-                        borderColor: "black",
-                        backgroundColor: "#F1C796",
-                        marginHorizontal: 20,
-                        elevation: 5,
-                        shadowColor: "#000",
-                        shadowOpacity: 0.1,
-                        shadowOffset: { x: 0, y: 0 },
-                        shadowRadius: 15,
-                        marginTop: 10,
-                      },
-                    }}
-                  />
-                </View>
-
-                <View style={styles.isaccompanied}>
-                  <Text style={styles.textmodal}>Je suis accompagnée</Text>
-                  <Switch
-                    trackColor={{ false: "#F1C796", true: "#F88559" }}
-                    thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={isAccompanied}
-                  />
-                </View>
-                <View style={styles.mood}>
-                  <Text style={styles.textmodal}>MOOD</Text>
-                  <View style={styles.icon}>
-                    <FontAwesome
-                      name="music"
-                      onPress={() => changeMusic()}
-                      size={25}
-                      style={iconStyleMusic}
-                    />
-                    <FontAwesome
-                      name="moon-o"
-                      onPress={() => changeMood()}
-                      size={25}
-                      style={iconStyleMood}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <ScrollView contentContainerStyle={styles.scrollView}>
-              <Text style={styles.titlemodal}>Adresses Favorites</Text>
-              {addresses}
-            </ScrollView>
-
-            <TouchableOpacity
-              onPress={() => handleValidate()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Valider</Text>
+        initialRegion={{
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        }}
+      >
+        <Marker
+          coordinate={currentPosition}
+          title="Vous êtes ici"
+          image={require("../assets/marker.png")}
+        />
+      </MapView>
+    )}
+    <View style={styles.search}>
+      <Text style={styles.title}>Hello {user.firstname},</Text>
+      <Text style={styles.text}>Où allons-nous ?</Text>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <View style={styles.addresse}>
+          <TextInput placeholder="Addresse" />
+          <FontAwesome name="search" size={30} color="grey"></FontAwesome>
+        </View>
+      </TouchableOpacity>
+    </View>
+    <Modal visible={modalVisible} transparent={true} animationType="slide">
+      <LinearGradient
+        colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+        style={styles.linearGradient}
+      >
+        <SafeAreaView style={styles.container}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <FontAwesome name="times" size={24} color="#333" />
             </TouchableOpacity>
-            <Modal
-              visible={errorModalVisible}
-              transparent={true}
-              animationType="slide"
-              onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.errorModalView}>
-                  <Text style={styles.modalText}>
-                    Veuillez renseigner une arrivée pour votre course
-                  </Text>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setErrorModalVisible(false)}
-                  >
-                    <Text style={styles.textStyle}>Fermer</Text>
-                  </TouchableOpacity>
+          </View>
+
+          <View style={styles.shadowContainer}>
+            <View style={styles.profile}>
+              <View style={styles.autoDeparture}>
+                <GooglePlacesAutocomplete
+                  placeholder="Ma position"
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
+                  onChangeText={(value) => setDeparture(value)}
+                  value={departure}
+                  onPress={handleDepartureSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 140,
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0,
+                      //borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
+
+              <View style={styles.autoArrival}>
+                <GooglePlacesAutocomplete
+                  placeholder="Arrivée"
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
+                  onChangeText={(value) => setArrival(value)}
+                  value={arrival}
+                  onPress={handleArrivalSelect}
+                  fetchDetails={true}
+                  query={{
+                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 120,
+
+                    },
+                    textInputContainer: {
+                      height: "50%",
+                      marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+
+                    },
+                    textInput: {
+                      backgroundColor: "transparent",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+
+                    },
+                    listView: {
+                      position: "absolute",
+                      top: 50,
+                      borderWidth: 0.5,
+                      borderColor: "black",
+                      backgroundColor: "#F1C796",
+                      marginHorizontal: 20,
+                      elevation: 5,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: 10,
+                    },
+                  }}
+                />
+              </View>
+
+              <View style={styles.isaccompanied}>
+                <Text style={styles.textmodal}>Je suis accompagnée</Text>
+                <Switch
+                  trackColor={{ false: "#F1C796", true: "#F88559" }}
+                  thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isAccompanied}
+                />
+              </View>
+              <View style={styles.mood}>
+                <Text style={styles.textmodal}>MOOD</Text>
+                <View style={styles.icon}>
+                  <FontAwesome
+                    name="music"
+                    onPress={() => changeMusic()}
+                    size={25}
+                    style={iconStyleMusic}
+                  />
+                  <FontAwesome
+                    name="moon-o"
+                    onPress={() => changeMood()}
+                    size={25}
+                    style={iconStyleMood}
+                  />
                 </View>
               </View>
-            </Modal>
-          </SafeAreaView>
-        </LinearGradient>
-      </Modal>
-    </LinearGradient>
-  );
+            </View>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <Text style={styles.titlemodal}>Adresses Favorites</Text>
+            {addresses}
+          </ScrollView>
+
+          <TouchableOpacity
+            onPress={() => handleValidate()}
+            style={styles.button}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.textButton}>Valider</Text>
+          </TouchableOpacity>
+          <Modal
+            visible={errorModalVisible}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.errorModalView}>
+                <Text style={styles.modalText}>
+                  Veuillez renseigner une arrivée pour votre course
+                </Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setErrorModalVisible(false)}
+                >
+                  <Text style={styles.textStyle}>Fermer</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </SafeAreaView>
+      </LinearGradient>
+    </Modal>
+  </LinearGradient>
+);
 }
 
 const styles = StyleSheet.create({
@@ -626,39 +617,39 @@ const styles = StyleSheet.create({
     padding: 30,
   },
 
- name: {
-   fontSize: 18,
-   fontWeight: "700",
- },
+  name: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
 
 
- button: {
-   height: 40,
-  //  paddingTop: 8,
-   width: "80%",
-   alignItems: "center",
-   justifyContent: 'center',
-   marginTop: 20,
-   backgroundColor: "#F88559",
-   borderRadius: 30,
-   shadowColor: "#000",
-   shadowOffset: {
-     width: 0,
-     height: 2,
-   },
-   shadowOpacity: 0.25,
-   shadowRadius: 4,
-   elevation: 5,
- },
+  button: {
+    height: 40,
+    //  paddingTop: 8,
+    width: "80%",
+    alignItems: "center",
+    justifyContent: 'center',
+    marginTop: 20,
+    backgroundColor: "#F88559",
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 
 
- textButton: {
-   color: "#fff",
-  //  height: 30,
-   fontWeight: "600",
-   fontSize: 16,
-   
- },
+  textButton: {
+    color: "#fff",
+    //  height: 30,
+    fontWeight: "600",
+    fontSize: 16,
+
+  },
 
 
   centeredView: {
