@@ -19,7 +19,9 @@ export default function ComplainScreen({ navigation }) {
         navigation.navigate("Map")
     }
 
-
+    const goBack = () => {
+        navigation.navigate("Arrival")
+    }
 
 
     return (
@@ -28,10 +30,16 @@ export default function ComplainScreen({ navigation }) {
             style={styles.linearGradient}
         >
 
+            <View style={styles.cross}>
+                <TouchableOpacity onPress={() => goBack()}>
+                    <FontAwesome name="times" size={24} color="#333" />
+                </TouchableOpacity>
+            </View>
+
             <View style={styles.container}>
 
                 <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
-                    <Text style={styles.textEmergency }>Comportement inapproprié</Text>
+                    <Text style={styles.textEmergency}>Comportement inapproprié</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.emergency} activeOpacity={0.8}>
@@ -47,7 +55,7 @@ export default function ComplainScreen({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                    <Text style={styles.textButton} onPress={()=>handleValidate()}>Valider </Text>
+                    <Text style={styles.textButton} onPress={() => handleValidate()}>Valider </Text>
                 </TouchableOpacity>
 
             </View>
@@ -61,6 +69,11 @@ const styles = StyleSheet.create({
 
     linearGradient: {
         flex: 1,
+    },
+
+    cross: {
+        marginTop: '15%',
+        marginLeft: '5%',
     },
 
     container: {

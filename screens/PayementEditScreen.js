@@ -84,10 +84,11 @@ const styles = StyleSheet.create({
   },
 
   titleTop:{
-    fontSize: 30,
+    fontSize: 40,
     color: "#473E66",
     fontFamily: "OpenSans-Regular",
     paddingBottom: '15%',
+    fontFamily: 'Ladislav-Bold',
   },
   
   container: {
@@ -103,18 +104,19 @@ const styles = StyleSheet.create({
   pay: {
     width: "80%",
     alignItems: "center",
-    marginBottom: 20,
-  },
+    marginBottom: '15%',  },
+
   paywith: {
     width: "80%",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: '15%',
   },
   text: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "Regular",
     color: "#473E66",
     marginBottom: 10,
+    fontFamily: 'Ladislav-Bold',
   },
   input: {
     width: "100%",
@@ -166,33 +168,45 @@ const styles = StyleSheet.create({
   textButton: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "Regular",
+    fontFamily: 'Ladislav-Bold',
   },
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
     
   },
+  
   modalContent: {
     backgroundColor: "white",
     padding: 22,
     alignItems: "center",
-    borderRadius: 10,
-    
+    borderRadius: 20,
+    width: '80%', // Définissez une largeur fixe pour la modale
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
+
+
   modalText: {
     fontSize: 20,
-    marginBottom: 15,
+    marginBottom: 20, // Augmente l'espace entre le texte et les boutons
     textAlign: "center",
-    
   },
-  modalButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: '70%',
 
-   
+
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Espacement automatique des boutons
+    width: '100%', // Utilisation de la largeur totale de la modale pour le conteneur
+    marginTop: 10, // Espacement au-dessus des boutons, si nécessaire
   },
+
   modalButton: {
     backgroundColor: "#F88559",
     paddingVertical: 10,

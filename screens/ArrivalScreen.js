@@ -8,15 +8,43 @@ import {
     View,
     Modal,
     TextInput,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+ 
 } from "react-native";
 
+//import LottieView from "lottie-react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 
 
 export default function ArrivalScreen({ navigation }) {
+
+    /* FONCTION POUR LES CONFETTIS
+    const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+
+    const animationProgress = useRef(new Animated.Value(0));
+
+    useEffect(() => {
+        Animated.timing(animationProgress.current, {
+            toValue: 1,
+            duration: 5000,
+            easing: Easing.linear,
+            useNativeDriver: false,
+        }).start();
+    }, []); 
+    
+    
+     <AnimatedLottieView
+                source={require("../path/to/animation.json")}
+                progress={animationProgress.current}
+                style={{ width: "100%", height: "100%" }}
+            />*/
+
+
+
+
+
 
     // DONNER LES ETATS INITIAUX DES ELEMENTS
 
@@ -54,7 +82,7 @@ export default function ArrivalScreen({ navigation }) {
     }
 
 
-// EN CAS DE COMMENTAIRE DANS LA MODAL - ENVOI DANS LE BACK END DU COMMENT
+    // EN CAS DE COMMENTAIRE DANS LA MODAL - ENVOI DANS LE BACK END DU COMMENT
     const handleComment = () => {
         fetch("https://huguette-backend.vercel.app/reviews", {
             method: "POST",
@@ -96,6 +124,8 @@ export default function ArrivalScreen({ navigation }) {
             style={styles.linearGradient}
         >
 
+           
+
             <View style={styles.container}>
                 <Text style={styles.title}>Vous êtes arrivée ! </Text>
 
@@ -117,7 +147,7 @@ export default function ArrivalScreen({ navigation }) {
                     <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleValidate()}>
                         <Text style={styles.textButton} >Valider </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => handleComplain()}>
+                    <TouchableOpacity style={styles.signalButton} activeOpacity={0.8} onPress={() => handleComplain()}>
                         <Text style={styles.textButton} >Signaler </Text>
                     </TouchableOpacity>
                 </View>
@@ -127,13 +157,13 @@ export default function ArrivalScreen({ navigation }) {
                     colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
                     style={styles.linearGradient}
                 >
-                    <View style={styles.containerModal}>
                         <View style={styles.modalHeader}>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <FontAwesome name="times" size={24} color="#333" />
                             </TouchableOpacity>
                         </View>
 
+                    <View style={styles.containerModal}>
                         <Text style={styles.textModal} >On vous écoute...</Text>
 
                         <KeyboardAvoidingView>
@@ -232,6 +262,25 @@ const styles = StyleSheet.create({
 
     },
 
+    signalButton: {
+        height: 40,
+        width: "60%",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        backgroundColor: "#EBB2B5",
+        borderRadius: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+
+    },
+
     textButton: {
         color: "#fff",
         fontWeight: "600",
@@ -244,6 +293,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         margin: '5%',
+    },
+
+    modalHeader: {
+        marginTop: '15%',
+        marginLeft: '5%',
     },
 
     textModal: {
