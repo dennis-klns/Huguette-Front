@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -144,10 +144,10 @@ export default function MapPositionScreen({ navigation }) {
       }
     })();
   }, []); */
-  /* 
+
   useEffect(() => {
     setMarkerPosition({ latitude: trip.latitude, longitude: trip.longitude });
-  }, []); */
+  }, []);
 
   return (
     <LinearGradient
