@@ -1,14 +1,5 @@
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -23,19 +14,20 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("SignIn");
   };
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: "#ffffff",
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: "#ffffff",
 
-      // Paddings to handle safe area
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      
-    }}>
+        // Paddings to handle safe area
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}
+    >
       <Image
         source={require("../assets/huguette.png")}
         resizeMode="cover"
@@ -68,7 +60,6 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   image: {
     height: "120%",
     width: "100%",
@@ -77,7 +68,7 @@ const styles = StyleSheet.create({
 
   title: {
     width: "80%",
-    fontSize: 38,
+    fontSize: 80,
     fontFamily: "Ladislav-Bold",
     fontWeight: "600",
     textAlign: "center",
@@ -96,6 +87,7 @@ const styles = StyleSheet.create({
   textgroup: {
     flex: 1,
     justifyContent: "flex-start",
+    alignItems: "center",
     margin: "4%",
   },
 
