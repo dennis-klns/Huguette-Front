@@ -16,8 +16,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [homeUpdate, setHomeUpdate] = useState(null);
-  const [workUpdate, setWorkUpdate] = useState(null);
+  const [homeUpdate, setHomeUpdate] = useState({});
+  const [workUpdate, setWorkUpdate] = useState({});
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -25,9 +25,16 @@ export default function FavoritAdresses({ navigation }) {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const handleHome = () => {
-    console.log("Adresse domicile:", homeUpdate);
-  };
+
+  /*   const handleHome = (data, details) => {
+    console.log("Data départ:", data);
+    console.log("Details départ:", details.geometry?.location);
+    setHomeUpdate({
+      latitude: details.geometry?.location.lat,
+      longitude: details.geometry?.location.lng,
+      completeAddress: data.description,
+    });
+  }; */
 
   const handleWork = () => {
     console.log("Adresse travail:", workUpdate);
@@ -61,7 +68,7 @@ export default function FavoritAdresses({ navigation }) {
                   placeholder="Adresse Domicile"
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
-                  onPress={() => handleHome()}
+                  //onPress={() => handleHome()}
                   fetchDetails={true}
                   query={{
                     key: GOOGLE_PLACES_API_KEY,
