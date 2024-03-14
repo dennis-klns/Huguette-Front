@@ -1,7 +1,7 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
-import { useSelector} from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,13 +14,37 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [homeUpdate, setHomeUpdate] = useState({});
   const [workUpdate, setWorkUpdate] = useState({});
 
-const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+  
+    const loadFavoriteAddresses = async () => {
+      fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+
+          if (data.result) {
+            setHomeUpdate(data.home ? data.home.completeAddress : "");
+            setWorkUpdate(data.work ? data.work.completeAddress : "");
+          } else {
+            console.error("Failed to load addresses:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    loadFavoriteAddresses()
+  }, //[user.token]
+  );
+
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -48,22 +72,16 @@ const user = useSelector((state) => state.user.value);
     });
   };
 
-
   const setNewAddress = () => {
-
-    console.log(user.token)
-    console.log(homeUpdate)
-    console.log(workUpdate)
-
 
     fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        token : user.token,
+        token: user.token,
         longitudeH: homeUpdate.longitude,
-        latitudeH : homeUpdate.latitude,
-        longitudeW : workUpdate.longitude,
+        latitudeH: homeUpdate.latitude,
+        longitudeW: workUpdate.longitude,
         latitudeW: workUpdate.latitude,
       }),
     })
@@ -75,7 +93,7 @@ const user = useSelector((state) => state.user.value);
           console.error("Update Addresses Failed:", data.error);
         }
       });
-      setModalVisible(false)
+    setModalVisible(false)
   }
 
   return (
@@ -91,7 +109,7 @@ const user = useSelector((state) => state.user.value);
         <View style={styles.container}>
           <SafeAreaView>
             <TouchableOpacity onPress={() => handleBack()}>
-              <FontAwesome name="times" size={20} color="#333" />
+              <FontAwesome name="times" size={30} color="#333" />
             </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Adresses favorites</Text>
@@ -103,7 +121,7 @@ const user = useSelector((state) => state.user.value);
                   <Text style={styles.text}>Maison</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Domicile"
+                  placeholder={homeUpdate.toString()}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
                   onPress={handleHome}
@@ -119,7 +137,7 @@ const user = useSelector((state) => state.user.value);
                       alignItems: "center",
                       width: "100%",
                       // height:'50%',
-                      zIndex: 1,
+                      // zIndex: 1,
                       // backgroundColor:'red',
                     },
                     textInputContainer: {
@@ -130,7 +148,7 @@ const user = useSelector((state) => state.user.value);
                     },
                     textInput: {
                       width: "100%",
-                      // backgroundColor: "black",
+                      backgroundColor: "transparent",
                       borderBottomWidth: 1,
                       borderColor: "black",
                       marginBottom: 20,
@@ -150,6 +168,7 @@ const user = useSelector((state) => state.user.value);
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
                       marginTop: "10%",
+                      zIndex: 140,
                     },
                   }}
                 />
@@ -161,7 +180,7 @@ const user = useSelector((state) => state.user.value);
                   <Text style={styles.text}>Bureau</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Travail"
+                  placeholder={workUpdate.toString()}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
                   onPress={handleWork}
@@ -188,7 +207,7 @@ const user = useSelector((state) => state.user.value);
                     },
                     textInput: {
                       width: "100%",
-                      // backgroundColor: "black",
+                      backgroundColor: "transparent",
                       borderBottomWidth: 1,
                       borderColor: "black",
                       marginBottom: 20,
@@ -214,17 +233,6 @@ const user = useSelector((state) => state.user.value);
               </View>
             </View>
 
-            {/* <View style={styles.body} activeOpacity={0.3}>
-        <View style={styles.body2}>
-          <View style={styles.logoContainer}>
-            <FontAwesome name="car" size={25} color="#3e3e3e" />
-          </View>
-          <View style={styles.bar12}>
-            <Text style={styles.textEmergency}>Travail</Text>
-          </View>
-        </View>
-        <TextInput style={styles.input} placeholder='adresse travail'></TextInput>
-      </View> */}
 
             <TouchableOpacity
               onPress={() => toggleModal()}
@@ -276,6 +284,10 @@ const styles = StyleSheet.create({
   work: {
     zIndex: 0,
   },
+
+  home: {
+    zIndex: 140,
+  },
   title: {
     paddingTop: "10%",
     fontSize: 40,
@@ -285,9 +297,8 @@ const styles = StyleSheet.create({
   },
 
   adressesContainer: {
-    marginTop: "3%",
-    height: "50%",
-
+    marginTop: "20%",
+    height: "40%",
     justifyContent: "space-around",
   },
 
