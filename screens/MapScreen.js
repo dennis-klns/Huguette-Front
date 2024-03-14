@@ -31,11 +31,11 @@ import {
   addTripId,
 } from "../reducers/trip";
 
-import { addHome, addWork } from '../reducers/users'
+import { addHome, addWork } from '../reducers/user'
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
-  //const [addresses, setAddresses] = useState("");
+
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState({});
@@ -224,18 +224,10 @@ export default function MapScreen({ navigation }) {
           dispatch(addWork(data.work))
   }
 
-    if (!addressesList) {
-      setAddresses(
-     
-      <View>
-      <Text style={styles.name}>Vous n'avez pas d'adresse favorite</Text>
-      </View>
-    
-      )
-    } else {
+    if (addressesList) {
     setAddresses(addressesList.map((data, i) => {
       return (
-        <TouchableOpacity key={i} style={styles.addresses} onPress={() => setArrival()}>
+        <TouchableOpacity key={i} style={styles.addresses}>
           <Text style={styles.name}>{data.name}</Text>
           <Text>{data.address}</Text>
         </TouchableOpacity>
