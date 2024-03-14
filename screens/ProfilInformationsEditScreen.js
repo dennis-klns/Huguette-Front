@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -202,158 +204,168 @@ export default function ProfilInformations({ navigation }) {
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.closeIcon}>
-          <TouchableOpacity onPress={() => handleBack()}>
-            <FontAwesome name="times" size={30} color="#333" />
-          </TouchableOpacity>
-        </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} // Comportement différent pour iOS et Android
+        keyboardVerticalOffset={Platform.OS === "ios" ? 500 : 0} // Offset supplémentaire pour Android
+      >
+        <SafeAreaView style={styles.container}>
+          <View style={styles.closeIcon}>
+            <TouchableOpacity onPress={() => handleBack()}>
+              <FontAwesome name="times" size={30} color="#333" />
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.profilContainer} activeOpacity={0.3}>
-          <View style={styles.profile}>
-            <View>
-              <Text style={styles.titleTop}>Profil</Text>
-            </View>
-            <View>
-              <TouchableOpacity onPress={togglePhotoModal}>
-                <Image
-                  source={
-                    profilePicture.picture
-                      ? { uri: profilePicture.picture }
-                      : require("../assets/profilpicturephoto.png")
-                  }
-                  style={styles.photo}
-                />
-              </TouchableOpacity>
+          <View style={styles.profilContainer} activeOpacity={0.3}>
+            <View style={styles.profile}>
+              <View>
+                <Text style={styles.titleTop}>Profil</Text>
+              </View>
+              <View>
+                <TouchableOpacity onPress={togglePhotoModal}>
+                  <Image
+                    source={
+                      profilePicture.picture
+                        ? { uri: profilePicture.picture }
+                        : require("../assets/profilpicturephoto.png")
+                    }
+                    style={styles.photo}
+                  />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  setPhotoUri(null); // Réinitialise photoUri à null pour une nouvelle prise de photo
-                  setIsCameraVisible(true); // Affiche le modal de la caméra
-                }}
-                style={styles.button}
-              >
-                <Text style={styles.textButton}>Prendre une photo</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setPhotoUri(null); // Réinitialise photoUri à null pour une nouvelle prise de photo
+                    setIsCameraVisible(true); // Affiche le modal de la caméra
+                  }}
+                  style={styles.button}
+                >
+                  <Text style={styles.textButton}>Prendre une photo</Text>
+                </TouchableOpacity>
 
-              <Modal isVisible={isCameraVisible} style={styles.modal}>
-                <View style={styles.modalContent}>
-                  {hasPermission && !photoUri && (
-                    <Camera
-                      style={styles.camera}
-                      type={type}
-                      ref={cameraRef}
-                      flashMode={flashMode}
-                    >
-                      <View style={styles.cameraContent}>
+                <Modal isVisible={isCameraVisible} style={styles.modal}>
+                  <View style={styles.modalContent}>
+                    {hasPermission && !photoUri && (
+                      <Camera
+                        style={styles.camera}
+                        type={type}
+                        ref={cameraRef}
+                        flashMode={flashMode}
+                      >
+                        <View style={styles.cameraContent}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              setType(
+                                type === CameraType.back
+                                  ? CameraType.front
+                                  : CameraType.back
+                              )
+                            }
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="rotate-right"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={handleTakePhoto}
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="camera"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => setIsCameraVisible(false)}
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="times"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </Camera>
+                    )}
+
+                    {photoUri && (
+                      <View style={styles.modalContent}>
+                        <Image
+                          source={{ uri: photoUri }}
+                          style={{ width: 300, height: 300 }}
+                        />
                         <TouchableOpacity
-                          onPress={() =>
-                            setType(
-                              type === CameraType.back
-                                ? CameraType.front
-                                : CameraType.back
-                            )
-                          }
-                          style={styles.cameraButton}
+                          onPress={handleValidation}
+                          style={styles.modalButton}
                         >
-                          <FontAwesome
-                            name="rotate-right"
-                            size={25}
-                            color="#ffffff"
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={handleTakePhoto}
-                          style={styles.cameraButton}
-                        >
-                          <FontAwesome
-                            name="camera"
-                            size={25}
-                            color="#ffffff"
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => setIsCameraVisible(false)}
-                          style={styles.cameraButton}
-                        >
-                          <FontAwesome name="times" size={25} color="#ffffff" />
+                          <Text style={styles.textButton}>Valider</Text>
                         </TouchableOpacity>
                       </View>
-                    </Camera>
-                  )}
-
-                  {photoUri && (
-                    <View style={styles.modalContent}>
-                      <Image
-                        source={{ uri: photoUri }}
-                        style={{ width: 300, height: 300 }}
-                      />
-                      <TouchableOpacity
-                        onPress={handleValidation}
-                        style={styles.modalButton}
-                      >
-                        <Text style={styles.textButton}>Valider</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </Modal>
-
-              <TouchableOpacity onPress={pickImage} style={styles.button}>
-                <Text style={styles.textButton}>Importer une photo</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.textContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.title}>Modifiez vos informations :</Text>
-              </View>
-              <TextInput
-                style={styles.text2}
-                placeholder={user.firstname}
-                value={updatedFirstname}
-                onChangeText={setUpdatedFirstname}
-              />
-              <TextInput
-                style={styles.text2}
-                placeholder={user.lastname}
-                value={updatedLastname}
-                onChangeText={setUpdatedLastname}
-              />
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  onPress={() => toggleModalValider()}
-                  style={styles.buttonValidate}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.textButton}>Valider</Text>
-                </TouchableOpacity>
-                <Modal isVisible={isModalVisible} style={styles.modal}>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.modalText}>
-                      Voulez-vous valider vos modifications ?
-                    </Text>
-                    <View style={styles.modalButtonContainer}>
-                      <TouchableOpacity
-                        onPress={() => handleEditInformations()}
-                        style={styles.modalButton}
-                      >
-                        <Text style={styles.textModal}>Oui</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => setModalVisible(false)}
-                        style={styles.modalButton}
-                      >
-                        <Text style={styles.textModal}>Non</Text>
-                      </TouchableOpacity>
-                    </View>
+                    )}
                   </View>
                 </Modal>
+
+                <TouchableOpacity onPress={pickImage} style={styles.button}>
+                  <Text style={styles.textButton}>Importer une photo</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.textContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.title}>Modifiez vos informations :</Text>
+                </View>
+                <TextInput
+                  style={styles.text2}
+                  placeholder={user.firstname}
+                  value={updatedFirstname}
+                  onChangeText={setUpdatedFirstname}
+                />
+                <TextInput
+                  style={styles.text2}
+                  placeholder={user.lastname}
+                  value={updatedLastname}
+                  onChangeText={setUpdatedLastname}
+                />
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    onPress={() => toggleModalValider()}
+                    style={styles.buttonValidate}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.textButton}>Valider</Text>
+                  </TouchableOpacity>
+                  <Modal isVisible={isModalVisible} style={styles.modal}>
+                    <View style={styles.modalContent}>
+                      <Text style={styles.modalText}>
+                        Voulez-vous valider vos modifications ?
+                      </Text>
+                      <View style={styles.modalButtonContainer}>
+                        <TouchableOpacity
+                          onPress={() => handleEditInformations()}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.textModal}>Oui</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => setModalVisible(false)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.textModal}>Non</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </Modal>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -366,12 +378,13 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    alignItems: "center",
+
     justifyContent: "flex-start",
   },
 
   closeIcon: {
     width: "90%",
+    paddingLeft: "3%",
   },
 
   titleTop: {
