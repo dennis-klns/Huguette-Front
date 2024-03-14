@@ -148,11 +148,11 @@ export default function MapScreen({ navigation }) {
   let iconStyleMusic = {};
   let iconStyleMood = {};
   if (music) {
-    iconStyleMusic = { color: "#EBB2B5" };
+    iconStyleMusic = { color: "#F88559" };
   }
 
   if (mood) {
-    iconStyleMood = { color: "#EBB2B5" };
+    iconStyleMood = { color: "#F88559" };
   }
 
   const handleValidate = () => {
@@ -323,6 +323,9 @@ export default function MapScreen({ navigation }) {
                 <View style={styles.autoDeparture}>
                   <GooglePlacesAutocomplete
                     placeholder="Ma position"
+                    textInputProps={{
+                      placeholderTextColor: 'grey',
+                    }}
                     onChangeText={(value) => setDeparture(value)}
                     value={departure}
                     onPress={handleDepartureSelect}
@@ -374,6 +377,9 @@ export default function MapScreen({ navigation }) {
                 <View style={styles.autoArrival}>
                   <GooglePlacesAutocomplete
                     placeholder="Arrivée"
+                    textInputProps={{
+                      placeholderTextColor: 'grey',
+                    }}
                     onChangeText={(value) => setArrival(value)}
                     value={arrival}
                     onPress={handleArrivalSelect}
@@ -388,12 +394,14 @@ export default function MapScreen({ navigation }) {
                         justifyContent: "center",
                         alignItems: "center",
                         zIndex: 120,
+                        
                       },
                       textInputContainer: {
                         height: "50%",
                         marginHorizontal: 20,
                         borderTopWidth: 0,
                         borderBottomWidth: 0,
+                        
                       },
                       textInput: {
                         backgroundColor: "transparent",
@@ -403,6 +411,7 @@ export default function MapScreen({ navigation }) {
                         fontSize: 16,
                         padding: 10,
                         fontFamily: "OpenSans-Regular",
+                      
                       },
                       listView: {
                         position: "absolute",
@@ -425,7 +434,7 @@ export default function MapScreen({ navigation }) {
                 <View style={styles.isaccompanied}>
                   <Text style={styles.textmodal}>Je suis accompagnée</Text>
                   <Switch
-                    trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
+                    trackColor={{ false: "#F1C796", true: "#F88559" }}
                     thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
@@ -578,7 +587,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     textAlign: "center",
-    color: "red",
   },
 
   autoDeparture: {
@@ -633,36 +641,40 @@ const styles = StyleSheet.create({
     padding: 30,
   },
 
-  name: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
+ name: {
+   fontSize: 18,
+   fontWeight: "700",
+ },
 
-  button: {
-    height: 40,
-    paddingTop: 8,
-    width: "80%",
-    alignItems: "center",
-    marginTop: 20,
-    backgroundColor: "#F88559",
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
 
-  textButton: {
-    color: "#fff",
-    height: 30,
-    fontWeight: "600",
-    fontSize: 16,
-    fontFamily: "OpenSans-Regular",
-  },
+ button: {
+   height: 40,
+  //  paddingTop: 8,
+   width: "80%",
+   alignItems: "center",
+   justifyContent: 'center',
+   marginTop: 20,
+   backgroundColor: "#F88559",
+   borderRadius: 30,
+   shadowColor: "#000",
+   shadowOffset: {
+     width: 0,
+     height: 2,
+   },
+   shadowOpacity: 0.25,
+   shadowRadius: 4,
+   elevation: 5,
+ },
+
+
+ textButton: {
+   color: "#fff",
+  //  height: 30,
+   fontWeight: "600",
+   fontSize: 16,
+   
+ },
+
 
   centeredView: {
     flex: 1,

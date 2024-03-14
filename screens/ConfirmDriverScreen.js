@@ -130,6 +130,6 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "600",
         fontSize: 16,
-        fontFamily: "Ladislav-Bold",
+        // fontFamily: "Ladislav-Bold",
     },
 });
