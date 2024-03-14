@@ -15,7 +15,7 @@ import {
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
-import { addPicture } from "../reducers/user";
+import { addPicture, updateFirstname, updateLastname } from "../reducers/user";
 
 export default function ProfilInformations({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -28,8 +28,8 @@ export default function ProfilInformations({ navigation }) {
   const [isModalVisible3, setModalVisible3] = useState(false);
   const [CameraVisible, setCameraVisible] = useState(false);
 
-  const [firstname, setFirstname] = useState(user.firstname);
-  const [lastname, setLastname] = useState(user.lastname);
+  const [updatedFirstname, setUpdatedFirstname] = useState(user.firstname);
+  const [updatedLastname, setUpdatedLastname] = useState(user.lastname);
 
   const togglePhotoModal = () => {
     setPhotoModalVisible(!isPhotoModalVisible);
@@ -174,6 +174,29 @@ export default function ProfilInformations({ navigation }) {
     }
   };
 
+  const handleEditInformations = () => {
+    setModalVisible(false), dispatch(updateFirstname(updatedFirstname));
+    dispatch(updateLastname(updatedLastname));
+    fetch("https://huguette-backend.vercel.app/users/personalInfos", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tokenPassenger: user.token,
+        firstname: updatedFirstname,
+        lastname: updatedLastname,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Réponse du backend :", data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la validation des informations :", error);
+      });
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -288,14 +311,14 @@ export default function ProfilInformations({ navigation }) {
               <TextInput
                 style={styles.text2}
                 placeholder={user.firstname}
-                value={firstname}
-                onChangeText={setFirstname}
+                value={updatedFirstname}
+                onChangeText={setUpdatedFirstname}
               />
               <TextInput
                 style={styles.text2}
                 placeholder={user.lastname}
-                value={lastname}
-                onChangeText={setLastname}
+                value={updatedLastname}
+                onChangeText={setUpdatedLastname}
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -312,7 +335,7 @@ export default function ProfilInformations({ navigation }) {
                     </Text>
                     <View style={styles.modalButtonContainer}>
                       <TouchableOpacity
-                        onPress={() => setModalVisible(false)}
+                        onPress={() => handleEditInformations()}
                         style={styles.modalButton}
                       >
                         <Text style={styles.textModal}>Oui</Text>

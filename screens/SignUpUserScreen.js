@@ -121,7 +121,7 @@ export default function SignUpUserScreen({ navigation }) {
   };
 
   const validateName = (value, setName, setIsValid) => {
-    const nameRegex = /^[A-Za-z\u00C0-\u00FF]+$/;
+    const nameRegex = /^[A-Za-z\u00C0-\u00FF]+(?: [A-Za-z\u00C0-\u00FF]+)*$/;
     setName(value);
     setIsValid(nameRegex.test(value) || value === "");
   };
@@ -173,6 +173,12 @@ export default function SignUpUserScreen({ navigation }) {
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
+          <View style={styles.closeIcon}>
+          <TouchableOpacity onPress={handleBack}>
+            <FontAwesome name="times" size={30} color="#333" />
+          </TouchableOpacity>
+        </View>
+
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollView}
@@ -366,9 +372,9 @@ export default function SignUpUserScreen({ navigation }) {
                 />
               </View>
             </Modal>
-            <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
+            {/* <TouchableOpacity onPress={handleBack} style={styles.button2} activeOpacity={0.8}>
               <Text style={styles.textButton2}>Retour</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
@@ -380,6 +386,11 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
   },
+
+  closeIcon:{
+    paddingLeft: '5%',
+    paddingTop: '15%',
+   },
 
   container: {
     flex: 1,
@@ -406,7 +417,7 @@ const styles = StyleSheet.create({
   paywith: {
     width: "100%",
     alignItems: "center",
-    marginBottom: '20%',
+    marginBottom: '15%',
    
   },
 
@@ -477,7 +488,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    
+    marginBottom: '10%',
   },
 
   button2: {
@@ -499,13 +510,6 @@ const styles = StyleSheet.create({
     marginBottom: '10%',
   },
 
-
-  textButton: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 16,
-   
-  },
 
   textButton2: {
     color: "#fff",
