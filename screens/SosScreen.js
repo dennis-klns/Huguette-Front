@@ -151,14 +151,6 @@ export default function SosScreen({ navigation }) {
       <TouchableOpacity style={styles.emergency} activeOpacity={0.8} onPress={makePhoneCall}>
         <Text style={styles.textEmergency}>Appel d'urgence</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.8}
-        onPress={() => handleValidate()}
-      >
-        <Text style={styles.textButton}>Retour</Text>
-      </TouchableOpacity>
     </View>
   </LinearGradient>
 );
@@ -178,8 +170,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: '30%',
+    justifyContent: 'center',
+    paddingBottom :'30%',
+  
   },
 
   emergency: {

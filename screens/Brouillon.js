@@ -31,38 +31,22 @@ import {
   addTripId,
 } from "../reducers/trip";
 
-export default function MapScreen({ navigation }) {
+export default function WaitingDriverConfirmedScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
   const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState({});
   const [isAccompanied, setIsAccompanied] = useState(false);
   const [mood, setMood] = useState(false);
   const [music, setMusic] = useState(false);
+  const [isModalVisible, setisModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  
 
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
-
-
-  const handleMapScreen = () => {
-    navigation.navigate('TabNavigator', { screen: 'Map'});
-
-}
-
-useEffect(() => {
-  // Démarre un compte à rebours au chargement du composant
-  const timer = setTimeout(() => {
-    navigation.navigate("Route"); // Navigue vers la page ConfirmDriver après 2 secondes
-  }, 3000); // 2000 millisecondes = 2 secondes
-
-  return () => clearTimeout(timer); // Nettoie le timer si le composant est démonté avant que le timer se termine
-}, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter
-
-
 
   // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
   const addressesList = [
@@ -76,7 +60,96 @@ useEffect(() => {
     },
   ];
 
+  // const toggleModal = () => {
+  //   setisModalVisible(prev => !prev);
+  // };
 
+  // Récupération des données lat,long du départ et de l'arrivée
+  // const handleDepartureSelect = (data, details) => {
+  //   console.log("Data départ:", data);
+  //   console.log("Details départ:", details.geometry?.location);
+  //   setDeparture({
+  //     latitude: details.geometry?.location.lat,
+  //     longitude: details.geometry?.location.lng,
+  //     completeAddress: data.description,
+  //   });
+  // };
+
+  // const handleArrivalSelect = (data, details) => {
+  //   console.log("Data arrivée:", data);
+  //   console.log("Details arrivée:", details.geometry?.location);
+  //   setArrival({
+  //     latitude: details.geometry?.location.lat,
+  //     longitude: details.geometry?.location.lng,
+  //     completeAddress: data.description,
+  //   });
+  // };
+
+  const toggleSwitch = () => {
+    setIsAccompanied((previousState) => !previousState);
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("IsAccompanied changed:", data);
+        } else {
+          console.error("Failed IsAccompanied:", data.error);
+        }
+      }); */
+  };
+
+  const changeMood = () => {
+    setMood((previousState) => !previousState);
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Mood changed:", data);
+        } else {
+          console.error("Failed Mood:", data.error);
+        }
+      }); */
+  };
+
+  const changeMusic = () => {
+    setMusic((previousState) => !previousState);
+    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isAccompanied: isAccompanied,
+        token: user.token,
+        music: music,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Music changed:", data);
+        } else {
+          console.error("Failed Music:", data.error);
+        }
+      }); */
+  };
 
   let iconStyleMusic = {};
   let iconStyleMood = {};
@@ -94,6 +167,7 @@ useEffect(() => {
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
 
+   
 
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
@@ -206,6 +280,10 @@ useEffect(() => {
     );
   });
 
+  const handleRoute = () => {
+    navigation.navigate("Route")
+    };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -219,8 +297,8 @@ useEffect(() => {
           initialRegion={{
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
+            latitudeDelta: 0.109,
+            longitudeDelta: 0.109,
           }}
         >
           <Marker
@@ -231,50 +309,28 @@ useEffect(() => {
         </MapView>
       )}
       <ScrollView >
-        
       <View style={styles.search}>
         <Text style={styles.title}>Votre chauffeuse Margueritte est en route !</Text>
         <Text style={styles.text}>Temps estimé : 4 minutes</Text>
         <View style={styles.buttonContainer}>
-           <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonScreen}>
-                <Text style={styles.textButton}>Contacter</Text>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={() => setModalVisible2(true)} style={styles.buttonScreen}>
-                <Text style={styles.textButton}>Annuler</Text>
-           </TouchableOpacity>
+              {/* <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={toggleModal}>
+                    <Text style={styles.textButton} >Contacter</Text>
+               </TouchableOpacity> */}
+               <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => setModalVisible(true)} >
+                       <Text style={styles.textButton}>Contacter</Text>
+               </TouchableOpacity >
+            
+               <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>handleValidate()}>
+                    <Text style={styles.textButton} >Annuler</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>handleRoute()}>
+                    <Text style={styles.textButton} >suivant / </Text>
+                </TouchableOpacity>
+        </View>
        </View>
-      <Modal visible={modalVisible} transparent={true} animationType="slide">
-         <View style={styles.centeredView}>
-            <View style={styles.modalContent}>
-               <Text style={styles.modalText}>Voulez-vous contacter votre chauffeur ?</Text>
-                  <View style={styles.buttonModalContainer}> 
-                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-                        <Text style={styles.textModal}>Message</Text>
-                     </TouchableOpacity>
-                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-                      <Text style={styles.textModal}>Fermer</Text>
-                     </TouchableOpacity>
-                  </View>
-              </View>    
-        </View>
-    </Modal>
-    <Modal visible={modalVisible2} transparent={true} animationType="slide">
-         <View style={styles.centeredView}>
-            <View style={styles.modalContent}>
-               <Text style={styles.modalText}>Voulez-vous annumler votre course ?</Text>
-                  <View style={styles.buttonModalContainer}> 
-                     <TouchableOpacity style={styles.modalButton} onPress={() => handleMapScreen()} >
-                        <Text style={styles.textModal}>Oui</Text>
-                     </TouchableOpacity>
-                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible2(false)}>
-                      <Text style={styles.textModal}>Non</Text>
-                     </TouchableOpacity>
-                  </View>
-              </View>    
-        </View>
-    </Modal>
-            </View>
-    </ScrollView>
+       
+       </ScrollView>
+
     </LinearGradient>
   );
 }
@@ -306,9 +362,9 @@ const styles = StyleSheet.create({
   },
 
   search: {
-    paddingTop: '7%',
     width: "100%",
     justifyContent: "center",
+    paddingTop: '5%',
   },
 
   title: {
@@ -321,7 +377,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "400",
     margin: 10,
-    paddingTop: '2%',
     fontFamily: "Ladislav-Bold",
   },
 
@@ -397,15 +452,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 10,
     fontWeight: "600",
+    fontFamily: "Ladislav-Bold",
   },
 
-  mood: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    width: "100%",
-    margin: 30,
-  },
+
 
   icon: {
     flexDirection: "row",
@@ -431,14 +481,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer:{
-    paddingTop: '10%',
     width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
-    paddingBottom: '10%',
-    
-    
+    paddingBottom: '5%',
   },
 
   button: {
@@ -459,24 +505,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  buttonScreen: {
-    height: 40,
-    width: "40%",
-    alignItems: "center",
-    justifyContent: 'center',
-    backgroundColor: "#F88559",
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    
-  },
-
   textButton: {
     color: "#fff",
     fontWeight: "600",
@@ -484,66 +512,12 @@ const styles = StyleSheet.create({
     fontFamily: "Ladislav-Bold",
   },
 
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  errorModalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  
-
-  buttonClose: {
-    backgroundColor: "#F88559", // Couleur du bouton pour fermer la modale, ajustable
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-
-  // modalContent: {
-  //   backgroundColor: "white",
-  //   padding: 20,
-    
-  //   alignItems: "center",
-  //   borderRadius: 10,
-  //   borderColor: "rgba(0, 0, 0, 0.1)",
-  //   shadowColor: "#000",
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2,
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-  //   elevation: 5,
-  // },
-
   modalContent: {
     backgroundColor: "white",
     padding: 20,
     alignItems: "center",
-    borderRadius: 20,
-    width: '80%', // Définissez une largeur fixe pour la modale pour un meilleur contrôle
+    borderRadius: 10,
+    borderColor: "rgba(0, 0, 0, 0.1)",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -554,24 +528,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   
-  // modalText: {
-  //   fontSize: 20,
-  //   marginBottom: 15,
-  //   textAlign: "center",
-  // },
-
   modalText: {
     fontSize: 20,
-    marginBottom: 20, // Augmentez l'espacement entre le texte et les boutons
+    marginBottom: 15,
     textAlign: "center",
-  },
-
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
   },
   
   modalButtonContainer: {
@@ -580,19 +540,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   
-  // buttonModalContainer:{
-  //   flexDirection: 'row',
-  //   width: '50%',
-  //   backgroundColor: 'blue',
-  // },
-
-  buttonModalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around', // Cela va espacer les boutons automatiquement
-    width: '100%', // Utilisez la largeur totale de la modale pour le conteneur des boutons
-    marginTop: 10, // Ajoutez un peu d'espace au-dessus des boutons si nécessaire
-  },
-
   modalButton: {
     backgroundColor: "#F88559",
     paddingVertical: 10,
