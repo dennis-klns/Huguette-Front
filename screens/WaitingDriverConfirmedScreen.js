@@ -36,7 +36,6 @@ export default function MapScreen({ navigation }) {
   //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
 
   const handleMapScreen = () => {
