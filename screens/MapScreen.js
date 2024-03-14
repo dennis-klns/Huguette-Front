@@ -532,8 +532,6 @@ const styles = StyleSheet.create({
     height: "70%",
   },
 
-
-
   addresse: {
     width: "95%",
     height: "30%",
