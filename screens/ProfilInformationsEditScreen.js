@@ -347,22 +347,23 @@ export default function ProfilInformations({ navigation }) {
                       </Camera>
                     )}
 
-                    {photoUri && (
-                      <View style={styles.modalContent}>
-                        <Image
-                          source={{ uri: photoUri }}
-                          style={{ width: 300, height: 300 }}
-                        />
-                        <TouchableOpacity
-                          onPress={handleValidation}
-                          style={styles.modalButton}
-                        >
-                          <Text style={styles.textButton}>Valider</Text>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                  </View>
-                </Modal>
+{photoUri && (
+  <View style={styles.modalContent}>
+    <Image source={{ uri: photoUri }} style={{ width: 300, height: 300 }} />
+    <View style={styles.modalButtonContainer}>
+      <TouchableOpacity onPress={handleValidation} style={styles.modalButton}>
+        <Text style={styles.textModal}>Valider</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {setPhotoUri(null);}}
+        style={styles.modalButton}
+      >
+        <Text style={styles.textModal}>Reprendre</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+)}
+              </View>
+            </Modal>
 
                 <TouchableOpacity onPress={pickImage} style={styles.button}>
                   <Text style={styles.textButton}>Importer une photo</Text>
