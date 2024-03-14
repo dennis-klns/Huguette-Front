@@ -35,6 +35,7 @@ export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   //const [addresses, setAddresses] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [departure, setDeparture] = useState({});
   const [arrival, setArrival] = useState({});
   const [isAccompanied, setIsAccompanied] = useState(false);
@@ -45,6 +46,23 @@ export default function MapScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
+
+
+  const handleMapScreen = () => {
+    navigation.navigate('TabNavigator', { screen: 'Map'});
+
+}
+
+useEffect(() => {
+  // Démarre un compte à rebours au chargement du composant
+  const timer = setTimeout(() => {
+    navigation.navigate("Route"); // Navigue vers la page ConfirmDriver après 2 secondes
+  }, 3000); // 2000 millisecondes = 2 secondes
+
+  return () => clearTimeout(timer); // Nettoie le timer si le composant est démonté avant que le timer se termine
+}, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter
+
+
 
   // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
   const addressesList = [
@@ -58,92 +76,7 @@ export default function MapScreen({ navigation }) {
     },
   ];
 
-  // Récupération des données lat,long du départ et de l'arrivée
-  const handleDepartureSelect = (data, details) => {
-    console.log("Data départ:", data);
-    console.log("Details départ:", details.geometry?.location);
-    setDeparture({
-      latitude: details.geometry?.location.lat,
-      longitude: details.geometry?.location.lng,
-      completeAddress: data.description,
-    });
-  };
 
-  const handleArrivalSelect = (data, details) => {
-    console.log("Data arrivée:", data);
-    console.log("Details arrivée:", details.geometry?.location);
-    setArrival({
-      latitude: details.geometry?.location.lat,
-      longitude: details.geometry?.location.lng,
-      completeAddress: data.description,
-    });
-  };
-
-  const toggleSwitch = () => {
-    setIsAccompanied((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("IsAccompanied changed:", data);
-        } else {
-          console.error("Failed IsAccompanied:", data.error);
-        }
-      }); */
-  };
-
-  const changeMood = () => {
-    setMood((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("Mood changed:", data);
-        } else {
-          console.error("Failed Mood:", data.error);
-        }
-      }); */
-  };
-
-  const changeMusic = () => {
-    setMusic((previousState) => !previousState);
-    /* fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("Music changed:", data);
-        } else {
-          console.error("Failed Music:", data.error);
-        }
-      }); */
-  };
 
   let iconStyleMusic = {};
   let iconStyleMood = {};
@@ -160,6 +93,7 @@ export default function MapScreen({ navigation }) {
       setErrorModalVisible(true); // Affiche la modale d'erreur
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
+
 
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
@@ -296,197 +230,51 @@ export default function MapScreen({ navigation }) {
           />
         </MapView>
       )}
+      <ScrollView >
+        
       <View style={styles.search}>
-        <Text style={styles.title}>Hello {user.firstname},</Text>
-        <Text style={styles.text}>Où allons-nous ?</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <View style={styles.addresse}>
-            <TextInput placeholder="Addresse" />
-            <FontAwesome name="search" size={30} color="grey"></FontAwesome>
-          </View>
-        </TouchableOpacity>
-      </View>
+        <Text style={styles.title}>Votre chauffeuse Margueritte est en route !</Text>
+        <Text style={styles.text}>Temps estimé : 4 minutes</Text>
+        <View style={styles.buttonContainer}>
+           <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonScreen}>
+                <Text style={styles.textButton}>Contacter</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() => setModalVisible2(true)} style={styles.buttonScreen}>
+                <Text style={styles.textButton}>Annuler</Text>
+           </TouchableOpacity>
+       </View>
       <Modal visible={modalVisible} transparent={true} animationType="slide">
-        <LinearGradient
-          colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-          style={styles.linearGradient}
-        >
-          <SafeAreaView style={styles.container}>
-            <View style={styles.modalHeader}>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <FontAwesome name="times" size={24} color="#333" />
-              </TouchableOpacity>
+         <View style={styles.centeredView}>
+            <View style={styles.modalContent}>
+               <Text style={styles.modalText}>Voulez-vous contacter votre chauffeur ?</Text>
+                  <View style={styles.buttonModalContainer}> 
+                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                        <Text style={styles.textModal}>Message</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                      <Text style={styles.textModal}>Fermer</Text>
+                     </TouchableOpacity>
+                  </View>
+              </View>    
+        </View>
+    </Modal>
+    <Modal visible={modalVisible2} transparent={true} animationType="slide">
+         <View style={styles.centeredView}>
+            <View style={styles.modalContent}>
+               <Text style={styles.modalText}>Voulez-vous annumler votre course ?</Text>
+                  <View style={styles.buttonModalContainer}> 
+                     <TouchableOpacity style={styles.modalButton} onPress={() => handleMapScreen()} >
+                        <Text style={styles.textModal}>Oui</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible2(false)}>
+                      <Text style={styles.textModal}>Non</Text>
+                     </TouchableOpacity>
+                  </View>
+              </View>    
+        </View>
+    </Modal>
             </View>
-
-            <View style={styles.shadowContainer}>
-            <View style={styles.profile}>
-              <View style={styles.autoDeparture}>
-                <GooglePlacesAutocomplete
-                  placeholder="Ma position"
-                  onChangeText={(value) => setDeparture(value)}
-                  value={departure}
-                  onPress={handleDepartureSelect}
-                  fetchDetails={true}
-                  query={{
-                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                    language: "fr",
-                    components: "country:fr",
-                  }}
-                  styles={{
-                    container: {
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 140,
-                    },
-                    textInputContainer: {
-                      height: "50%",
-                      marginHorizontal: 20,
-                      borderTopWidth: 0,
-                      borderBottomWidth: 0,
-                    },
-                    textInput: {
-                      backgroundColor: "transparent",
-                      borderBottomWidth: 1,
-                      borderColor: "black",
-                      marginBottom: 20,
-                      fontSize: 16,
-                      padding: 10,
-                      fontFamily: "OpenSans-Regular",
-                    },
-                    listView: {
-                      position: "absolute",
-                      top: 50,
-                      borderWidth: 0,
-                      //borderColor: "black",
-                      backgroundColor: "#F1C796",
-                      marginHorizontal: 20,
-                      elevation: 5,
-                      shadowColor: "#000",
-                      shadowOpacity: 0.1,
-                      shadowOffset: { x: 0, y: 0 },
-                      shadowRadius: 15,
-                      marginTop: 10,
-                    },
-                  }}
-                />
-              </View>
-
-              <View style={styles.autoArrival}>
-                <GooglePlacesAutocomplete
-                  placeholder="Arrivée"
-                  onChangeText={(value) => setArrival(value)}
-                  value={arrival}
-                  onPress={handleArrivalSelect}
-                  fetchDetails={true}
-                  query={{
-                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
-                    language: "fr",
-                    components: "country:fr",
-                  }}
-                  styles={{
-                    container: {
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 120,
-                    },
-                    textInputContainer: {
-                      height: "50%",
-                      marginHorizontal: 20,
-                      borderTopWidth: 0,
-                      borderBottomWidth: 0,
-                    },
-                    textInput: {
-                      backgroundColor: "transparent",
-                      borderBottomWidth: 1,
-                      borderColor: "black",
-                      marginBottom: 20,
-                      fontSize: 16,
-                      padding: 10,
-                      fontFamily: "OpenSans-Regular",
-                    },
-                    listView: {
-                      position: "absolute",
-                      top: 50,
-                      borderWidth: 0.5,
-                      borderColor: "black",
-                      backgroundColor: "#F1C796",
-                      marginHorizontal: 20,
-                      elevation: 5,
-                      shadowColor: "#000",
-                      shadowOpacity: 0.1,
-                      shadowOffset: { x: 0, y: 0 },
-                      shadowRadius: 15,
-                      marginTop: 10,
-                    },
-                  }}
-                />
-              </View>
-
-              <View style={styles.isaccompanied}>
-                <Text style={styles.textmodal}>Je suis accompagnée</Text>
-                <Switch
-                  trackColor={{ false: "#F1C796", true: "#EBB2B5" }}
-                  thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={isAccompanied}
-                />
-              </View>
-              <View style={styles.mood}>
-                <Text style={styles.textmodal}>MOOD</Text>
-                <View style={styles.icon}>
-                  <FontAwesome
-                    name="music"
-                    onPress={() => changeMusic()}
-                    size={25}
-                    style={iconStyleMusic}
-                  />
-                  <FontAwesome
-                    name="moon-o"
-                    onPress={() => changeMood()}
-                    size={25}
-                    style={iconStyleMood}
-                  />
-                </View>
-              </View>
-            </View>
-            </View>
-
-            <ScrollView contentContainerStyle={styles.scrollView}>
-              <Text style={styles.titlemodal}>Adresses Favorites</Text>
-              {addresses}
-            </ScrollView>
-
-            <TouchableOpacity
-              onPress={() => handleValidate()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Valider</Text>
-            </TouchableOpacity>
-            <Modal
-              visible={errorModalVisible}
-              transparent={true}
-              animationType="slide"
-              onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.errorModalView}>
-                  <Text style={styles.modalText}>
-                    Veuillez renseigner une arrivée pour votre course
-                  </Text>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setErrorModalVisible(false)}
-                  >
-                    <Text style={styles.textStyle}>Fermer</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-          </SafeAreaView>
-        </LinearGradient>
-      </Modal>
+    </ScrollView>
     </LinearGradient>
   );
 }
@@ -518,9 +306,9 @@ const styles = StyleSheet.create({
   },
 
   search: {
+    paddingTop: '7%',
     width: "100%",
     justifyContent: "center",
-    margin: 10,
   },
 
   title: {
@@ -533,6 +321,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "400",
     margin: 10,
+    paddingTop: '2%',
+    fontFamily: "Ladislav-Bold",
   },
 
   // DEBUT DES ELEMENTS DE LA MODAL
@@ -640,11 +430,22 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
+  buttonContainer:{
+    paddingTop: '10%',
+    width: '100%',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingBottom: '10%',
+    
+    
+  },
+
   button: {
     height: 40,
-    paddingTop: 8,
-    width: "80%",
+    width: "60%",
     alignItems: "center",
+    justifyContent: 'center',
     marginTop: 20,
     backgroundColor: "#F88559",
     borderRadius: 30,
@@ -658,12 +459,29 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
+  buttonScreen: {
+    height: 40,
+    width: "40%",
+    alignItems: "center",
+    justifyContent: 'center',
+    backgroundColor: "#F88559",
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    
+  },
+
   textButton: {
     color: "#fff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
-    fontFamily: "OpenSans-Regular",
+    fontFamily: "Ladislav-Bold",
   },
 
   centeredView: {
@@ -687,11 +505,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 16, // Vous pouvez ajuster la taille du texte ici
-  },
+  
+
   buttonClose: {
     backgroundColor: "#F88559", // Couleur du bouton pour fermer la modale, ajustable
     borderRadius: 20,
@@ -705,4 +520,104 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
+  // modalContent: {
+  //   backgroundColor: "white",
+  //   padding: 20,
+    
+  //   alignItems: "center",
+  //   borderRadius: 10,
+  //   borderColor: "rgba(0, 0, 0, 0.1)",
+  //   shadowColor: "#000",
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2,
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
+
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+    borderRadius: 20,
+    width: '80%', // Définissez une largeur fixe pour la modale pour un meilleur contrôle
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  
+  // modalText: {
+  //   fontSize: 20,
+  //   marginBottom: 15,
+  //   textAlign: "center",
+  // },
+
+  modalText: {
+    fontSize: 20,
+    marginBottom: 20, // Augmentez l'espacement entre le texte et les boutons
+    textAlign: "center",
+  },
+
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  
+  // buttonModalContainer:{
+  //   flexDirection: 'row',
+  //   width: '50%',
+  //   backgroundColor: 'blue',
+  // },
+
+  buttonModalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Cela va espacer les boutons automatiquement
+    width: '100%', // Utilisez la largeur totale de la modale pour le conteneur des boutons
+    marginTop: 10, // Ajoutez un peu d'espace au-dessus des boutons si nécessaire
+  },
+
+  modalButton: {
+    backgroundColor: "#F88559",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  
+  // Ajoutez un style pour le texte des boutons dans la modale
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  
+  textModal: {
+    color: 'white',
+  },
+  
+
 });

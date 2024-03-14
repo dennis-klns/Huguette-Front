@@ -96,6 +96,11 @@ export default function SignUpUserScreen({ navigation }) {
       <LinearGradient
         colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
         style={styles.linearGradient}>
+            <View style={styles.closeIcon}>
+         <TouchableOpacity onPress={handleBack}>
+           <FontAwesome name="times" size={30} color="#333" />
+         </TouchableOpacity>
+       </View>
         <View style={{
           flex: 1,
           justifyContent: 'space-between',
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
 
   closeIcon:{
    paddingLeft: '5%',
-   paddingTop: '3%',
+   paddingTop: '15%',
   },
 
   container: {
@@ -214,7 +219,7 @@ const styles = StyleSheet.create({
     height:'80%',
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: '10%',
+    paddingTop: '15%',
   },
 
   title: {
@@ -234,17 +239,6 @@ const styles = StyleSheet.create({
     marginBottom: '5',
   },
 
-  pay: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
-  },
-
-  paywith: {
-    width: "100%",
-    alignItems: "center",
-    marginBottom: 50,
-  },
 
   text: {
     width: "80%",

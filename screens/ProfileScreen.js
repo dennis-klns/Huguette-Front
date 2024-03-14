@@ -95,16 +95,16 @@ export default function ProfileScreen({ navigation }) {
 
 
           <TouchableOpacity onPress={() => handleProfileInfo()} style={styles.bar} activeOpacity={0.3}>
+            
             <FontAwesome name="user" size={26} color="#3e3e3e" />
             <View style={styles.textContainer}>
             <Text style={styles.text}>Informations personnelles</Text>
+
             <View style={styles.icon}>
             <FontAwesome name="arrow-right" size={20} color="#3e3e3e" />
             </View>
             </View>
            
-          
-
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleFavorite()} style={styles.bar} activeOpacity={0.3}>
@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: '25%',
- 
 
   },
 
@@ -191,46 +190,46 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     alignSelf: 'center',
-    marginBottom: '10%',
+    marginBottom: '15%',
   },
+
 
   bar: {
+
+    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '5%',
+    marginBottom: '3%',
+    padding: '3%',
   },
 
-  
-  navigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
 
   textContainer: {
     alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+
+    width: '90%'
   },
   
   text: {
-    fontSize: 20,
+    fontSize: 25,
     fontFamily: 'Ladislav-Bold',
-    marginLeft: '10%',
+    alignSelf: 'flex-start',
 
   },
 
   icon: {
     alignSelf: 'flex-end',
+    marginRight: '3%',
 
   },
 
-
-
   button: {
+    marginTop: '30%',
     height: '8%',
+    width: '80%',
+    alignSelf: 'center',
     alignItems: "center",
     justifyContent: 'center',
     backgroundColor: "#EAAC8B",
