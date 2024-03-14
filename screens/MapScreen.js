@@ -253,31 +253,19 @@ export default function MapScreen({ navigation }) {
         });
       }
     })();
-  }, [modalVisible]);
 
-  // Affichage des adresses favorites
-  // const addresses = addressesList.map((data, i) => {
-  //   return (
-  //     <View key={i} style={styles.addresses}>
-  //       <Text style={styles.name}>{data.name}</Text>
-  //       <Text>{data.address}</Text>
-  //     </View>
-  //   );
-  // });
-  
-  useEffect(() => {
     fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
   .then(response => response.json())
   .then(data => {
     console.log('favoriteAddresses',data);
     const addressesList= [];
-    if(data.home.completeAddress) {
+    if(data.home) {
       addressesList.push({
         name: "Maison",
         address: data.home.completeAddress,
       })
     }
-    if (data.work.completeAddress) {
+    if (data.work) {
       addressesList.push({
         name: "Travail",
         address: data.work.completeAddress,
@@ -296,9 +284,22 @@ export default function MapScreen({ navigation }) {
     }
    
   }).then((data) =>{
-    console('après fetch',(data));
+    console.log('après fetch',(data));
   });
-})
+
+  }, [modalVisible]);
+
+  // Affichage des adresses favorites
+  // const addresses = addressesList.map((data, i) => {
+  //   return (
+  //     <View key={i} style={styles.addresses}>
+  //       <Text style={styles.name}>{data.name}</Text>
+  //       <Text>{data.address}</Text>
+  //     </View>
+  //   );
+  // });
+  
+ 
 
   return (
     <LinearGradient
