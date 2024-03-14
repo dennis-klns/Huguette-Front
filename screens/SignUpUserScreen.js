@@ -121,7 +121,7 @@ export default function SignUpUserScreen({ navigation }) {
   };
 
   const validateName = (value, setName, setIsValid) => {
-    const nameRegex = /^[A-Za-z\u00C0-\u00FF]+(?: [A-Za-z\u00C0-\u00FF]+)*$/;
+    const nameRegex = /^[A-Za-z\u00C0-\u00FF]+(?: [A-Za-z\u00C0-\u00FF]*)*$/;
     setName(value);
     setIsValid(nameRegex.test(value) || value === "");
   };

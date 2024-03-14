@@ -17,7 +17,7 @@ import {
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
-import { addPicture, updateFirstname, updateLastname } from "../reducers/user";
+import { addPicture, updateFirstname, updateLastname,removePicture } from "../reducers/user";
 
 export default function ProfilInformations({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -201,6 +201,24 @@ setIsPhotoUploaded(true);
       });
   };
 
+  const handleDeletePhoto = async () => {
+    try {
+      const response = await fetch(`https://huguette-backend.vercel.app/deletePhoto/${user.token}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (data.result) {
+        console.log("Photo supprimée avec succès");
+        dispatch(removePicture());
+        setPhotoModalVisible(false); // Ferme le modal de confirmation
+      } else {
+        console.error("Échec de la suppression de la photo", data.message);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la photo", error);
+    }
+  };
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -231,7 +249,11 @@ setIsPhotoUploaded(true);
                     ? { uri: profilePicture.picture }
                     : require("../assets/profilpicturephoto.png")
                 }
-                style={styles.photo}
+                style={
+                  profilePicture.picture
+                    ? styles.photo // Style normal pour la photo du backend
+                    : [styles.photo, styles.photoOpacity] // Application d'un style supplémentaire pour l'opacité
+                }
               />
             </TouchableOpacity>
 
@@ -244,6 +266,20 @@ setIsPhotoUploaded(true);
             >
               <Text style={styles.textButton}>Prendre une photo</Text>
             </TouchableOpacity>
+
+               <Modal isVisible={isPhotoModalVisible} style={styles.modal}>
+                  <View style={styles.modalContent}>
+                     <Text style={styles.modalText}>Voulez-vous supprimer la photo ?</Text>
+                        <View style={styles.modalButtonContainer}>
+                           <TouchableOpacity onPress={handleDeletePhoto} style={styles.modalButton}>
+                              <Text style={styles.textModal}>Oui</Text>
+                           </TouchableOpacity>
+                           <TouchableOpacity onPress={togglePhotoModal} style={styles.modalButton}>
+                              <Text style={styles.textModal}>Non</Text>
+                           </TouchableOpacity>
+                       </View>
+                  </View>
+                </Modal>
 
             <Modal isVisible={isCameraVisible} style={styles.modal}>
               <View style={styles.modalContent}>
@@ -375,6 +411,8 @@ setIsPhotoUploaded(true);
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
+    paddingTop: '20%',
+    paddingBottom: '10%',
   },
 
   container: {
@@ -384,7 +422,7 @@ const styles = StyleSheet.create({
 
   closeIcon: {
     alignSelf: 'flex-start',
-    marginLeft: '3%',
+    marginLeft: '6%',
 
   },
 
@@ -463,6 +501,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
 
   },
+
+  
 
   button: {
     height: "10%",
@@ -572,6 +612,10 @@ const styles = StyleSheet.create({
     padding: "3%",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  photoOpacity: {
+    opacity: 0.5,
   },
 
 });
