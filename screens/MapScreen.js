@@ -49,16 +49,7 @@ export default function MapScreen({ navigation }) {
   const dispatch = useDispatch();
 
   // Essai en dur avec une liste d'adresses favorites - A SUPPRIMER UNE FOIS DYNAMIQUE
-  const addressesList = [
-    {
-      name: "Maison",
-      address: "16 rue des Boulets, PARIS",
-    },
-    {
-      name: "La Capsule",
-      address: "56 boulevard Pereire, PARIS",
-    },
-  ];
+ 
 
   // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
@@ -307,6 +298,7 @@ export default function MapScreen({ navigation }) {
   }).then((data) =>{
     console('après fetch',(data));
   });
+})
 
   return (
     <LinearGradient
