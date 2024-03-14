@@ -7,6 +7,8 @@ const initialState = {
     firstname: null,
     lastname: null,
     picture: null,
+    home: {},
+    work: {},
   },
 };
 
@@ -27,6 +29,12 @@ export const userSlice = createSlice({
     },
     addAddresses: (state, action) => {
       state.value.addresses.push(action.payload);
+    },
+    addHome: (state, action) => {
+      state.value.home = action.payload;
+    },
+    addWork: (state, action) => {
+      state.value.home = action.payload;
     },
     addPicture: (state, action) => {
       state.value.picture = action.payload;
@@ -51,5 +59,7 @@ export const {
   updateFirstname,
   updateLastname,
   removePicture,
+  addHome,
+  addWork,
 } = userSlice.actions;
 export default userSlice.reducer;
