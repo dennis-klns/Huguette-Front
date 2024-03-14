@@ -1,9 +1,9 @@
+import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
   Dimensions,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Switch,
@@ -11,7 +11,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Platform,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView from "react-native-maps";
@@ -20,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   addArrival,
   addCost,
@@ -30,9 +30,6 @@ import {
   addLongitude,
   addTripId,
 } from "../reducers/trip";
-import {
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
 
 export default function MapScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -71,7 +68,7 @@ export default function MapScreen({ navigation }) {
       longitude: details.geometry?.location.lng,
       completeAddress: data?.description,
     });
-    if(!departure.completeAddress) {
+    if (!departure.completeAddress) {
       setDeparture({
         latitude: trip.latitude,
         longitude: trip.longitude,
@@ -100,7 +97,6 @@ export default function MapScreen({ navigation }) {
 
   const changeMusic = () => {
     setMusic(!music);
-   
   };
 
   let iconStyleMusic = {};
@@ -139,7 +135,6 @@ export default function MapScreen({ navigation }) {
         // }
       });
 
-
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -164,7 +159,7 @@ export default function MapScreen({ navigation }) {
           dispatch(addLatitude(data.trip.departure.latitude));
           setArrival({});
           setDeparture({});
-          setModalVisible(false);   
+          setModalVisible(false);
 
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
@@ -175,9 +170,9 @@ export default function MapScreen({ navigation }) {
             // console.log(parts);
             // console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
-            
           } else {
-            dispatch(addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
             );
           }
 
@@ -190,7 +185,6 @@ export default function MapScreen({ navigation }) {
       .catch((error) => {
         console.error("Error:", error);
       });
-
   };
 
   //console.log("tripReducer:", trip);
@@ -205,7 +199,7 @@ export default function MapScreen({ navigation }) {
           setDeparture(location.coords);
           dispatch(addLongitude(location.coords.longitude));
           dispatch(addLatitude(location.coords.latitude));
-          dispatch(addDeparture('Ma Position'));
+          dispatch(addDeparture("Ma Position"));
         });
       }
     })();
@@ -220,7 +214,6 @@ export default function MapScreen({ navigation }) {
       </View>
     );
   });
-  
 
   return (
     <LinearGradient
@@ -231,12 +224,13 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           //provider={PROVIDER_GOOGLE}
-            initialRegion={{
+          initialRegion={{
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
             latitudeDelta: 0.001,
             longitudeDelta: 0.001,
-          }}>
+          }}
+        >
           <Marker
             coordinate={currentPosition}
             title="Vous êtes ici"
@@ -260,7 +254,7 @@ export default function MapScreen({ navigation }) {
           <Text style={styles.title}>Hello {user.firstname},</Text>
           <Text style={styles.text}>Où allons-nous ?</Text>
         </View>
-        
+
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <View style={styles.addresse}>
             <TextInput placeholder="Addresse" />
@@ -274,18 +268,20 @@ export default function MapScreen({ navigation }) {
           colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
           style={styles.linearGradient}
         >
-          <View style={{
-          width:'100%',
-          height:'100%',      
-          // justifyContent: '',
-          alignItems: 'center',
-          // backgroundColor:'blue',
-          // Paddings to handle safe area
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-          }}>
+          <View
+            style={{
+              width: "100%",
+              height: "100%",
+              // justifyContent: '',
+              alignItems: "center",
+              // backgroundColor:'blue',
+              // Paddings to handle safe area
+              paddingTop: insets.top,
+              paddingBottom: insets.bottom,
+              paddingLeft: insets.left,
+              paddingRight: insets.right,
+            }}
+          >
             <View style={styles.modalHeader}>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <FontAwesome name="times" size={24} color="#333" />
@@ -293,7 +289,6 @@ export default function MapScreen({ navigation }) {
             </View>
 
             <View style={styles.shadowContainer}>
-
               <View style={styles.profile}>
                 <View style={styles.googleInputs}>
                   <View style={styles.autoDeparture}>
@@ -304,7 +299,7 @@ export default function MapScreen({ navigation }) {
                       onPress={handleDepartureSelect}
                       fetchDetails={true}
                       query={{
-                        key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                        key: GOOGLE_PLACES_API_KEY,
                         language: "fr",
                         components: "country:fr",
                       }}
@@ -312,7 +307,7 @@ export default function MapScreen({ navigation }) {
                         container: {
                           justifyContent: "center",
                           alignItems: "center",
-                          width:'100%',
+                          width: "100%",
                           // height:'50%',
                           // zIndex: 140,
                           // backgroundColor:'red',
@@ -324,7 +319,7 @@ export default function MapScreen({ navigation }) {
                           borderBottomWidth: 0,
                         },
                         textInput: {
-                          width:'100%',
+                          width: "100%",
                           // backgroundColor: "black",
                           borderBottomWidth: 1,
                           borderColor: "black",
@@ -334,10 +329,10 @@ export default function MapScreen({ navigation }) {
                           fontFamily: "OpenSans-Regular",
                         },
                         listView: {
-                          height:'400%',
-                          width:'100%',
+                          height: "400%",
+                          width: "100%",
                           position: "absolute",
-                          top: '10%',
+                          top: "10%",
                           borderWidth: 0,
                           borderColor: "black",
                           marginHorizontal: 20,
@@ -345,7 +340,7 @@ export default function MapScreen({ navigation }) {
                           shadowOpacity: 0.1,
                           shadowOffset: { x: 0, y: 0 },
                           shadowRadius: 15,
-                          marginTop: '20%',
+                          marginTop: "20%",
                           /*position: "absolute",
                           top: 50,
                           borderWidth: 0.5,
@@ -357,7 +352,7 @@ export default function MapScreen({ navigation }) {
                           shadowOpacity: 0.1,
                           shadowOffset: { x: 0, y: 0 },
                           shadowRadius: 15,
-                          marginTop: 10,*/ 
+                          marginTop: 10,*/
                         },
                       }}
                     />
@@ -371,7 +366,7 @@ export default function MapScreen({ navigation }) {
                       onPress={handleArrivalSelect}
                       fetchDetails={true}
                       query={{
-                        key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                        key: GOOGLE_PLACES_API_KEY,
                         language: "fr",
                         components: "country:fr",
                       }}
@@ -401,10 +396,10 @@ export default function MapScreen({ navigation }) {
                           fontFamily: "OpenSans-Regular",
                         },
                         listView: {
-                          height:'400%',
-                          width:'100%',
+                          height: "400%",
+                          width: "100%",
                           position: "absolute",
-                          top: '10%',
+                          top: "10%",
                           borderWidth: 0,
                           borderColor: "black",
                           marginHorizontal: 20,
@@ -412,7 +407,7 @@ export default function MapScreen({ navigation }) {
                           shadowOpacity: 0.1,
                           shadowOffset: { x: 0, y: 0 },
                           shadowRadius: 15,
-                          marginTop: '20%',
+                          marginTop: "20%",
                           /*position: "absolute",
                           top: 50,
                           borderWidth: 0.5,
@@ -424,7 +419,7 @@ export default function MapScreen({ navigation }) {
                           shadowOpacity: 0.1,
                           shadowOffset: { x: 0, y: 0 },
                           shadowRadius: 15,
-                          marginTop: 10,*/ 
+                          marginTop: 10,*/
                         },
                       }}
                     />
@@ -459,63 +454,54 @@ export default function MapScreen({ navigation }) {
                     />
                   </View>
                 </View>
-
               </View>
             </View>
-              
-              <View style={styles.favouriteAddresses}>
-                <Text style={styles.titleModal}>Adresses Favorites</Text>
-                <ScrollView contentContainerStyle={styles.scrollView}>
-                  {addresses}
-                </ScrollView>
-              </View>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  onPress={() => handleValidate()}
-                  style={styles.button}
-                  activeOpacity={0.8}>
-                  <Text style={styles.textButton}>Valider</Text>
-                </TouchableOpacity>
-              </View>
-              
-              
+
+            <View style={styles.favouriteAddresses}>
+              <Text style={styles.titleModal}>Adresses Favorites</Text>
+              <ScrollView contentContainerStyle={styles.scrollView}>
+                {addresses}
+              </ScrollView>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => handleValidate()}
+                style={styles.button}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.textButton}>Valider</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </LinearGradient>
-        
       </Modal>
 
-      
       {/* </View> */}
 
       <Modal
-                  visible={errorModalVisible}
-                  transparent={false}
-                  animationType="slide"
-                  onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
-                >
-                  <LinearGradient 
-                  colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
-                  style={styles.linearGradient}
-                  >
-                
-                 
-                    <View style={styles.errorModalView}>
-                      <Text style={styles.modalText}>
-                        Veuillez renseigner une arrivée pour votre course.
-                      </Text>
-                      <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setErrorModalVisible(false)}
-                      >
-                        <Text style={styles.textStyle}>Fermer</Text>
-                      </TouchableOpacity>
-                    </View>
-                  
-                  </LinearGradient>
-                </Modal>
+        visible={errorModalVisible}
+        transparent={false}
+        animationType="slide"
+        onRequestClose={() => setErrorModalVisible(false)} // Permet de fermer la modale avec le bouton retour d'Android
+      >
+        <LinearGradient
+          colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
+          style={styles.linearGradient}
+        >
+          <View style={styles.errorModalView}>
+            <Text style={styles.modalText}>
+              Veuillez renseigner une arrivée pour votre course.
+            </Text>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setErrorModalVisible(false)}
+            >
+              <Text style={styles.textStyle}>Fermer</Text>
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </Modal>
     </LinearGradient>
-    
-    
   );
 }
 
@@ -523,8 +509,8 @@ const styles = StyleSheet.create({
   // Caractéristiques pour la page principale
   linearGradient: {
     flex: 1,
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   map: {
@@ -532,14 +518,12 @@ const styles = StyleSheet.create({
     height: "70%",
   },
 
-
-
   addresse: {
     width: "95%",
     height: "30%",
     borderBottomColor: "grey",
     borderBottomWidth: 1,
-    marginBottom:'10%',
+    marginBottom: "10%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -547,10 +531,10 @@ const styles = StyleSheet.create({
 
   search: {
     width: "100%",
-    height:'40%',
+    height: "40%",
     justifyContent: "space-around",
-    alignItems:'flex-start',
-    paddingLeft:'5%',
+    alignItems: "flex-start",
+    paddingLeft: "5%",
   },
 
   searchText: {
@@ -577,19 +561,19 @@ const styles = StyleSheet.create({
   },
 
   modalHeader: {
-    margin: '1%',
+    margin: "1%",
     // height: Dimensions.get("window"),
-    height:'5%',
-    width:'100%',
+    height: "5%",
+    width: "100%",
     // backgroundColor:'purple',
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  
+
   shadowContainer: {
     width: "80%",
     height: "40%",
-    alignItems: 'center',
+    alignItems: "center",
     // justifyContent:'space-between',
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 10,
@@ -602,21 +586,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     // elevation: '5',
     // backgroundColor:'blue',
-
   },
 
   profile: {
-    justifyContent:'space-around',
-    alignItems:'center',
-    height:'100%',
-    width: '100%',
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
     // backgroundColor:'purple',
   },
 
   googleInputs: {
     height: "50%",
     width: "100%",
-    alignItems:'center',
+    alignItems: "center",
     // justifyContent:'center',
     // zIndex: 150,
     // backgroundColor:'orange',
@@ -640,24 +623,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    height:'25%',
+    height: "25%",
     // backgroundColor:'green',
   },
 
   textmodal: {
     fontSize: 16,
-    margin: '3%',
+    margin: "3%",
     fontWeight: "600",
-    
   },
 
   mood: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:'space-between',
+    justifyContent: "space-between",
     width: "95%",
-    height:'25%',
-    marginRight:'5%',
+    height: "25%",
+    marginRight: "5%",
     // backgroundColor:'blue',
   },
 
@@ -668,18 +650,17 @@ const styles = StyleSheet.create({
   },
 
   favouriteAddresses: {
-    marginTop: '7%',
+    marginTop: "7%",
     color: "#000",
     // borderBottomColor: "#4F4F4F",
     // borderBottomWidth: 1,
-    justifyContent:'center',
+    justifyContent: "center",
     // alignItems:'center',
-    width:'80%',
-    height:'35%',
+    width: "80%",
+    height: "35%",
     // marginLeft:'10%',
     // backgroundColor:'red',
-    marginBottom:'5%',
-    
+    marginBottom: "5%",
   },
 
   titleModal: {
@@ -687,18 +668,17 @@ const styles = StyleSheet.create({
     // marginLeft: 10,
     fontFamily: "Ladislav-Bold",
     // textAlign: "center",
-    marginTop:'5%',
-
+    marginTop: "5%",
   },
 
   addresses: {
-    marginTop: '5%',
+    marginTop: "5%",
     // marginBottom: '2%',
     color: "#000",
     // borderBottomColor: "#4F4F4F",
     // borderBottomWidth: 1,
-    width:'100%',
-    height:'40%',
+    width: "100%",
+    height: "40%",
     // backgroundColor:'green',
     // alignItems:'flex-start'
     // justifyContent:'center',
@@ -706,9 +686,9 @@ const styles = StyleSheet.create({
 
   scrollView: {
     // width: Dimensions.get("window").width,
-    marginTop: '10%',
-    width:'100%',
-    height: '80%',
+    marginTop: "10%",
+    width: "100%",
+    height: "80%",
     // padding: "10%",
     // position:'absolute',
     // backgroundColor:'yellow',
@@ -720,18 +700,18 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    width:'100%',
-    height:'10%',
+    width: "100%",
+    height: "10%",
     // backgroundColor:'yellow',
     alignItems: "center",
-    justifyContent:'center',
+    justifyContent: "center",
   },
 
   button: {
-    height: '70%',
+    height: "70%",
     width: "80%",
     alignItems: "center",
-    justifyContent:'center',
+    justifyContent: "center",
     // marginTop: '2%',
     backgroundColor: "#F88559",
     borderRadius: 20,
@@ -766,7 +746,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     // padding: 35,
-    justifyContent:'space-around',
+    justifyContent: "space-around",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -776,16 +756,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height:'50%',
-    width:'70%',
+    height: "50%",
+    width: "70%",
     // backgroundColor:'blue',
   },
   modalText: {
     // marginBottom: 15,
     textAlign: "center",
     fontSize: 18, // Vous pouvez ajuster la taille du texte ici
-    fontWeight:'500',
-    margin:'5%',
+    fontWeight: "500",
+    margin: "5%",
   },
   buttonClose: {
     backgroundColor: "#F88559", // Couleur du bouton pour fermer la modale, ajustable
@@ -794,8 +774,8 @@ const styles = StyleSheet.create({
     // elevation: 2,
     // justifyContent: "center",
     // alignItems: "center",
-    width:'80%',
-    height:'15%',
+    width: "80%",
+    height: "15%",
   },
   textStyle: {
     color: "white",

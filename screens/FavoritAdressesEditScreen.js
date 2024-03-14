@@ -1,74 +1,174 @@
+import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
+import React, { useState } from "react";
 import {
-  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import Modal from 'react-native-modal';
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutTrip } from '../reducers/trip';
-import { logout } from '../reducers/user';
-
-
 
 export default function FavoritAdresses({ navigation }) {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [homeUpdate, setHomeUpdate] = useState(null);
+  const [workUpdate, setWorkUpdate] = useState(null);
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
-
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  const handleHome = () => {
+    console.log("Adresse domicile:", homeUpdate);
+  };
+
+  const handleWork = () => {
+    console.log("Adresse travail:", workUpdate);
+  };
 
   return (
-
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
       style={styles.linearGradient}
     >
-      <View style={styles.container}>
-        <SafeAreaView>
-
-          <TouchableOpacity onPress={() => handleBack()}>
-            <FontAwesome name="times" size={20} color="#333" />
-          </TouchableOpacity>
-
-          <Text style={styles.title}>Adresses favorites</Text>
-
-
-          <View style={styles.adressesContainer}>
-
-            <View style={styles.home}>
-              <View style={styles.group} activeOpacity={0.3}>
-                <FontAwesome name="home" size={25} color="#3e3e3e" />
-                <Text style={styles.text}>Maison</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} // Comportement différent pour iOS et Android
+        keyboardVerticalOffset={Platform.OS === "ios" ? 500 : 0}
+      >
+        <View style={styles.container}>
+          <SafeAreaView>
+            <TouchableOpacity onPress={() => handleBack()}>
+              <FontAwesome name="times" size={20} color="#333" />
+            </TouchableOpacity>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Adresses favorites</Text>
+            </View>
+            <View style={styles.adressesContainer}>
+              <View style={styles.home}>
+                <View style={styles.group} activeOpacity={0.3}>
+                  <FontAwesome name="home" size={25} color="#3e3e3e" />
+                  <Text style={styles.text}>Maison</Text>
+                </View>
+                <GooglePlacesAutocomplete
+                  placeholder="Adresse Domicile"
+                  onChangeText={(value) => setHomeUpdate(value)}
+                  value={homeUpdate}
+                  onPress={() => handleHome()}
+                  fetchDetails={true}
+                  query={{
+                    key: GOOGLE_PLACES_API_KEY,
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      // height:'50%',
+                      zIndex: 1,
+                      // backgroundColor:'red',
+                    },
+                    textInputContainer: {
+                      height: "100%",
+                      // marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      width: "100%",
+                      // backgroundColor: "black",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      width: "100%",
+                      position: "absolute",
+                      top: "10%",
+                      borderWidth: 0,
+                      borderColor: "black",
+                      marginHorizontal: 20,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: "10%",
+                    },
+                  }}
+                />
               </View>
-              <TextInput style={styles.input} placeholder='Adresse du domicile'></TextInput>
+
+              <View style={styles.work}>
+                <View style={styles.group} activeOpacity={0.3}>
+                  <FontAwesome name="car" size={23} color="#3e3e3e" />
+                  <Text style={styles.text}>Bureau</Text>
+                </View>
+                <GooglePlacesAutocomplete
+                  placeholder="Adresse Travail"
+                  onChangeText={(value) => setWorkUpdate(value)}
+                  value={workUpdate}
+                  fetchDetails={true}
+                  query={{
+                    key: GOOGLE_PLACES_API_KEY,
+                    language: "fr",
+                    components: "country:fr",
+                  }}
+                  styles={{
+                    container: {
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      // height:'50%',
+                      // zIndex: 140,
+                      // backgroundColor:'red',
+                    },
+                    textInputContainer: {
+                      height: "100%",
+                      // marginHorizontal: 20,
+                      borderTopWidth: 0,
+                      borderBottomWidth: 0,
+                    },
+                    textInput: {
+                      width: "100%",
+                      // backgroundColor: "black",
+                      borderBottomWidth: 1,
+                      borderColor: "black",
+                      marginBottom: 20,
+                      fontSize: 16,
+                      padding: 10,
+                      fontFamily: "OpenSans-Regular",
+                    },
+                    listView: {
+                      width: "100%",
+                      position: "absolute",
+                      top: "10%",
+                      borderWidth: 0,
+                      borderColor: "black",
+                      marginHorizontal: 20,
+                      shadowColor: "#000",
+                      shadowOpacity: 0.1,
+                      shadowOffset: { x: 0, y: 0 },
+                      shadowRadius: 15,
+                      marginTop: "10%",
+                    },
+                  }}
+                />
+              </View>
             </View>
 
-            <View style={styles.work}>
-              <View style={styles.group} activeOpacity={0.3}>
-              <FontAwesome name="car" size={23} color="#3e3e3e" />
-                <Text style={styles.text}>Bureau</Text>
-              </View>
-              <TextInput style={styles.input} placeholder='Adresse du bureau'></TextInput>
-            </View>
-          </View>
-
-
-
-
-
-          {/* <View style={styles.body} activeOpacity={0.3}>
+            {/* <View style={styles.body} activeOpacity={0.3}>
         <View style={styles.body2}>
           <View style={styles.logoContainer}>
             <FontAwesome name="car" size={25} color="#3e3e3e" />
@@ -80,104 +180,94 @@ export default function FavoritAdresses({ navigation }) {
         <TextInput style={styles.input} placeholder='adresse travail'></TextInput>
       </View> */}
 
-      
-            <TouchableOpacity onPress={() => toggleModal()} style={styles.button} activeOpacity={0.8} >
+            <TouchableOpacity
+              onPress={() => toggleModal()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
               <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
             <Modal isVisible={isModalVisible} style={styles.modal}>
               <View style={styles.modalContent}>
-                <Text style={styles.modalText}>Voulez-vous valider vos modifications ?</Text>
+                <Text style={styles.modalText}>
+                  Voulez-vous valider vos modifications ?
+                </Text>
                 <View style={styles.modalButtonContainer}>
-                  <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(false)}
+                    style={styles.modalButton}
+                  >
                     <Text style={styles.textModal}>Oui</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(false)}
+                    style={styles.modalButton}
+                  >
                     <Text style={styles.textModal}>Non</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </Modal>
-        </SafeAreaView>
-      </View >
-      
-
-
-    </LinearGradient >
-
+          </SafeAreaView>
+        </View>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-
-
   linearGradient: {
     flex: 1,
-
   },
 
   container: {
-    flex: 1,
-    alignItems: 'flex-start',
-    paddingTop: '20%',
-    margin: '10%',
-    width: Dimensions.get("window").width,
-    
+    paddingTop: "10%",
+    margin: "3%",
   },
-
+  titleContainer: {
+    textAlign: "center",
+  },
+  work: {
+    zIndex: 0,
+  },
   title: {
-    paddingTop: '5%',
-    fontSize: 30,
+    paddingTop: "10%",
+    fontSize: 40,
     color: "#473E66",
-    fontFamily: 'Ladislav-Bold',
+    fontFamily: "Ladislav-Bold",
+    textAlign: "center",
   },
 
   adressesContainer: {
-    height: '50%',
-    height: '50%',
-    alignItems: 'flex-start',
-    justifyContent: 'space-around',
+    marginTop: "3%",
+    height: "50%",
 
- 
-
+    justifyContent: "space-around",
   },
 
   group: {
-    width: '55%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '4%',
-
+    flexDirection: "row",
+    alignItems: "baseline",
+    marginBottom: "3%",
   },
-
-  home: {
-    width: '100%'
-  },
-
-  work: {
-    width: '100%'
-  },
-
 
   input: {
     fontSize: 16,
+    fontFamily: "Ladislav-Bold",
     color: "#473E66",
     borderBottomColor: "#4F4F4F",
     borderBottomWidth: 1,
-
   },
 
   text: {
-    fontWeight: '800',
-    fontSize: 20,
-    marginRight: '10%',
+    fontSize: 25,
+    fontFamily: "Ladislav-Bold",
+    marginLeft: "5%",
   },
 
-
   button: {
-    marginTop: '50%',
-    marginLeft: '20%',
-    height: '7%',
+    marginTop: "50%",
+    height: "7%",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F88559",
@@ -190,19 +280,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-
   },
 
   textButton: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
     fontSize: 16,
-
   },
 
   modal: {
-    justifyContent: 'center', // Ajusté pour centrer la modale
-    alignItems: 'center',
+    justifyContent: "center", // Ajusté pour centrer la modale
+    alignItems: "center",
     margin: 0,
   },
 
@@ -231,6 +319,7 @@ const styles = StyleSheet.create({
   modalButtonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    paddingRight: "14%",
     width: "100%",
   },
 
@@ -250,7 +339,6 @@ const styles = StyleSheet.create({
   },
 
   textModal: {
-    color: 'white',
+    color: "white",
   },
-
 });
