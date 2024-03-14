@@ -40,7 +40,7 @@ export default function PaiementEdit({ navigation }) {
         </View>
 
         <View style={styles.paywith}>
-          <Text style={styles.text}>Ajouter un moyen de paiement</Text>
+          <Text style={styles.text2}>Ajouter un moyen de paiement</Text>
           <TextInput placeholder="Numéro de carte" onChangeText={setCardNumber} value={cardNumber} style={styles.input} />
           <View style={styles.halfinput}>
             <TextInput placeholder="Date d'expiration" onChangeText={setExpdate} value={expdate} style={styles.smallinput} />
@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     paddingTop: '20%',
-    fontFamily: "OpenSans-Regular",
+    
   paddingBottom: '10%',
   },
 
   titleTop:{
     fontSize: 40,
     color: "#473E66",
-    fontFamily: "OpenSans-Regular",
+    
     paddingBottom: '15%',
     fontFamily: 'Ladislav-Bold',
   },
@@ -109,15 +109,24 @@ const styles = StyleSheet.create({
   paywith: {
     width: "80%",
     alignItems: "center",
-    marginBottom: '15%',
+    marginBottom: '10%',
   },
   text: {
     fontSize: 24,
-    fontWeight: "Regular",
     color: "#473E66",
-    marginBottom: 10,
+    marginBottom: '10%',
     fontFamily: 'Ladislav-Bold',
   },
+
+  text2: {
+    fontSize: 24,
+   
+    color: "#473E66",
+    marginBottom: '15%',
+    fontFamily: 'Ladislav-Bold',
+  },
+
+
   input: {
     width: "100%",
     marginTop: 10,
@@ -126,11 +135,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#4F4F4F",
     paddingVertical: 5,
+    fontFamily: 'Ladislav-Bold',
   },
+
   halfinput: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+ 
   },
   smallinput: {
     width: "48%",
@@ -168,8 +180,10 @@ const styles = StyleSheet.create({
   textButton: {
     color: "#fff",
     fontSize: 18,
-    fontFamily: 'Ladislav-Bold',
+    fontWeight : 'bold',
+    
   },
+
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
