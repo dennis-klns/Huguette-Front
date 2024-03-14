@@ -131,13 +131,13 @@ export default function SignUpDriverScreen({ navigation }) {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    //setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
 
   const showDatepicker = () => {
     setShow(true);
-  };
+  }
 
   const openPickerModal = () => {
     setIsPickerVisible(true);

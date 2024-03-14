@@ -22,6 +22,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import {addPicture} from '../reducers/user'
+import ImageResizer from 'react-native-image-resizer';
 
 export default function SignUpPhotoScreen({ navigation }) {
 
@@ -30,8 +31,12 @@ export default function SignUpPhotoScreen({ navigation }) {
   const [photoUri, setPhotoUri] = useState(null);
 
   const user = useSelector((state) => state.user.value)
+  const profilePicture = useSelector((state) => state.user.value);
 
   const toggleModal = () => {
+    if (!isModalVisible) { // Si on est sur le point d'ouvrir la modale
+      setPhotoUri(null); // On réinitialise l'URI de la photo pour cacher l'aperçu précédent
+    }
     setModalVisible(!isModalVisible);
   };
   
@@ -41,6 +46,15 @@ export default function SignUpPhotoScreen({ navigation }) {
     navigation.navigate('TabNavigator', { screen: 'Map'});
 
 }
+
+const [isAlertModalVisible, setAlertModalVisible] = useState(false);
+const handleMapScreenWithPhoto = () => {
+  if (photoUri) { // Si une photo a été sélectionnée
+    navigation.navigate('TabNavigator', { screen: 'Map'});
+  } else { // Si aucune photo n'a été sélectionnée
+    setAlertModalVisible(true); // Afficher le modal d'alerte
+  }
+};
 
 const dispatch = useDispatch();
 const isFocused = useIsFocused();
@@ -61,6 +75,44 @@ useEffect(() => {
 
 
 
+
+
+
+
+const handleTakePhoto = async () => {
+  if (cameraRef.current) {
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+    const uri = photo?.uri;
+    setPhotoUri(uri);
+  }
+};
+
+const handleValidation = () => {
+  console.log(user.token);
+  if (photoUri) {
+    const formData = new FormData();
+    formData.append('photoFromFront', {
+      uri: photoUri,
+      name: 'photo.jpg',
+      type: 'image/jpeg',
+    });
+    
+    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Réponse du backend :', data);
+      dispatch(addPicture(data.url));
+      toggleModal();
+    })
+    .catch(error => console.error('Erreur lors de la validation de la photo :', error));
+  } else {
+    console.error('Aucune photo à valider');
+  }
+};
+
 const pickImage = async () => {
   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -70,23 +122,27 @@ const pickImage = async () => {
   }
   
   const pickerResult = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true, 
-    quality: 1, 
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true, // Permet l'édition de l'image
+    aspect: [4, 3], // Aspect ratio de l'image éditée
+    quality: 0.5, // Compression de l'image (0.5 = 50% de la qualité originale)
   });
+
 
 
   console.log(pickerResult); 
 
-  if (pickerResult?.assets[0]?.canceled === true) {
-    setPhotoUri(pickerResult.assets[0].uri);
+  if (!pickerResult.assets[0].canceled) {
+    
+    const uri = (pickerResult.assets[0].uri);
+    setPhotoUri(pickerResult.uri)
   }
   console.log("test", pickerResult?.assets[0]?.uri); 
 
   let formData = new FormData();
   formData.append('token', user.token); 
   formData.append('photoFromLibrairie', {
-    uri: pickerResult?.assets[0]?.uri,
+    uri: pickerResult.assets[0].uri,
     name: 'photo.jpg', 
     type: 'image/jpeg', 
   });
@@ -109,55 +165,22 @@ const pickImage = async () => {
   .then(data => {
     console.log('librairie2:', data);
     dispatch(addPicture(data.url));
+    setPhotoUri(data.url)
   })
   .catch((error) => {
     console.error('Error uploading image:', error);
   });
 
-  setIsPhotoUploaded(true);
-
-};
-
-
-
-
-const handleTakePhoto = async () => {
-  if (cameraRef.current) {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
-    const uri = photo?.uri;
-    setPhotoUri(uri);
+  if (!pickerResult.cancelled) {
+    setPhotoUri(pickerResult.uri);
+    setIsPhotoUploaded(true);
   }
+
 };
 
-const handleValidation = () => {
-  console.log(user.token);
-  if (photoUri) {
-    const formData = new FormData();
-    formData.append('photoFromFront', {
-      uri: photoUri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
-    });
-
-    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Réponse du backend :', data);
-        dispatch(addPicture(data.url));
-        toggleModal();
-      })
-      .catch(error => console.error('Erreur lors de la validation de la photo :', error));
-  } else {
-    console.error('Aucune photo à valider');
-  }
-};
-
-    return (
-
-      <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
+return (
+  
+  <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAwareScrollView contentContainerStyle={styles.scrollView} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true}>
           <View style={styles.container}>
@@ -174,11 +197,16 @@ const handleValidation = () => {
                   <Modal isVisible={isModalVisible} style={styles.modal}>
                     <View style={styles.modalContent}>
                       {photoUri ? (
-                        <View>
+                        <View >
                           <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
-                          <TouchableOpacity onPress={handleValidation}>
-                            <Text>Validerr</Text>
-                          </TouchableOpacity>
+                          <View style={styles.modalButtonContainer}>
+                             <TouchableOpacity onPress={handleValidation} style={styles.modalButton}>
+                               <Text style={styles.textModal}>Valider</Text>
+                             </TouchableOpacity>
+                             <TouchableOpacity  onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                               <Text style={styles.textModal}>Annuler</Text>
+                             </TouchableOpacity>
+                          </View>
                         </View>
                       ) : hasPermission ? (
                         <Camera style={styles.camera} type={type} ref={cameraRef} flashMode={flashMode}>
@@ -207,7 +235,9 @@ const handleValidation = () => {
                 </View>
                 {photoUri && (
                   
-    <Image source={{ uri: photoUri }} style={styles.imagePreview} />
+    // <Image source={{ uri: photoUri }} style={styles.imagePreview} />
+    <Image source={profilePicture.picture ? { uri: profilePicture.picture } : require('../assets/profilpicturephoto.png')}
+                                 style={{ width: 200, height: 200, borderRadius: 100 }} />
     
   )}
   {isPhotoUploaded && (
@@ -219,9 +249,17 @@ const handleValidation = () => {
               <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button2} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Passer</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button} activeOpacity={0.8}>
+              <TouchableOpacity onPress={() => handleMapScreenWithPhoto()} style={styles.button} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Valider</Text>
               </TouchableOpacity>
+                  <Modal isVisible={isAlertModalVisible} style={styles.modal}>
+                       <View style={styles.modalContent}>
+                            <Text style={styles.alertModalText}>Veuillez ajouter une photo</Text>
+                            <TouchableOpacity onPress={() => setAlertModalVisible(false)} style={styles.modalButton}>
+                            <Text style={styles.textModal}>OK</Text>
+                            </TouchableOpacity>
+                       </View>
+                 </Modal>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -242,37 +280,42 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    width: "80%", 
-    fontSize: 24,
+    width: "80%",
+    fontSize: 40,
     fontWeight: "600",
     textAlign: "center",
     color: "#473E66",
-    margin: 40,
+    paddingTop :'15%',
+    fontFamily: "Ladislav-Bold",
 
   },
 
   profile: {
     width: "100%",
     alignItems: "center",
-    marginBottom: 80,
+    marginBottom: '10%',
   
   },
 
   text: {
     width: "80%",
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "800",
     color: "#473E66",
-    margin: 10,
+    paddingTop :'15%',
+    fontFamily: 'Ladislav-Bold',
   },
-
+  
   photoContainer: {
     width: '80%',
     height: '50%', 
     maxHeight: '65%', 
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    borderBottomColor: "#4F4F4F",
+    borderTopWidth: 1,
+    paddingTop: '5%',
+    // borderWidth: 2,
   },
   
   photoContent: {
@@ -288,6 +331,7 @@ const styles = StyleSheet.create({
 
   text1:{
     fontSize: 19,
+    fontFamily: 'Ladislav-Bold',
   },
 
   buttonContainer:{
@@ -373,21 +417,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
       },
       
-      modal: {
-        justifyContent: 'flex-end',
-        margin: 0,
-      },
-
-
-      modalContent: {
-        height: '70%',
-        backgroundColor: "white",
-        padding: 22,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-     
+    
+      textModal2: {
+        color: 'white',
       },
 
       camera: {
@@ -418,7 +450,75 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
       },
+
+      modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+      },
       
+      modalContent: {
+        backgroundColor: "white",
+        padding: 20,
+        alignItems: "center",
+        justifyContent: 'center',
+        borderRadius: 20,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        maxHeight: '85%', // Ajuste selon le besoin pour plus de contenu
+        width: '68%',
+      },
+      
+      modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        
+        marginTop: 10, // Ajuste pour plus d'espacement
+        width: '80%', // Assure que les boutons utilisent tout l'espace disponible
+      },
+      
+      modalButton: {
+        backgroundColor: "#F88559",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        justifyContent: 'center', // Centre le texte à l'intérieur du bouton
+        alignItems: 'center', // Assure que le contenu est centré horizontalement
+        width: '40%', // Ajuste la largeur des boutons selon le besoin
+      },
+      
+      textModal: {
+        color: 'white',
+        textAlign: 'center', // Assure que le texte est bien centré dans le bouton
+        fontWeight: '600',
+        fontSize: 10,
+      },
+      
+      // Style pour l'aperçu de l'image et le bouton "Valider"
+      imagePreview: {
+        width: 200,
+        height: 200,
+        borderRadius: 20, // Adoucit les coins de l'aperçu de l'image
+        marginTop: 20,
+      },
+      
+      // Utilise les styles existants pour le bouton "Valider"
+      validationButton: {
+        marginTop: 20,
+        backgroundColor: "#F88559",
+        borderRadius: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+      },
+      
+      validationButtonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "600",
+        textAlign: "center", // Centre le texte dans le bouton
+      },
+
+
     });
     
+
 
