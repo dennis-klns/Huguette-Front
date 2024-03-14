@@ -3,32 +3,19 @@ import { useEffect, useState } from "react";
 import {
   Dimensions,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
-  Platform,
+ 
 } from "react-native";
 
 import MapView from "react-native-maps";
-import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-import {
-  addArrival,
-  addCost,
-  addDeparture,
-  addDistance,
-  addDuration,
-  addLatitude,
-  addLongitude,
-  addTripId,
-} from "../reducers/trip";
+
 
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
