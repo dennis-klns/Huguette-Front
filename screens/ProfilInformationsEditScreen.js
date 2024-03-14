@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -85,56 +87,56 @@ export default function ProfilInformations({ navigation }) {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      alert(
-        "Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !"
-      );
-      return;
+if (permissionResult.granted === false) {
+  alert(
+    "Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !"
+  );
+  return;
+}
+
+const pickerResult = await ImagePicker.launchImageLibraryAsync({
+  mediaTypes: ImagePicker.MediaTypeOptions.All,
+  allowsEditing: true,
+  quality: 1,
+});
+
+console.log(pickerResult);
+
+if (pickerResult?.assets[0]?.canceled === true) {
+  setPhotoUri(pickerResult.assets[0].uri);
+}
+console.log("test", pickerResult?.assets[0]?.uri);
+
+let formData = new FormData();
+formData.append("token", user.token);
+formData.append("photoFromLibrairie", {
+  uri: pickerResult?.assets[0]?.uri,
+  name: "photo.jpg",
+  type: "image/jpeg",
+});
+
+//https://huguette-backend.vercel.app/uploadLibrairie'
+//http://192.168.10.154:3000/uploadLibrairie
+
+fetch("https://huguette-backend.vercel.app/uploadLibrairie", {
+  method: "POST",
+  body: formData,
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Erreur réseau");
     }
+    return response.json();
+  })
+  .then((data) => {
+    console.log("librairie2:", data);
+    dispatch(addPicture(data.url));
+  })
+  .catch((error) => {
+    console.error("Error uploading image:", error);
+  });
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    console.log(pickerResult);
-
-    if (pickerResult?.assets[0]?.canceled === true) {
-      setPhotoUri(pickerResult.assets[0].uri);
-    }
-    console.log("test", pickerResult?.assets[0]?.uri);
-
-    let formData = new FormData();
-    formData.append("token", user.token);
-    formData.append("photoFromLibrairie", {
-      uri: pickerResult?.assets[0]?.uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-
-    //https://huguette-backend.vercel.app/uploadLibrairie'
-    //http://192.168.10.154:3000/uploadLibrairie
-
-    fetch("https://huguette-backend.vercel.app/uploadLibrairie", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur réseau");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("librairie2:", data);
-        dispatch(addPicture(data.url));
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
-
-    setIsPhotoUploaded(true);
+setIsPhotoUploaded(true);
   };
 
   const handleTakePhoto = async () => {
@@ -155,23 +157,23 @@ export default function ProfilInformations({ navigation }) {
         type: "image/jpeg",
       });
 
-      fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Réponse du backend :", data);
-          dispatch(addPicture(data.url));
-          setIsCameraVisible(false);
-          // toggleModal();
-        })
-        .catch((error) =>
-          console.error("Erreur lors de la validation de la photo :", error)
-        );
-    } else {
-      console.error("Aucune photo à valider");
-    }
+  fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Réponse du backend :", data);
+      dispatch(addPicture(data.url));
+      setIsCameraVisible(false);
+      // toggleModal();
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la validation de la photo :", error)
+    );
+} else {
+  console.error("Aucune photo à valider");
+}
   };
 
   const handleEditInformations = () => {
@@ -207,7 +209,6 @@ export default function ProfilInformations({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"} // Comportement différent pour iOS et Android
         keyboardVerticalOffset={Platform.OS === "ios" ? 500 : 0} // Offset supplémentaire pour Android
       >
-
         <SafeAreaView style={styles.container}>
           <View style={styles.closeIcon}>
             <TouchableOpacity onPress={() => handleBack()}>
@@ -215,153 +216,157 @@ export default function ProfilInformations({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.profilContainer} activeOpacity={0.3}>
-            <View style={styles.profile}>
-              <View>
-                <Text style={styles.titleTop}>Profil</Text>
-              </View>
-              <View>
-                <TouchableOpacity onPress={togglePhotoModal}>
-                  <Image
-                    source={
-                      profilePicture.picture
-                        ? { uri: profilePicture.picture }
-                        : require("../assets/profilpicturephoto.png")
-                    }
-                    style={styles.photo}
-                  />
-                </TouchableOpacity>
+      <View style={styles.profilContainer} activeOpacity={0.3}>
+        <View style={styles.profile}>
+          <View>
+            <Text style={styles.titleTop}>Profil</Text>
+          </View>
+          <View>
+            <TouchableOpacity onPress={togglePhotoModal}>
+              <Image
+                source={
+                  profilePicture.picture
+                    ? { uri: profilePicture.picture }
+                    : require("../assets/profilpicturephoto.png")
+                }
+                style={styles.photo}
+              />
+            </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => {
-                    setPhotoUri(null); // Réinitialise photoUri à null pour une nouvelle prise de photo
-                    setIsCameraVisible(true); // Affiche le modal de la caméra
-                  }}
-                  style={styles.button}
-                >
-                  <Text style={styles.textButton}>Prendre une photo</Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setPhotoUri(null); // Réinitialise photoUri à null pour une nouvelle prise de photo
+                setIsCameraVisible(true); // Affiche le modal de la caméra
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.textButton}>Prendre une photo</Text>
+            </TouchableOpacity>
 
-                <Modal isVisible={isCameraVisible} style={styles.modal}>
-                  <View style={styles.modalContent}>
-                    {hasPermission && !photoUri && (
-                      <Camera
-                        style={styles.camera}
-                        type={type}
-                        ref={cameraRef}
-                        flashMode={flashMode}
-                      >
-                        <View style={styles.cameraContent}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              setType(
-                                type === CameraType.back
-                                  ? CameraType.front
-                                  : CameraType.back
-                              )
-                            }
-                            style={styles.cameraButton}
-                          >
-                            <FontAwesome
-                              name="rotate-right"
-                              size={25}
-                              color="#ffffff"
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={handleTakePhoto}
-                            style={styles.cameraButton}
-                          >
-                            <FontAwesome
-                              name="camera"
-                              size={25}
-                              color="#ffffff"
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => setIsCameraVisible(false)}
-                            style={styles.cameraButton}
-                          >
-                            <FontAwesome name="times" size={25} color="#ffffff" />
-                          </TouchableOpacity>
-                        </View>
-                      </Camera>
-                    )}
-
-                    {photoUri && (
-                      <View style={styles.modalContent}>
-                        <Image
-                          source={{ uri: photoUri }}
-                          style={{ width: 300, height: 300 }}
-                        />
-                        <TouchableOpacity
-                          onPress={handleValidation}
-                          style={styles.modalButton}
-                        >
-                          <Text style={styles.textButton}>Valider</Text>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                  </View>
-                </Modal>
-
-                <TouchableOpacity onPress={pickImage} style={styles.button}>
-                  <Text style={styles.textButton}>Importer une photo</Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.textContainer}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.title}>Modifiez vos informations :</Text>
-                </View>
-                <TextInput
-                  style={styles.info}
-                  placeholder={user.firstname}
-                  value={updatedFirstname}
-                  onChangeText={setUpdatedFirstname}
-                />
-                <TextInput
-                  style={styles.info}
-                  placeholder={user.lastname}
-                  value={updatedLastname}
-                  onChangeText={setUpdatedLastname}
-                />
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    onPress={() => toggleModalValider()}
-                    style={styles.buttonValidate}
-                    activeOpacity={0.8}
+            <Modal isVisible={isCameraVisible} style={styles.modal}>
+              <View style={styles.modalContent}>
+                {hasPermission && !photoUri && (
+                  <Camera
+                    style={styles.camera}
+                    type={type}
+                    ref={cameraRef}
+                    flashMode={flashMode}
                   >
-                    <Text style={styles.textButton}>Valider</Text>
-                  </TouchableOpacity>
-                  <Modal isVisible={isModalVisible} style={styles.modal}>
-                    <View style={styles.modalContent}>
-                      <Text style={styles.modalText}>
-                        Voulez-vous valider vos modifications ?
-                      </Text>
-                      <View style={styles.modalButtonContainer}>
-                        <TouchableOpacity
-                          onPress={() => handleEditInformations()}
-                          style={styles.modalButton}
-                        >
-                          <Text style={styles.textModal}>Oui</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => setModalVisible(false)}
-                          style={styles.modalButton}
-                        >
-                          <Text style={styles.textModal}>Non</Text>
-                        </TouchableOpacity>
-                      </View>
+                    <View style={styles.cameraContent}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          setType(
+                            type === CameraType.back
+                              ? CameraType.front
+                              : CameraType.back
+                          )
+                        }
+                        style={styles.cameraButton}
+                      >
+                        <FontAwesome
+                          name="rotate-right"
+                          size={25}
+                          color="#ffffff"
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={handleTakePhoto}
+                        style={styles.cameraButton}
+                      >
+                        <FontAwesome
+                          name="camera"
+                          size={25}
+                          color="#ffffff"
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => setIsCameraVisible(false)}
+                        style={styles.cameraButton}
+                      >
+                        <FontAwesome
+                          name="times"
+                          size={25}
+                          color="#ffffff"
+                        />
+                      </TouchableOpacity>
                     </View>
-                  </Modal>
-                </View>
+                  </Camera>
+                )}
+
+                {photoUri && (
+                  <View style={styles.modalContent}>
+                    <Image
+                      source={{ uri: photoUri }}
+                      style={{ width: 300, height: 300 }}
+                    />
+                    <TouchableOpacity
+                      onPress={handleValidation}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.textButton}>Valider</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
+            </Modal>
+
+            <TouchableOpacity onPress={pickImage} style={styles.button}>
+              <Text style={styles.textButton}>Importer une photo</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.textContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Modifiez vos informations :</Text>
+            </View>
+            <TextInput
+              style={styles.info}
+              placeholder={user.firstname}
+              value={updatedFirstname}
+              onChangeText={setUpdatedFirstname}
+            />
+            <TextInput
+              style={styles.info}
+              placeholder={user.lastname}
+              value={updatedLastname}
+              onChangeText={setUpdatedLastname}
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => toggleModalValider()}
+                style={styles.buttonValidate}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.textButton}>Valider</Text>
+              </TouchableOpacity>
+              <Modal isVisible={isModalVisible} style={styles.modal}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalText}>
+                    Voulez-vous valider vos modifications ?
+                  </Text>
+                  <View style={styles.modalButtonContainer}>
+                    <TouchableOpacity
+                      onPress={() => handleEditInformations()}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.textModal}>Oui</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(false)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.textModal}>Non</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
             </View>
           </View>
-        </SafeAreaView>
-      </KeyboardAvoidingView>
-    </LinearGradient>
+        </View>
+      </View>
+    </SafeAreaView>
+  </KeyboardAvoidingView>
+</LinearGradient>
   );
 }
 
@@ -372,12 +377,13 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "flex-start",
   },
 
   closeIcon: {
-    width: "90%",
+    alignSelf: 'flex-start',
+    marginLeft: '3%',
+
   },
 
   titleTop: {
@@ -474,8 +480,8 @@ const styles = StyleSheet.create({
   },
 
   buttonValidate: {
-    height: "30%",
-    width: "60%",
+    height: "33%",
+    width: "65%",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F88559",
@@ -489,6 +495,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
+  // ELEMENTS DE LA MODALE
 
   modalContent: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -565,4 +573,6 @@ const styles = StyleSheet.create({
   },
 
 });
+
+
 
