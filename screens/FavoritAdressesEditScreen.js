@@ -127,7 +127,7 @@ export default function FavoritAdresses({ navigation }) {
                     },
                     textInput: {
                       width: "100%",
-                      // backgroundColor: "black",
+                      backgroundColor: "transparent",
                       borderBottomWidth: 1,
                       borderColor: "black",
                       marginBottom: 20,
@@ -186,7 +186,7 @@ export default function FavoritAdresses({ navigation }) {
                     },
                     textInput: {
                       width: "100%",
-                      // backgroundColor: "black",
+                      backgroundColor: "transparent",
                       borderBottomWidth: 1,
                       borderColor: "black",
                       marginBottom: 20,
@@ -287,9 +287,8 @@ const styles = StyleSheet.create({
   },
 
   adressesContainer: {
-    marginTop: "3%",
-    height: "50%",
-
+    marginTop: "20%",
+    height: "40%",
     justifyContent: "space-around",
   },
 
