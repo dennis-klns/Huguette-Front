@@ -1,6 +1,7 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -21,6 +22,29 @@ export default function FavoritAdresses({ navigation }) {
   const [workUpdate, setWorkUpdate] = useState({});
 
   const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+  
+    const loadFavoriteAddresses = async () => {
+      fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+
+          if (data.result) {
+            setHomeUpdate(data.home ? data.home.completeAddress : "");
+            setWorkUpdate(data.work ? data.work.completeAddress : "");
+          } else {
+            console.error("Failed to load addresses:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    loadFavoriteAddresses()
+  }, //[user.token]
+  );
+
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -49,9 +73,6 @@ export default function FavoritAdresses({ navigation }) {
   };
 
   const setNewAddress = () => {
-    console.log(user.token);
-    console.log(homeUpdate);
-    console.log(workUpdate);
 
     fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
       method: "PUT",
@@ -72,8 +93,8 @@ export default function FavoritAdresses({ navigation }) {
           console.error("Update Addresses Failed:", data.error);
         }
       });
-    setModalVisible(false);
-  };
+    setModalVisible(false)
+  }
 
   return (
     <LinearGradient
@@ -100,7 +121,7 @@ export default function FavoritAdresses({ navigation }) {
                   <Text style={styles.text}>Maison</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Domicile"
+                  placeholder={homeUpdate.toString()}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
                   onPress={handleHome}
@@ -159,7 +180,7 @@ export default function FavoritAdresses({ navigation }) {
                   <Text style={styles.text}>Bureau</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Travail"
+                  placeholder={workUpdate.toString()}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
                   onPress={handleWork}
@@ -212,17 +233,6 @@ export default function FavoritAdresses({ navigation }) {
               </View>
             </View>
 
-            {/* <View style={styles.body} activeOpacity={0.3}>
-        <View style={styles.body2}>
-          <View style={styles.logoContainer}>
-            <FontAwesome name="car" size={25} color="#3e3e3e" />
-          </View>
-          <View style={styles.bar12}>
-            <Text style={styles.textEmergency}>Travail</Text>
-          </View>
-        </View>
-        <TextInput style={styles.input} placeholder='adresse travail'></TextInput>
-      </View> */}
 
             <TouchableOpacity
               onPress={() => toggleModal()}
