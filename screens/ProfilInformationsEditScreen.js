@@ -93,10 +93,12 @@ export default function ProfilInformations({ navigation }) {
     }
 
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // Permet l'édition de l'image
+      aspect: [4, 3], // Aspect ratio de l'image éditée
+      quality: 0.5, // Compression de l'image (0.5 = 50% de la qualité originale)
     });
+  
 
     console.log(pickerResult);
 

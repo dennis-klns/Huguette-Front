@@ -134,13 +134,13 @@ export default function RouteScreen({ navigation }) {
               <Text style={styles.textButton}> SOS </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.input}
               activeOpacity={0.8}
               onPress={() => handleValidate()}
             >
               <Text style={styles.textinput}>Course terminée</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ScrollView>
       </View>

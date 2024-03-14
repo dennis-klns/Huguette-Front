@@ -76,7 +76,9 @@ export default function ContactEdit({ navigation }) {
         if (data.result) {
           setEmergencyFirstname(data.emergencyInfos.firstname || "");
           setEmergencyLastname(data.emergencyInfos.lastname || "");
-          setEmergencyPhone(data.emergencyInfos.phone.toString() || ""); 
+          // Ajoutez un zéro au début du numéro de téléphone si ce n'est pas déjà fait
+          const phoneWithLeadingZero = data.emergencyInfos.phone ? `0${data.emergencyInfos.phone.toString()}` : "";
+          setEmergencyPhone(phoneWithLeadingZero);
           setEmergencyMessage(data.emergencyInfos.emergencyMessage || "");
         }
       })
@@ -120,7 +122,7 @@ export default function ContactEdit({ navigation }) {
         />
                     <View style={styles.messageInputContainer}>
 
-                 <View style={styles.titleContainer}>
+                 <View style={styles.titleContainer2}>
                      <Text style={styles.title}>Modifier votre message d'urgence</Text>
                 </View>
                 <TextInput style={styles.messageInput} placeholder="Message personnalisé" multiline={true} numberOfLines={4} value={emergencyMessage}
@@ -189,9 +191,10 @@ container: {
 },
 
 titleTop:{
-  fontSize: 30,
+  fontSize: 40,
   color: "#473E66",
   paddingBottom: '15%',
+  fontFamily: 'Ladislav-Bold',
 },
 
 text2:{
@@ -205,9 +208,10 @@ text2:{
 },
 
 messageInputContainer:{
+
 alignItems: 'center',
 paddingTop: '7%',
-
+fontFamily: 'Ladislav-Bold',
 },
 
 
@@ -215,7 +219,7 @@ messageInput: {
  
   height: '55%',
   width: "90%",
-  fontSize: 16,
+  fontSize: 14,
   color: "#473E66",
   margin: 10,
   padding: 10,
@@ -224,6 +228,7 @@ messageInput: {
   // fontFamily: "OpenSans-Regular",
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
   borderWidth: 1,
+  fontFamily: 'Ladislav-Bold',
 },
 
 closeIcon: {
@@ -234,24 +239,29 @@ closeIcon: {
 textContainer:{
   width: '80%',
   justifyContent: 'center',
-  // fontFamily: "OpenSans-Regular",
-height : '80%',
-paddingTop: '10%',
-  
+  fontFamily: 'Ladislav-Bold',
+  height : '80%',
+  paddingTop: '10%',
 },
 
 titleContainer:{
   justifyContent: 'center',
   alignItems: 'center',
-  // fontFamily: "OpenSans-Regular",
+  fontFamily: 'Ladislav-Bold',
   paddingBottom: '10%',
-  
- 
+},
+
+titleContainer2:{
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontFamily: 'Ladislav-Bold',
+  paddingTop: '8%',
+  paddingBottom: '8%',
 },
 
 title:{
-fontSize: 20,
-fontFamily: "OpenSans-Regular",
+fontSize: 22,
+fontFamily: 'Ladislav-Bold',
 },
 
   
