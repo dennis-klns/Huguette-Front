@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     paddingTop: '20%',
-    fontFamily: "OpenSans-Regular",
+    
   paddingBottom: '10%',
   },
 
   titleTop:{
     fontSize: 40,
     color: "#473E66",
-    fontFamily: "OpenSans-Regular",
+    
     paddingBottom: '15%',
     fontFamily: 'Ladislav-Bold',
   },
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 
   text2: {
     fontSize: 24,
-    fontWeight: "Regular",
+   
     color: "#473E66",
     marginBottom: '15%',
     fontFamily: 'Ladislav-Bold',

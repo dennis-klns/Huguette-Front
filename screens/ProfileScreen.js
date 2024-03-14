@@ -23,11 +23,12 @@ export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isDriver, setIsDriver] = useState(false);
 
 
-  /* const [isAccompanied, setIsAccompanied] = useState(false);
+  
   const toggleSwitch = () =>
-    setIsAccompanied((previousState) => !previousState); */
+  setIsDriver((previousState) => !previousState); 
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -81,10 +82,10 @@ export default function ProfileScreen({ navigation }) {
             <View style={styles.icon}>
             <Switch
               trackColor={{ false: "#F1C796", true: "#F88559" }}
-              //thumbColor={isAccompanied ? "#E0CAC2" : "#E0CAC2"}
+              thumbColor={isDriver ? "#E0CAC2" : "#E0CAC2"}
               ios_backgroundColor="#3e3e3e"
-            //onValueChange={toggleSwitch}
-            //value={isAccompanied}
+            onValueChange={toggleSwitch}
+            value={isDriver}
          
             />
             </View>

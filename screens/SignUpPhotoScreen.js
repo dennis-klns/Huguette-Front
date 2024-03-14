@@ -21,7 +21,7 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
-import {addPicture} from '../reducers/user'
+import {addPicture, removePicture} from '../reducers/user'
 import ImageResizer from 'react-native-image-resizer';
 
 export default function SignUpPhotoScreen({ navigation }) {
@@ -178,6 +178,32 @@ const pickImage = async () => {
 
 };
 
+
+const handleSkip = async () => {
+  // Vérifiez d'abord s'il y a une photoUri à ignorer
+  if (photoUri) {
+      try {
+          // Appel à la route de suppression
+          const response = await fetch(`https://huguette-backend.vercel.app/deletePhoto/${user.token}`, {
+              method: 'DELETE',
+          });
+          const data = await response.json();
+          if (data.result) {
+              console.log(data.message);
+              // Réinitialisez photoUri à null si la suppression est réussie
+              setPhotoUri(null);
+              dispatch(removePicture());
+          } else {
+              console.error(data.message);
+          }
+      } catch (error) {
+          console.error('Erreur lors de la suppression de la photo :', error);
+      }
+  }
+  // Naviguez à l'écran suivant après la suppression ou s'il n'y avait pas de photo
+  navigation.navigate('TabNavigator', { screen: 'Map' });
+};
+
 return (
   
   <LinearGradient colors={['#F1C796', '#EBB2B5', '#E0CAC2']} style={styles.linearGradient}>
@@ -246,7 +272,7 @@ return (
               </View>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => handleMapScreen()} style={styles.button2} activeOpacity={0.8}>
+              <TouchableOpacity onPress={() => handleSkip()} style={styles.button2} activeOpacity={0.8}>
                 <Text style={styles.textButton}>Passer</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleMapScreenWithPhoto()} style={styles.button} activeOpacity={0.8}>
