@@ -1,7 +1,6 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { useSelector} from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,13 +13,14 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [homeUpdate, setHomeUpdate] = useState({});
   const [workUpdate, setWorkUpdate] = useState({});
 
-const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.value);
 
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
@@ -48,22 +48,19 @@ const user = useSelector((state) => state.user.value);
     });
   };
 
-
   const setNewAddress = () => {
-
-    console.log(user.token)
-    console.log(homeUpdate)
-    console.log(workUpdate)
-
+    console.log(user.token);
+    console.log(homeUpdate);
+    console.log(workUpdate);
 
     fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        token : user.token,
+        token: user.token,
         longitudeH: homeUpdate.longitude,
-        latitudeH : homeUpdate.latitude,
-        longitudeW : workUpdate.longitude,
+        latitudeH: homeUpdate.latitude,
+        longitudeW: workUpdate.longitude,
         latitudeW: workUpdate.latitude,
       }),
     })
@@ -75,8 +72,8 @@ const user = useSelector((state) => state.user.value);
           console.error("Update Addresses Failed:", data.error);
         }
       });
-      setModalVisible(false)
-  }
+    setModalVisible(false);
+  };
 
   return (
     <LinearGradient
@@ -91,7 +88,7 @@ const user = useSelector((state) => state.user.value);
         <View style={styles.container}>
           <SafeAreaView>
             <TouchableOpacity onPress={() => handleBack()}>
-              <FontAwesome name="times" size={20} color="#333" />
+              <FontAwesome name="times" size={30} color="#333" />
             </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Adresses favorites</Text>
@@ -119,7 +116,7 @@ const user = useSelector((state) => state.user.value);
                       alignItems: "center",
                       width: "100%",
                       // height:'50%',
-                      zIndex: 1,
+                      // zIndex: 1,
                       // backgroundColor:'red',
                     },
                     textInputContainer: {
@@ -150,6 +147,7 @@ const user = useSelector((state) => state.user.value);
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
                       marginTop: "10%",
+                      zIndex: 140,
                     },
                   }}
                 />
@@ -275,6 +273,10 @@ const styles = StyleSheet.create({
   },
   work: {
     zIndex: 0,
+  },
+
+  home: {
+    zIndex: 140,
   },
   title: {
     paddingTop: "10%",
