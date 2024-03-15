@@ -13,7 +13,7 @@ export default function SosScreen({ navigation }) {
   
 
   const handleBack = () => {
-    navigation.navigate("Route");
+    navigation.navigate("Arrival");
   };
 
   // useEffect(() => {
