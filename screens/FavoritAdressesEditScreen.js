@@ -15,6 +15,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [homeUpdate, setHomeUpdate] = useState({});

@@ -12,14 +12,16 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useDispatch } from "react-redux";
-import { login } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
+import { login, addHome, addWork, } from "../reducers/user";
 import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
 
 export default function SignUpUserScreen({ navigation }) {
+
+  const user = useSelector((state) => state.user.value);
 
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
@@ -43,6 +45,7 @@ export default function SignUpUserScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        // console.log('DATA', data);
         if (data.result) {
           dispatch(login({ firstname: data.firstname, token: data.token, lastname: data.lastname, picture: data.picture }));
           
@@ -50,11 +53,14 @@ export default function SignUpUserScreen({ navigation }) {
           setPhone("");
           setPassword("");
           navigation.navigate("TabNavigator", { screen: "Map" }); 
-          console.log('token : ',data.token)
-          // navigation.navigate("TabNavigator", { screen: "Map" });
           // navigation.navigate("SignUpPhoto");  
-          console.log(data);
-          console.log(data.url);
+          // console.log(data);
+          if(data.home) {
+            dispatch(addHome(data.home));
+          }
+          if(data.work) {
+            dispatch(addWork(data.work));
+          }
         } else {
           setErrorMessage("Identifiants manquants ou incorrects");
           setIsErrorModalVisible(true);
@@ -65,6 +71,7 @@ export default function SignUpUserScreen({ navigation }) {
       });
   };
 
+// console.log('REDUCER', user)
   const handlePressIn = () => {
     setPasswordVisibility(false);
   };
