@@ -1,7 +1,7 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +14,7 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {addHome, addWork, } from "../reducers/user";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -21,6 +22,8 @@ export default function FavoritAdresses({ navigation }) {
   const [workUpdate, setWorkUpdate] = useState({});
 
   const user = useSelector((state) => state.user.value);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadFavoriteAddresses = async () => {
@@ -84,11 +87,15 @@ export default function FavoritAdresses({ navigation }) {
       .then((data) => {
         if (data.result) {
           console.log("Addresses updated", data);
+          dispatch(addHome(data.home));
+          dispatch(addWork(data.work));
+
         } else {
           console.error("Update Addresses Failed:", data.error);
         }
       });
     setModalVisible(false);
+    navigation.navigate("Map")
   };
 
   return (

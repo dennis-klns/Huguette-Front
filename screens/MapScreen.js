@@ -18,6 +18,7 @@ import MapView from "react-native-maps";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import {
@@ -44,12 +45,16 @@ export default function MapScreen({ navigation }) {
   const [music, setMusic] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const user = useSelector((state) => state.user.value);
+  
   const [home, setHome] = useState({});
   const [work, setWork] = useState({});
+  const [addressesList, setAddressesList] = useState([])
+
+  console.log("arrival", arrival);
 
 
 
-  const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
   const dispatch = useDispatch();
 
@@ -58,8 +63,6 @@ export default function MapScreen({ navigation }) {
 
   // Récupération des données lat,long du départ et de l'arrivée
   const handleDepartureSelect = (data, details) => {
-    console.log("Data départ:", data);
-    console.log("Details départ:", details.geometry?.location);
     setDeparture({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
@@ -68,8 +71,6 @@ export default function MapScreen({ navigation }) {
   };
 
   const handleArrivalSelect = (data, details) => {
-    console.log("Data arrivée:", data);
-    console.log("Details arrivée:", details.geometry?.location);
     setArrival({
       latitude: details.geometry?.location.lat,
       longitude: details.geometry?.location.lng,
@@ -187,9 +188,7 @@ export default function MapScreen({ navigation }) {
   //console.log("tripReducer:", trip);
 
   const determineAddress = (placeTitle) => {
-
-    // console.log(placeTitle);
-    placeTitle === 'Maison' ? setArrival(home) :  setArrival(work);
+    placeTitle === 'Maison' ? setArrival(home) : setArrival(work);
     // console.log(arrival);
     // console.log('reducer user',user);
     // const foundPlace= user[placeTitle === "Travail" ? "work" : "home"]
@@ -213,43 +212,41 @@ export default function MapScreen({ navigation }) {
     fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
       .then(response => response.json())
       .then(data => {
-
-        const addressesList = [];
+        const newList = []
         if (data.home) {
-          addressesList.push({
+          newList.push({
             name: "Maison",
             address: data.home.completeAddress,
           })
           setHome(data.home);
           // console.log('homeBDD',data.home)
         }
+
         if (data.work) {
-          addressesList.push({
+          newList.push({
             name: "Travail",
             address: data.work.completeAddress,
           })
           setWork(data.work);
           // console.log('workBDD',data.work)
-  }
+        }
 
-
-
-    if (addressesList) {
-    setAddresses(addressesList.map((data, i) => {
-      return (
-        <TouchableOpacity key={i} style={styles.addresses} onPress={() => determineAddress(data.name)}>
-          <Text style={styles.name}>{data.name}</Text>
-          <Text>{data.address}</Text>
-        </TouchableOpacity>
-      );
-    }))
-  }
-
-}).then(() => {
-  // console.log('Set Addresses');
-});
-
+        setAddressesList(newList)
+      })
   }, [modalVisible]);
+
+  useEffect(() => {
+    if (addressesList.length > 0) {
+      setAddresses(addressesList.map((data, i) => {
+        return (
+          <TouchableOpacity key={i} style={styles.addresses} onPress={() => determineAddress(data.name)}>
+            <Text style={styles.name}>{data.name}</Text>
+            <Text>{data.address}</Text>
+          </TouchableOpacity>
+          );
+        }))
+      }
+  }, [addressesList])
 
 
 
@@ -294,7 +291,11 @@ return (
       >
         <SafeAreaView style={styles.container}>
           <View style={styles.modalHeader}>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={() => {
+              setModalVisible(false)
+              setDeparture({})
+              setArrival({})
+              }}>
               <FontAwesome name="times" size={24} color="#333" />
             </TouchableOpacity>
           </View>
