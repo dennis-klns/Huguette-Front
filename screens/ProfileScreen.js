@@ -57,10 +57,11 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleLogOut = () => {
+    console.log('REDUCER',trip, user)
     dispatch(logoutTrip());
     dispatch(logout());
     navigation.navigate("Home");
-    console.log(trip, user)
+    console.log('REDUCER 2',trip, user)
   };
 
   return (
