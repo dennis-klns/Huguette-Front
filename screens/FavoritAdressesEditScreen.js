@@ -43,6 +43,26 @@ export default function FavoritAdresses({ navigation }) {
       };
       loadFavoriteAddresses();
     } //[user.token]
+  useEffect(() => {
+  
+    const loadFavoriteAddresses = async () => {
+      fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+
+          if (data.result) {
+            setHomeUpdate(data.home ? data.home.completeAddress : "");
+            setWorkUpdate(data.work ? data.work.completeAddress : "");
+          } else {
+            console.error("Failed to load addresses:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    loadFavoriteAddresses()
+  }, [user.token]
   );
 
   const handleBack = () => {
@@ -120,6 +140,9 @@ export default function FavoritAdresses({ navigation }) {
                 </View>
                 <GooglePlacesAutocomplete
                   placeholder={homeUpdate.toString()}
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
                   onPress={handleHome}
@@ -179,6 +202,9 @@ export default function FavoritAdresses({ navigation }) {
                 </View>
                 <GooglePlacesAutocomplete
                   placeholder={workUpdate.toString()}
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
                   onPress={handleWork}
