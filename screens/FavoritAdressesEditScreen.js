@@ -1,7 +1,6 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +13,7 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { useSelector } from "react-redux";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -24,12 +23,12 @@ export default function FavoritAdresses({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
-  
     const loadFavoriteAddresses = async () => {
-      fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
-        .then(response => response.json())
-        .then(data => {
-
+      fetch(
+        `https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
           if (data.result) {
             setHomeUpdate(data.home ? data.home.completeAddress : "");
             setWorkUpdate(data.work ? data.work.completeAddress : "");
@@ -41,11 +40,8 @@ export default function FavoritAdresses({ navigation }) {
           console.error("Error:", error);
         });
     };
-    loadFavoriteAddresses()
-  }, [user.token]
-  );
-
-
+    loadFavoriteAddresses();
+  }, [user.token]);
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
@@ -73,7 +69,6 @@ export default function FavoritAdresses({ navigation }) {
   };
 
   const setNewAddress = () => {
-
     fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -93,8 +88,8 @@ export default function FavoritAdresses({ navigation }) {
           console.error("Update Addresses Failed:", data.error);
         }
       });
-    setModalVisible(false)
-  }
+    setModalVisible(false);
+  };
 
   return (
     <LinearGradient
@@ -123,7 +118,7 @@ export default function FavoritAdresses({ navigation }) {
                 <GooglePlacesAutocomplete
                   placeholder={homeUpdate.toString()}
                   textInputProps={{
-                    placeholderTextColor: 'grey',
+                    placeholderTextColor: "grey",
                   }}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
@@ -185,7 +180,7 @@ export default function FavoritAdresses({ navigation }) {
                 <GooglePlacesAutocomplete
                   placeholder={workUpdate.toString()}
                   textInputProps={{
-                    placeholderTextColor: 'grey',
+                    placeholderTextColor: "grey",
                   }}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
@@ -238,7 +233,6 @@ export default function FavoritAdresses({ navigation }) {
                 />
               </View>
             </View>
-
 
             <TouchableOpacity
               onPress={() => toggleModal()}

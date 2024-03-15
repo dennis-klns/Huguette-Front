@@ -297,72 +297,82 @@ setIsPhotoUploaded(true);
               </View>
             </Modal>
 
-            <Modal isVisible={isCameraVisible} style={styles.modal}>
-              <View style={styles.modalContent}>
-                {hasPermission && !photoUri && (
-                  <Camera
-                    style={styles.camera}
-                    type={type}
-                    ref={cameraRef}
-                    flashMode={flashMode}
-                  >
-                    <View style={styles.cameraContent}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          setType(
-                            type === CameraType.back
-                              ? CameraType.front
-                              : CameraType.back
-                          )
-                        }
-                        style={styles.cameraButton}
+                <Modal isVisible={isCameraVisible} style={styles.modal}>
+                  <View style={styles.modalContent}>
+                    {hasPermission && !photoUri && (
+                      <Camera
+                        style={styles.camera}
+                        type={type}
+                        ref={cameraRef}
+                        flashMode={flashMode}
                       >
-                        <FontAwesome
-                          name="rotate-right"
-                          size={25}
-                          color="#ffffff"
+                        <View style={styles.cameraContent}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              setType(
+                                type === CameraType.back
+                                  ? CameraType.front
+                                  : CameraType.back
+                              )
+                            }
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="rotate-right"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={handleTakePhoto}
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="camera"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => setIsCameraVisible(false)}
+                            style={styles.cameraButton}
+                          >
+                            <FontAwesome
+                              name="times"
+                              size={25}
+                              color="#ffffff"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </Camera>
+                    )}
+
+                    {photoUri && (
+                      <View style={styles.modalContent}>
+                        <Image
+                          source={{ uri: photoUri }}
+                          style={{ width: 300, height: 300 }}
                         />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={handleTakePhoto}
-                        style={styles.cameraButton}
-                      >
-                        <FontAwesome
-                          name="camera"
-                          size={25}
-                          color="#ffffff"
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => setIsCameraVisible(false)}
-                        style={styles.cameraButton}
-                      >
-                        <FontAwesome
-                          name="times"
-                          size={25}
-                          color="#ffffff"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </Camera>
-                )}
-{photoUri && (
-  <View style={styles.modalContent}>
-    <Image source={{ uri: photoUri }} style={{ width: 300, height: 300 }} />
-    <View style={styles.modalButtonContainer}>
-      <TouchableOpacity onPress={handleValidation} style={styles.modalButton}>
-        <Text style={styles.textModal}>Valider</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {setPhotoUri(null);}}
-        style={styles.modalButton}
-      >
-        <Text style={styles.textModal}>Reprendre</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-)}
-              </View>
-            </Modal>
+                        <View style={styles.modalButtonContainer}>
+                          <TouchableOpacity
+                            onPress={handleValidation}
+                            style={styles.modalButton}
+                          >
+                            <Text style={styles.textModal}>Valider</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setPhotoUri(null);
+                            }}
+                            style={styles.modalButton}
+                          >
+                            <Text style={styles.textModal}>Reprendre</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                </Modal>
 
             <TouchableOpacity onPress={pickImage} style={styles.button}>
               <Text style={styles.textButton}>Importer une photo</Text>
