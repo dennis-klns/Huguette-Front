@@ -14,7 +14,6 @@ import {
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector } from "react-redux";
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -42,7 +41,7 @@ export default function FavoritAdresses({ navigation }) {
         });
     };
     loadFavoriteAddresses()
-  }, //[user.token]
+  }, [user.token]
   );
 
 
@@ -122,6 +121,9 @@ export default function FavoritAdresses({ navigation }) {
                 </View>
                 <GooglePlacesAutocomplete
                   placeholder={homeUpdate.toString()}
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
                   onPress={handleHome}
@@ -181,6 +183,9 @@ export default function FavoritAdresses({ navigation }) {
                 </View>
                 <GooglePlacesAutocomplete
                   placeholder={workUpdate.toString()}
+                  textInputProps={{
+                    placeholderTextColor: 'grey',
+                  }}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
                   onPress={handleWork}
