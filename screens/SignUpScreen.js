@@ -44,11 +44,11 @@ import {
   
         <View style={styles.buttonsgroup}>
         <TouchableOpacity onPress={() => handleSignUpUser()} style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Passagère</Text>
+          <Text style={styles.textButton}>Passager•ère</Text>
         </TouchableOpacity>
   
         <TouchableOpacity onPress={() => handleSignUpDriver()}  style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.textButton}>Conductrice</Text>
+          <Text style={styles.textButton}>Conducteur•rice</Text>
         </TouchableOpacity>
         </View>
   

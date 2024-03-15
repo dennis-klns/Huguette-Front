@@ -186,7 +186,7 @@ export default function SignUpUserScreen({ navigation }) {
           scrollEnabled={true}
         >
           <View style={styles.container}>
-            <Text style={styles.title}>PROFIL PASSAGÈRE</Text>
+            <Text style={styles.title}>PROFIL PASSAGER•ÈRE</Text>
 
             <View style={styles.profile}>
               <Text style={styles.text}>Votre profil</Text>
