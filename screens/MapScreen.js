@@ -132,7 +132,6 @@ export default function MapScreen({ navigation }) {
           setArrival({});
           setDeparture({});
           setModalVisible(false);
-          navigation.navigate("MapPosition");
 
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
@@ -143,13 +142,16 @@ export default function MapScreen({ navigation }) {
             // console.log(parts);
             // console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
+            
+
           } else {
             dispatch(
               addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
             );
           }
-
+          navigation.navigate("MapPosition");
           // console.log("tripBDD:", data.trip);
+          console.log(music, isAccompanied, mood, user.token);
         } else {
           console.error("Failed:", data.error);
         }
@@ -176,7 +178,7 @@ export default function MapScreen({ navigation }) {
         } else {
           console.error("Failed Music:", data.error);
         }
-      });
+      })
   };
 
   //console.log("tripReducer:", trip);
