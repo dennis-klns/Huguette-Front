@@ -48,6 +48,8 @@ export const tripSlice = createSlice({
       state.value.duration = null;
       state.value.distance = null;
       state.value.cost = null;
+      state.value.longitude = null;
+      state.value.latitude = null;
     },
   },
 });

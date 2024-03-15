@@ -44,6 +44,9 @@ export default function MapScreen({ navigation }) {
   const [music, setMusic] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const [home, setHome] = useState({});
+  const [work, setWork] = useState({});
+
 
 
   const user = useSelector((state) => state.user.value);
@@ -104,6 +107,29 @@ export default function MapScreen({ navigation }) {
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
 
+    console.log(music, isAccompanied, mood, user.token);
+
+
+    fetch('https://huguette-backend.vercel.app/users/moodpassenger', {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        music: false,
+        isAccompanied: isAccompanied,
+        token: user.token,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log('RRRRRRRRRRRR',data)
+        // if (data.result) {
+        //   console.log("Music changed:", data);
+        // } else {
+        //   console.error("Failed Music:", data.error);
+        // }
+      })
+
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -118,19 +144,17 @@ export default function MapScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("OK:", trip);
+          // console.log("OK:", trip);
           dispatch(addTripId(data.trip._id));
           dispatch(addDeparture(data.trip.departure.completeAddress));
           dispatch(addArrival(data.trip.arrival.completeAddress));
           dispatch(addDuration(data.trip.estimatedDuration));
           dispatch(addDistance(data.trip.distance));
-          //dispatch(addCost(parseFloat(data.trip.estimatedDuration) * 30));
           dispatch(addLongitude(data.trip.departure.longitude));
           dispatch(addLatitude(data.trip.departure.latitude));
           setArrival({});
           setDeparture({});
           setModalVisible(false);
-          navigation.navigate("MapPosition");
 
           if (data.trip.estimatedDuration.includes("hour")) {
             const str = data.trip.estimatedDuration;
@@ -138,59 +162,39 @@ export default function MapScreen({ navigation }) {
             const minutes = Math.floor(
               Number(parts[0]) * 60 + Number(parts[1])
             );
-            console.log(parts);
-            console.log(minutes);
+            // console.log(parts);
+            // console.log(minutes);
             dispatch(addCost(parseFloat(minutes) * 0.9));
-          } else {
-            dispatch(
-              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
-            );
-          }
-          if (data.trip.estimatedDuration.includes("hour")) {
-            const str = data.trip.estimatedDuration;
-            const parts = str.split("mins").join("").split("hours");
-            const minutes = Math.floor(
-              Number(parts[0]) * 60 + Number(parts[1])
-            );
-            console.log(parts);
-            console.log(minutes);
-            dispatch(addCost(Math.floor(parseFloat(minutes) * 0.9)));
-          } else {
-            dispatch(
-              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
-            );
-          }
+            
 
-          console.log("tripBDD:", data.trip);
+          } else {
+            dispatch(
+              addCost(Math.floor(parseFloat(data.trip.estimatedDuration) * 0.9))
+            );
+          }
+          navigation.navigate("MapPosition");
+          // console.log("tripBDD:", data.trip);
         } else {
           console.error("Failed:", data.error);
         }
-      })
+      }).then(()=>{})
       .catch((error) => {
         console.error("Error:", error);
       });
 
-    fetch("https://huguette-backend.vercel.app/users/moodPassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("Music changed:", data);
-        } else {
-          console.error("Failed Music:", data.error);
-        }
-      });
   };
 
   //console.log("tripReducer:", trip);
+
+  const determineAddress = (placeTitle) => {
+
+    // console.log(placeTitle);
+    placeTitle === 'Maison' ? setArrival(home) :  setArrival(work);
+    // console.log(arrival);
+    // console.log('reducer user',user);
+    // const foundPlace= user[placeTitle === "Travail" ? "work" : "home"]
+    // if (foundPlace) setArrival(foundPlace)
+  }
 
   useEffect(() => {
     (async () => {
@@ -204,6 +208,8 @@ export default function MapScreen({ navigation }) {
       }
     })();
 
+    
+
     fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
       .then(response => response.json())
       .then(data => {
@@ -214,20 +220,24 @@ export default function MapScreen({ navigation }) {
             name: "Maison",
             address: data.home.completeAddress,
           })
-          dispatch(addHome(data.home))
+          setHome(data.home);
+          // console.log('homeBDD',data.home)
         }
         if (data.work) {
           addressesList.push({
             name: "Travail",
             address: data.work.completeAddress,
           })
-          dispatch(addWork(data.work))
+          setWork(data.work);
+          // console.log('workBDD',data.work)
   }
+
+
 
     if (addressesList) {
     setAddresses(addressesList.map((data, i) => {
       return (
-        <TouchableOpacity key={i} style={styles.addresses}>
+        <TouchableOpacity key={i} style={styles.addresses} onPress={() => determineAddress(data.name)}>
           <Text style={styles.name}>{data.name}</Text>
           <Text>{data.address}</Text>
         </TouchableOpacity>
@@ -235,12 +245,11 @@ export default function MapScreen({ navigation }) {
     }))
   }
 
-}).then((data) => {
-  console.log('Failed set Addresses', (data));
+}).then(() => {
+  // console.log('Set Addresses');
 });
 
   }, [modalVisible]);
-
 
 
 
