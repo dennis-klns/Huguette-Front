@@ -107,6 +107,29 @@ export default function MapScreen({ navigation }) {
       return; // Empêche la navigation si les conditions ne sont pas remplies
     }
 
+    console.log(music, isAccompanied, mood, user.token);
+
+
+    fetch('https://huguette-backend.vercel.app/users/moodpassenger', {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        music: false,
+        isAccompanied: isAccompanied,
+        token: user.token,
+        mood: mood,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log('RRRRRRRRRRRR',data)
+        // if (data.result) {
+        //   console.log("Music changed:", data);
+        // } else {
+        //   console.error("Failed Music:", data.error);
+        // }
+      })
+
     fetch("https://huguette-backend.vercel.app/trips/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -151,7 +174,6 @@ export default function MapScreen({ navigation }) {
           }
           navigation.navigate("MapPosition");
           // console.log("tripBDD:", data.trip);
-          console.log(music, isAccompanied, mood, user.token);
         } else {
           console.error("Failed:", data.error);
         }
@@ -160,25 +182,6 @@ export default function MapScreen({ navigation }) {
         console.error("Error:", error);
       });
 
-    fetch("https://huguette-backend.vercel.app/users/moodpassenger", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isAccompanied: isAccompanied,
-        token: user.token,
-        music: music,
-        mood: mood,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('RRRRRRRRRRRR',data)
-        if (data.result) {
-          console.log("Music changed:", data);
-        } else {
-          console.error("Failed Music:", data.error);
-        }
-      })
   };
 
   //console.log("tripReducer:", trip);
