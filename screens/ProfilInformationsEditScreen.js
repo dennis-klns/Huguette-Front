@@ -92,57 +92,57 @@ export default function ProfilInformations({ navigation }) {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      alert(
-        "Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !"
-      );
-      return;
+if (permissionResult.granted === false) {
+  alert(
+    "Vous avez refusé d'autoriser l'accès à la bibliothèque de photos !"
+  );
+  return;
+}
+
+const pickerResult = await ImagePicker.launchImageLibraryAsync({
+  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  allowsEditing: true, // Permet l'édition de l'image
+  aspect: [4, 3], // Aspect ratio de l'image éditée
+  quality: 0.5, // Compression de l'image (0.5 = 50% de la qualité originale)
+});
+
+console.log(pickerResult);
+
+if (pickerResult?.assets[0]?.canceled === true) {
+  setPhotoUri(pickerResult.assets[0].uri);
+}
+console.log("test", pickerResult?.assets[0]?.uri);
+
+let formData = new FormData();
+formData.append("token", user.token);
+formData.append("photoFromLibrairie", {
+  uri: pickerResult?.assets[0]?.uri,
+  name: "photo.jpg",
+  type: "image/jpeg",
+});
+
+//https://huguette-backend.vercel.app/uploadLibrairie'
+//http://192.168.10.154:3000/uploadLibrairie
+
+fetch("https://huguette-backend.vercel.app/uploadLibrairie", {
+  method: "POST",
+  body: formData,
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Erreur réseau");
     }
+    return response.json();
+  })
+  .then((data) => {
+    console.log("librairie2:", data);
+    dispatch(addPicture(data.url));
+  })
+  .catch((error) => {
+    console.error("Error uploading image:", error);
+  });
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true, // Permet l'édition de l'image
-      aspect: [4, 3], // Aspect ratio de l'image éditée
-      quality: 0.5, // Compression de l'image (0.5 = 50% de la qualité originale)
-    });
-
-    console.log(pickerResult);
-
-    if (pickerResult?.assets[0]?.canceled === true) {
-      setPhotoUri(pickerResult.assets[0].uri);
-    }
-    console.log("test", pickerResult?.assets[0]?.uri);
-
-    let formData = new FormData();
-    formData.append("token", user.token);
-    formData.append("photoFromLibrairie", {
-      uri: pickerResult?.assets[0]?.uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-
-    //https://huguette-backend.vercel.app/uploadLibrairie'
-    //http://192.168.10.154:3000/uploadLibrairie
-
-    fetch("https://huguette-backend.vercel.app/uploadLibrairie", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur réseau");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("librairie2:", data);
-        dispatch(addPicture(data.url));
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
-
-    setIsPhotoUploaded(true);
+setIsPhotoUploaded(true);
   };
 
   const handleTakePhoto = async () => {
@@ -163,23 +163,23 @@ export default function ProfilInformations({ navigation }) {
         type: "image/jpeg",
       });
 
-      fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Réponse du backend :", data);
-          dispatch(addPicture(data.url));
-          setIsCameraVisible(false);
-          // toggleModal();
-        })
-        .catch((error) =>
-          console.error("Erreur lors de la validation de la photo :", error)
-        );
-    } else {
-      console.error("Aucune photo à valider");
-    }
+  fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Réponse du backend :", data);
+      dispatch(addPicture(data.url));
+      setIsCameraVisible(false);
+      // toggleModal();
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la validation de la photo :", error)
+    );
+} else {
+  console.error("Aucune photo à valider");
+}
   };
 
   const handleEditInformations = () => {
