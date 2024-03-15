@@ -22,34 +22,13 @@ export default function FavoritAdresses({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
 
-  useEffect(
-    () => {
-      const loadFavoriteAddresses = async () => {
-        fetch(
-          `https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.result) {
-              setHomeUpdate(data.home ? data.home.completeAddress : "");
-              setWorkUpdate(data.work ? data.work.completeAddress : "");
-            } else {
-              console.error("Failed to load addresses:", data.error);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      };
-      loadFavoriteAddresses();
-    } //[user.token]
   useEffect(() => {
-  
     const loadFavoriteAddresses = async () => {
-      fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
-        .then(response => response.json())
-        .then(data => {
-
+      fetch(
+        `https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
           if (data.result) {
             setHomeUpdate(data.home ? data.home.completeAddress : "");
             setWorkUpdate(data.work ? data.work.completeAddress : "");
@@ -61,10 +40,8 @@ export default function FavoritAdresses({ navigation }) {
           console.error("Error:", error);
         });
     };
-    loadFavoriteAddresses()
-  }, [user.token]
-  );
-
+    loadFavoriteAddresses();
+  }, [user.token]);
   const handleBack = () => {
     navigation.navigate("TabNavigator", { screen: "Profile" });
   };
@@ -141,7 +118,7 @@ export default function FavoritAdresses({ navigation }) {
                 <GooglePlacesAutocomplete
                   placeholder={homeUpdate.toString()}
                   textInputProps={{
-                    placeholderTextColor: 'grey',
+                    placeholderTextColor: "grey",
                   }}
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
@@ -203,7 +180,7 @@ export default function FavoritAdresses({ navigation }) {
                 <GooglePlacesAutocomplete
                   placeholder={workUpdate.toString()}
                   textInputProps={{
-                    placeholderTextColor: 'grey',
+                    placeholderTextColor: "grey",
                   }}
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
