@@ -26,6 +26,9 @@ export const userSlice = createSlice({
       state.value.token = null;
       state.value.firstname = null;
       state.value.lastname = null;
+      state.value.addresses = [];
+      state.value.home = null;
+      state.value.work = null;
     },
     addAddresses: (state, action) => {
       state.value.addresses.push(action.payload);
