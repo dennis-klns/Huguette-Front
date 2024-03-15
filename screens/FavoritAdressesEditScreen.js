@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
   adressesContainer: {
     marginTop: "3%",
     height: "50%",
-
     justifyContent: "space-around",
   },
 
