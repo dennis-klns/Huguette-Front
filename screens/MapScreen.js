@@ -357,7 +357,7 @@ return (
 
               <View style={styles.autoArrival}>
                 <GooglePlacesAutocomplete
-                  placeholder="Arrivée"
+                  placeholder={arrival.completeAddress || "Arrivée"}
                   textInputProps={{
                     placeholderTextColor: 'grey',
                   }}
