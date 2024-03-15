@@ -1,6 +1,7 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
+import {useSelector} from 'react-redux'
 import {
   KeyboardAvoidingView,
   Platform,
