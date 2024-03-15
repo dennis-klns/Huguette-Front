@@ -1,6 +1,6 @@
 import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -75,6 +75,29 @@ export default function FavoritAdresses({ navigation }) {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    console.log(user.token);
+    // Charger les adresses favorites lorsque le composant est monté
+    const loadFavoriteAddresses = async () => {
+      try {
+        const response = await fetch(`https://huguette-backend.vercel.app/favoriteAddresses/${user.token}`);
+        const text = await response.text(); // Lisez la réponse en tant que texte
+        console.log(text); // Affichez le texte pour déboguer
+        const data = JSON.parse(text); // Ensuite, parsez le texte en JSON
+        if (data.result) {
+          setHomeUpdate(data.home ? data.home.completeAddress : "");
+          setWorkUpdate(data.work ? data.work.completeAddress : "");
+        } else {
+          console.error("Failed to load addresses:", data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    };
+
+    loadFavoriteAddresses();
+  }, [user.token]); 
+
   return (
     <LinearGradient
       colors={["#F1C796", "#EBB2B5", "#E0CAC2"]}
@@ -100,7 +123,7 @@ export default function FavoritAdresses({ navigation }) {
                   <Text style={styles.text}>Maison</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Domicile"
+                  placeholder=""
                   onChangeText={(value) => setHomeUpdate(value)}
                   value={homeUpdate}
                   onPress={handleHome}
@@ -159,7 +182,7 @@ export default function FavoritAdresses({ navigation }) {
                   <Text style={styles.text}>Bureau</Text>
                 </View>
                 <GooglePlacesAutocomplete
-                  placeholder="Adresse Travail"
+                  placeholder=""
                   onChangeText={(value) => setWorkUpdate(value)}
                   value={workUpdate}
                   onPress={handleWork}
