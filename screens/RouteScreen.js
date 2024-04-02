@@ -79,7 +79,7 @@ export default function RouteScreen({ navigation }) {
     // Démarre un compte à rebours de 5 secondes au chargement du composant
     const timer = setTimeout(() => {
       navigation.navigate("Arrival"); // Navigue vers la nouvelle page après 5 secondes
-    }, 20000); // 5000 millisecondes = 5 secondes
+    }, 25000); // 5000 millisecondes = 5 secondes
 
     return () => clearTimeout(timer); // Nettoie le timer si le composant est démonté avant que le timer se termine
   }, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter

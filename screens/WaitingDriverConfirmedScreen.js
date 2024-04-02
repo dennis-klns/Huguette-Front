@@ -34,7 +34,7 @@ useEffect(() => {
   // Démarre un compte à rebours au chargement du composant
   const timer = setTimeout(() => {
     navigation.navigate("Route"); // Navigue vers la page ConfirmDriver après 2 secondes
-  }, 20000); // 2000 millisecondes = 2 secondes
+  }, 10000); // 2000 millisecondes = 2 secondes
 
   return () => clearTimeout(timer); // Nettoie le timer si le composant est démonté avant que le timer se termine
 }, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter
