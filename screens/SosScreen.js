@@ -16,33 +16,13 @@ export default function SosScreen({ navigation }) {
     navigation.navigate("Arrival");
   };
 
-  // useEffect(() => {
-  //   const fetchEmergencyContact = async () => {
-  //     try {
-  //       // Assurez-vous que l'adresse de votre serveur et le port sont corrects
-  //       console.log(userToken)
-  //       const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
 
-  //       const data = await response.json();
-  //       console.log(data);
-  //           setEmergencyContact({
-  //             phone: data.emergencyInfos.phone,
-  //             message: data.emergencyInfos.emergencyMessage,
-  //           });
-  //     } catch (error) {
-  //       console.error('Erreur lors de la récupération du contact d\'urgence:', error);
-  //       Alert.alert("Erreur", error.toString());
-  //     }
-  //   };
-  
-  //   fetchEmergencyContact();
-  // }, [userToken]);
 
   useEffect(() => {
     const fetchEmergencyContact = async () => {
       try {
         console.log(userToken)
-        const response = await fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`);
+        const response = await fetch(`https://huguette-back.vercel.app/users/emergencyInfos/${userToken}`);
 
         const data = await response.json();
         console.log(data);
@@ -66,19 +46,6 @@ export default function SosScreen({ navigation }) {
 }, [userToken]);
 
 
-  // const sendSMS = () => {
-  //   const url = `sms:${emergencyContact.phone}?body=${encodeURIComponent(emergencyContact.message)}`;
-
-  //   Linking.canOpenURL(url)
-  //     .then((supported) => {
-  //       if (supported) {
-  //         return Linking.openURL(url);
-  //       } else {
-  //         throw new Error('Impossible d\'ouvrir l\'URL pour l\'envoi de SMS');
-  //       }
-  //     })
-  //     .catch((err) => Alert.alert("Erreur", err.toString()));
-  // };
 
   const sendSMS = () => {
     let url = `sms:`;
@@ -97,22 +64,6 @@ export default function SosScreen({ navigation }) {
       .catch((err) => Alert.alert("Erreur", err.toString()));
 };
 
-
-
-  //  const makePhoneCall = () => {
-  //   // Utilisez l'état emergencyPhone pour passer l'appel
-  //   const url = `tel:${emergencyContact.phone}`;
-
-  //   Linking.canOpenURL(url)
-  //     .then((supported) => {
-  //       if (!supported) {
-  //         console.log('Impossible de lancer un appel');
-  //       } else {
-  //         return Linking.openURL(url);
-  //       }
-  //     })
-  //     .catch((err) => console.error('Une erreur est survenue', err));
-  // };
 
   const makePhoneCall = () => {
     let url = `tel:`;

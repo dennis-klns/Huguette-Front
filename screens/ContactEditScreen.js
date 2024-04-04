@@ -70,7 +70,7 @@ export default function ContactEdit({ navigation }) {
   };
 
   useEffect(() => {
-    fetch(`https://huguette-backend.vercel.app/users/emergencyInfos/${userToken}`)
+    fetch(`https://huguette-back.vercel.app/users/emergencyInfos/${userToken}`)
       .then(response => response.json())
       .then(data => {
         if (data.result) {

@@ -19,7 +19,7 @@ export default function WaitingScreen({ navigation }) {
   }, [navigation]); // Assurez-vous de lister navigation comme dépendance si vous utilisez linter
 
   const handleCancel = () => {
-    fetch("https://huguette-backend.vercel.app/trips/cancelationPassenger", {
+    fetch("https://huguette-back.vercel.app/trips/cancelationPassenger", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tripId: trip.tripId, cancelledPassenger: true }),

@@ -33,59 +33,8 @@ export default function MapPositionScreen({ navigation }) {
     console.log("region", markerPosition);
   };
 
-  // const fetchAddressFromCoordinates = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${markerPosition.latitude},${markerPosition.longitude}&key=${GOOGLE_API_KEY}`
-  //     );
-  //     const data = await response.json();
-  //     console.log("data", data);
-  //     if (data.status === "OK" && data.results.length > 0) {
-  //       const departureAddress = data.results[0].formatted_address;
-  //       console.log("departureAdress:", departureAddress);
-  //       console.log("user:", user);
-  //       console.log("trip:", trip);
-  //       setAddress(departureAddress);
-  //       //dispatch(addDeparture(departureAddress));
-  //     } else {
-  //       setAddress("Adresse non disponible");
-  //     }
-  //   } catch (error) {
-  //     console.error("Erreur lors de la récupération de l'adresse:", error);
-  //     setAddress("Erreur lors de la récupération de l'adresse");
-  //   }
-  // };
-
   const handleValidate = () => {
     navigation.navigate("Confirm");
-
-    // Je travaille sur cet écran.
-
-    // fetch("https://huguette-backend.vercel.app/trips/costposition", {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     // cost: trip.cost,
-    //     tripId: trip.tripId,
-    //     completeAddressD: address,
-    //     latitudeD: markerPosition.latitude,
-    //     longitudeD: markerPosition.longitude,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("handleValidateData:", data);
-    //     if (data.result) {
-    //       dispatch(addDeparture(data.departure.completeAddress));
-    //       console.log("completeAddress: ", data.departure.completeAddress);
-    //       navigation.navigate("Confirm");
-    //     } else {
-    //       console.error("Failed:", data.error);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
   };
 
   const handleTest = () => {
@@ -93,7 +42,7 @@ export default function MapPositionScreen({ navigation }) {
   };
 
   const changeCostPostion = () => {
-    fetch("https://huguette-backend.vercel.app/trips/costposition", {
+    fetch("https://huguette-back.vercel.app/trips/costposition", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -132,18 +81,6 @@ export default function MapPositionScreen({ navigation }) {
       });
   };
 
-  /*   useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-          setMarkerPosition(location.coords);
-        });
-      }
-    })();
-  }, []); */
 
   useEffect(() => {
     setMarkerPosition({ latitude: trip.latitude, longitude: trip.longitude });
@@ -187,15 +124,6 @@ export default function MapPositionScreen({ navigation }) {
         >
           <Text style={styles.textButton}>Je confirme ma position</Text>
         </TouchableOpacity>
-
-        {/* Bouton temporaire pour passer à la page d'après */}
-        {/* <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => handleTest()}
-        >
-          <Text style={styles.textButton}>Suivant</Text>
-        </TouchableOpacity> */}
       </View>
     </LinearGradient>
   );

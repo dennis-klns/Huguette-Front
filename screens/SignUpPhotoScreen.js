@@ -97,7 +97,7 @@ const handleValidation = () => {
       type: 'image/jpeg',
     });
     
-    fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+    fetch(`https://huguette-back.vercel.app/upload/${user.token}`, {
       method: 'POST',
       body: formData,
     })
@@ -152,7 +152,7 @@ const pickImage = async () => {
   //http://192.168.10.154:3000/uploadLibrairie
 
 
-  fetch('https://huguette-backend.vercel.app/uploadLibrairie', {
+  fetch('https://huguette-back.vercel.app/uploadLibrairie', {
     method: 'POST',
     body: formData,
   })
@@ -184,7 +184,7 @@ const handleSkip = async () => {
   if (photoUri) {
       try {
           // Appel à la route de suppression
-          const response = await fetch(`https://huguette-backend.vercel.app/deletePhoto/${user.token}`, {
+          const response = await fetch(`https://huguette-back.vercel.app/deletePhoto/${user.token}`, {
               method: 'DELETE',
           });
           const data = await response.json();

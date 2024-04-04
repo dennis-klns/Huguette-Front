@@ -124,7 +124,7 @@ formData.append("photoFromLibrairie", {
 //https://huguette-backend.vercel.app/uploadLibrairie'
 //http://192.168.10.154:3000/uploadLibrairie
 
-fetch("https://huguette-backend.vercel.app/uploadLibrairie", {
+fetch("https://huguette-back.vercel.app/uploadLibrairie", {
   method: "POST",
   body: formData,
 })
@@ -163,7 +163,7 @@ setIsPhotoUploaded(true);
         type: "image/jpeg",
       });
 
-  fetch(`https://huguette-backend.vercel.app/upload/${user.token}`, {
+  fetch(`https://huguette-back.vercel.app/upload/${user.token}`, {
     method: "POST",
     body: formData,
   })
@@ -185,7 +185,7 @@ setIsPhotoUploaded(true);
   const handleEditInformations = () => {
     setModalVisible(false), dispatch(updateFirstname(updatedFirstname));
     dispatch(updateLastname(updatedLastname));
-    fetch("https://huguette-backend.vercel.app/users/personalInfos", {
+    fetch("https://huguette-back.vercel.app/users/personalInfos", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -209,7 +209,7 @@ setIsPhotoUploaded(true);
   const handleDeletePhoto = async () => {
     try {
       const response = await fetch(
-        `https://huguette-backend.vercel.app/deletePhoto/${user.token}`,
+        `https://huguette-back.vercel.app/deletePhoto/${user.token}`,
         {
           method: "DELETE",
         }

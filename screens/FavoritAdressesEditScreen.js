@@ -28,7 +28,7 @@ export default function FavoritAdresses({ navigation }) {
   useEffect(() => {
     const loadFavoriteAddresses = async () => {
       fetch(
-        `https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`
+        `https://huguette-back.vercel.app/users/favoriteAddresses/${user.token}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -72,7 +72,7 @@ export default function FavoritAdresses({ navigation }) {
   };
 
   const setNewAddress = () => {
-    fetch("https://huguette-backend.vercel.app/users/favoriteAddresses", {
+    fetch("https://huguette-back.vercel.app/users/favoriteAddresses", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -16,7 +16,7 @@ export default function RouteScreen({ navigation }) {
   const [directions, setDirections] = useState(null);
 
   const mapRef = useRef(null);
-  const GOOGLE_API_KEY = "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0";
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
   const user = useSelector((state) => state.user.value);
   const trip = useSelector((state) => state.trip.value);
 
@@ -29,7 +29,7 @@ export default function RouteScreen({ navigation }) {
   };
 
   useEffect(() => {
-    fetch(`https://huguette-backend.vercel.app/trips/${trip.tripId}`)
+    fetch(`https://huguette-back.vercel.app/trips/${trip.tripId}`)
       .then((response) => response.json())
       .then((data) => {
         const fetchData = async () => {

@@ -57,7 +57,7 @@ export default function ArrivalScreen({ navigation }) {
     // POUR VALIDER ET CLOTURER LA COURSE + ENVOI DANS LE BACK END DE LA NOTE DE LA COURSE
     const handleValidate = () => {
 
-        fetch("https://huguette-backend.vercel.app/reviews", {
+        fetch("https://huguette-back.vercel.app/reviews", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -84,7 +84,7 @@ export default function ArrivalScreen({ navigation }) {
 
     // EN CAS DE COMMENTAIRE DANS LA MODAL - ENVOI DANS LE BACK END DU COMMENT
     const handleComment = () => {
-        fetch("https://huguette-backend.vercel.app/reviews", {
+        fetch("https://huguette-back.vercel.app/reviews", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -111,7 +111,7 @@ export default function MapScreen({ navigation }) {
     console.log(music, isAccompanied, mood, user.token);
 
 
-    fetch('https://huguette-backend.vercel.app/users/moodpassenger', {
+    fetch('https://huguette-back.vercel.app/users/moodpassenger', {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -123,15 +123,9 @@ export default function MapScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log('RRRRRRRRRRRR',data)
-        // if (data.result) {
-        //   console.log("Music changed:", data);
-        // } else {
-        //   console.error("Failed Music:", data.error);
-        // }
       })
 
-    fetch("https://huguette-backend.vercel.app/trips/", {
+    fetch("https://huguette-back.vercel.app/trips/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -185,14 +179,9 @@ export default function MapScreen({ navigation }) {
 
   };
 
-  //console.log("tripReducer:", trip);
 
   const determineAddress = (placeTitle) => {
     placeTitle === 'Maison' ? setArrival(home) : setArrival(work);
-    // console.log(arrival);
-    // console.log('reducer user',user);
-    // const foundPlace= user[placeTitle === "Travail" ? "work" : "home"]
-    // if (foundPlace) setArrival(foundPlace)
   }
 
   useEffect(() => {
@@ -209,7 +198,7 @@ export default function MapScreen({ navigation }) {
 
     
 
-    fetch(`https://huguette-backend.vercel.app/users/favoriteAddresses/${user.token}`)
+    fetch(`https://huguette-back.vercel.app/users/favoriteAddresses/${user.token}`)
       .then(response => response.json())
       .then(data => {
         const newList = []

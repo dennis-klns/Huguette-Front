@@ -87,7 +87,7 @@ export default function SignUpUserScreen({ navigation }) {
 
     const formattedBirthdate = date.toISOString().split("T")[0];
 
-    fetch("https://huguette-backend.vercel.app/users/signup", {
+    fetch("https://huguette-back.vercel.app/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

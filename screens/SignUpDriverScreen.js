@@ -85,7 +85,7 @@ export default function SignUpDriverScreen({ navigation }) {
 
     const formattedBirthdate = date.toISOString().split("T")[0];
 
-    fetch("https://huguette-backend.vercel.app/drivers/signupDriver", {
+    fetch("https://huguette-back.vercel.app/drivers/signupDriver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
