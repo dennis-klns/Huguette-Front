@@ -34,6 +34,10 @@ import {
 
 import { addHome, addWork } from '../reducers/user'
 
+const googleApiKey = process.env.GOOGLE_API_KEY;
+console.log("Google API Key:", googleApiKey);
+
+
 export default function MapScreen({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
 
@@ -302,7 +306,7 @@ return (
                   onPress={handleDepartureSelect}
                   fetchDetails={true}
                   query={{
-                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    key: googleApiKey,
                     language: "fr",
                     components: "country:fr",
                   }}
@@ -340,8 +344,11 @@ return (
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
                       marginTop: 10,
+                      maxHeight: 100, // Limitez la hauteur pour montrer seulement 2 éléments
+                      overflow: 'hidden', // Cachez les autres éléments qui dépassent
                     },
                   }}
+                  numberOfLines={2}
                 />
               </View>
 
@@ -356,7 +363,7 @@ return (
                   onPress={handleArrivalSelect}
                   fetchDetails={true}
                   query={{
-                    key: "AIzaSyDXDHg0TNXOSiKX6Mj2dWkDrzKLwYVh7R0",
+                    key: googleApiKey,
                     language: "fr",
                     components: "country:fr",
                   }}
@@ -397,8 +404,11 @@ return (
                       shadowOffset: { x: 0, y: 0 },
                       shadowRadius: 15,
                       marginTop: 10,
+                      maxHeight: 100, // Limitez la hauteur pour montrer seulement 2 éléments
+                      overflow: 'hidden', // Cachez les autres éléments qui dépassent
                     },
                   }}
+                  numberOfLines={2}
                 />
               </View>
 

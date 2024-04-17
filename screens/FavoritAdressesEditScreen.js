@@ -1,4 +1,3 @@
-import { GOOGLE_PLACES_API_KEY } from "@env";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {useSelector, useDispatch} from 'react-redux'
@@ -15,6 +14,9 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Modal from "react-native-modal";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {addHome, addWork, } from "../reducers/user";
+
+const googleApiKey = process.env.GOOGLE_API_KEY;
+
 
 export default function FavoritAdresses({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -132,7 +134,7 @@ export default function FavoritAdresses({ navigation }) {
                   onPress={handleHome}
                   fetchDetails={true}
                   query={{
-                    key: GOOGLE_PLACES_API_KEY,
+                    key: googleApiKey,
                     language: "fr",
                     components: "country:fr",
                   }}
@@ -194,7 +196,7 @@ export default function FavoritAdresses({ navigation }) {
                   onPress={handleWork}
                   fetchDetails={true}
                   query={{
-                    key: GOOGLE_PLACES_API_KEY,
+                    key: googleApiKey,
                     language: "fr",
                     components: "country:fr",
                   }}
